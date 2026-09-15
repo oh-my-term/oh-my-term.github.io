@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta charset="UTF-8">
+<title>kb demo verification</title>
+<style>body{background:#08090d;color:#eee;font:13px/1.7 monospace;padding:20px}#out{white-space:pre-wrap}.pass{color:#3ecf8e}.fail{color:#e5484d}</style>
+</head><body>
+<p>drives demo-phone.html in a same-origin iframe and asserts on its internals</p>
+<iframe id="frame" src="demo-phone.html" style="width:318px;height:660px;border:0"></iframe>
+<pre id="out">pending</pre>
+<script>
+/* Verifies the demo keyboard the way the codex review asked:
+   default-expanded layout, Esc/Ctrl→C through the pointer shim,
+   typing→buffer handoff, storage isolation, i18n bridge, i18n switch. */
+(function () {
+  var out = document.getElementById('out');
+  var lines = [], failures = 0;
+  function check(name, ok, detail) {
+    lines.push((ok ? '[PASS] ' : '[FAIL] ') + name + (detail !== undefined ? ' — ' + detail : ''));
+    if (!ok) failures++;
+  }
+  function report() {
+    out.innerHTML = lines.map(function (l) {
+      return l.indexOf('[FAIL]') === 0 ? '<span class="fail">' + l + '</span>'
+           : l.indexOf('[PASS]') === 0 ? '<span class="pass">' + l + '</span>' : l;
+    }).join('\n') + '\n' + (failures ? failures + ' FAILURES' : 'ALL PASS');
+  }
+
+  var frame = document.getElementById('frame');
+  function whenReady(fn) {
+    var tries = 0;
+    (function poll() {
+      var w = frame.contentWindow, d = w && w.__demo;
+      if (d && d.ready && frame.contentDocument.getElementById('qwertyLayer').children.length) return fn(w, d);
+      if (++tries > 200) { lines.push('[FAIL] iframe demo never became ready'); return report(); }
+      setTimeout(poll, 50);
+    })();
+  }
+
+  function keyEl(doc, sel) { return doc.querySelector(sel); }
+  function pointer(el, type, id) {
+    var r = el.getBoundingClientRect();
+    el.dispatchEvent(new PointerEvent(type, {
+      bubbles: true, cancelable: true, composed: true,
+      pointerType: 'mouse', button: 0, pointerId: id || 7, isPrimary: true,
+      clientX: r.left + r.width / 2, clientY: r.top + r.height / 2
+    }));
+  }
+  function tap(win, el) {
+    var root = el.closest('#softKeyboard') || win.document.getElementById('softKeyboard');
+    pointer(el, 'pointerdown');
+    pointer(el, 'pointerup');
+  }
+
+  window.addEventListener('load', function () { setTimeout(function () { whenReady(run); }, 300); });
+
+  function run(win, demo) {
+    var doc = frame.contentDocument;
+    var kb = demo.kb;
+
+    try {
+      check('demo ready', !!kb);
+      check('keyboard visible', doc.getElementById('softKeyboard').style.display === 'block');
+      check('qwerty rendered', doc.querySelectorAll('#qwertyLayer .kb-key').length >= 26);
+      check('expanded by default', doc.getElementById('kbFull').style.display !== 'none');
+      check('storage shim active', win.localStorage.getItem('terminal_kb_layout') === null
+            && (win.localStorage.setItem('__probe', '1'), win.localStorage.getItem('__probe') === '1'
+                && win.localStorage.removeItem('__probe'), true));
+      check('no product keys written', Object.keys(win.localStorage).filter(function (k) { return k.indexOf('terminal_') === 0 || k === 'terminal_snippets'; }).length === 0);
+
+      /* Esc via the pointer shim (mouse path a desktop visitor takes) */
+      tap(win, keyEl(doc, '#kbCollapsed [data-arg-key="Escape"]'));
+      check('Esc tap sends ESC', demo.sent.indexOf('\x1b') !== -1, JSON.stringify(demo.sent));
+
+      /* fast Ctrl then C: modifier toggle must not be swallowed */
+      var ctrl = keyEl(doc, '#kbCollapsed #skCtrl') || keyEl(doc, '#kbFull #skCtrl2');
+      var cKey = keyEl(doc, '#qwertyLayer [data-key="c"]');
+      tap(win, ctrl);
+      tap(win, cKey);
+      check('Ctrl,C sends ^C', demo.sent.indexOf('\x03') !== -1, JSON.stringify(demo.sent.slice(-3)));
+      check('no double-send on C', demo.sent.filter(function (s) { return s === '\x03'; }).length === 1);
+
+      /* letter after "typing": simulate the animation having typed a line,
+         then the first keypress must adopt that text as the buffer */
+      var line = demo.phoneLine;
+      var expected = 'run the tests and fix';
+      line.textContent = expected;
+      line._buf = undefined; /* force the handoff branch in kbSend */
+      tap(win, cKey);
+      check('letter appends to typed line', line.textContent === expected + 'c', JSON.stringify(line.textContent));
+      check('buffer adopted, not overwritten', line._buf === expected + 'c');
+
+      /* release outside the keyboard: after setPointerCapture the browser
+         retargets pointerup to the capturing element — simulate that */
+      var key = keyEl(doc, '#kbCollapsed [data-arg-key="Home"]');
+      var root = doc.getElementById('softKeyboard');
+      pointer(key, 'pointerdown');
+      pointer(root, 'pointerup'); /* capture-retargeted release */
+      check('no stuck active-touch after outside release',
+            !doc.querySelector('.kb-key.active-touch'));
+
+      /* i18n bridge: no raw key names after opening settings */
+      var before = demo.sent.length;
+      var gear = keyEl(doc, '#kbFull [data-act="toggle-settings-panel"]');
+      var settings = doc.getElementById('kbSettingsPanel');
+      gear.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+      check('settings panel opens', settings.classList.contains('open'));
+      var bodyText = settings.textContent;
+      check('no raw i18n key names', bodyText.indexOf('softkey_') === -1 && bodyText.indexOf('snippets_done') === -1);
+      gear.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true })); /* close */
+
+      /* language switch propagates into the iframe */
+      win.__setLang('en');
+      var cancelLabel = doc.getElementById('keyPopupCancel').textContent;
+      win.__setLang('zh');
+      check('i18n switch re-renders labels', cancelLabel === 'Release to cancel', JSON.stringify(cancelLabel));
+
+    } catch (e) {
+      lines.push('[FAIL] exception: ' + (e && e.stack || e));
+      failures++;
+    }
+    report();
+  }
+})();
+</script>
+</body></html>

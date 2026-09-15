@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" class="lang-en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="assets/kb.css">
+<style>
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body { background:
+    radial-gradient(ellipse 700px 500px at 85% 110%, rgba(245,166,35,.10), transparent 65%),
+    radial-gradient(ellipse 600px 420px at 8% -10%, rgba(53,195,222,.07), transparent 65%),
+    #08090d; position: relative; }
+  .og-grid { position: absolute; inset: 0; opacity: .5;
+    background-image: linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 20%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 20%, transparent 80%); }
+  .og { position: relative; display: flex; height: 630px; align-items: center; padding: 0 0 0 72px; gap: 24px; }
+  .og-copy { width: 560px; }
+  .og-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+  .og-brand .brand-mark { width: 34px; height: 34px; }
+  .og-brand span { font-family: var(--font-mono); font-weight: 600; font-size: 22px; color: var(--txt); }
+  .og h1 { font-family: var(--font-serif); font-weight: 400; font-size: 64px; line-height: 1.1; color: var(--txt); margin: 0 0 22px; }
+  .og h1 em { color: var(--amber); }
+  .og p { font-family: var(--font-cjk); color: var(--dim); font-size: 19px; line-height: 1.6; max-width: 30em; margin: 0 0 30px; }
+  .og-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .og-tags span { font-family: var(--font-mono); font-size: 12.5px; color: var(--dim);
+    border: 1px solid var(--line2); border-radius: 999px; padding: 7px 15px; background: rgba(255,255,255,.02); }
+  .og-tags b { color: var(--amber); font-weight: 500; }
+  .og-phone { position: absolute; right: 64px; top: 38px; transform: scale(.815); transform-origin: top right; }
+  .og-phone .phone-hint { display: none; }
+</style>
+</head>
+<body>
+<div class="og-grid" aria-hidden="true"></div>
+<div class="og">
+  <div class="og-copy">
+    <div class="og-brand">
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="14.4" cy="8.6" r="5.6" fill="none" stroke="#f5a623" stroke-width="2.6"/>
+        <circle cx="14.4" cy="8.6" r="1.7" fill="#f5a623"/>
+        <circle cx="9.6" cy="15.4" r="5.6" fill="none" stroke="#35c3de" stroke-width="2.6"/>
+        <circle cx="9.6" cy="15.4" r="1.7" fill="#35c3de"/>
+      </svg>
+      <span>oh-my-term</span>
+    </div>
+    <h1>The terminal built<br>for <em>Vibe&nbsp;Coding</em></h1>
+    <p>AI coding agents on your own machines. Close the client, drop the network — tasks keep running.</p>
+    <div class="og-tags">
+      <span><b>●</b> sessions never die</span>
+      <span><b>🔒</b> E2E encrypted</span>
+      <span><b>⇄</b> P2P + relay</span>
+      <span>Android · iOS · macOS · Win · Linux</span>
+    </div>
+  </div>
+</div>
+<div class="og-phone">
+  <div class="phone">
+    <div class="phone-notch"></div>
+    <div class="phone-status"><span>21:14</span><span class="ps-right"><i class="ps-sig"></i><i class="ps-wifi"></i><i class="ps-bat"></i></span></div>
+    <div class="phone-head">
+      <span class="ph-live"></span>
+      <span class="ph-title">claude [build-server-01]</span>
+      <span class="ph-actions" aria-hidden="true"><i class="on">&gt;_</i><i>▣</i><i>▥</i><i>⚙</i></span>
+    </div>
+    <div class="phone-term">
+      <div class="tui tui-compact">
+        <div class="tui-welcome"><span class="t-amber">✻</span> <span class="t-dim">Welcome to</span> Claude Code!</div>
+        <div class="tool"><span class="t-cyan">⏺</span> Read<span class="t-faint">(session.rs)</span></div>
+        <div class="tool-out t-faint">&nbsp;⎿ <span class="t-green">142 lines</span></div>
+        <div class="tool"><span class="t-cyan">⏺</span> Edit<span class="t-faint">(middleware.rs)</span></div>
+        <div class="tool-out t-faint">&nbsp;⎿ <span class="t-green">+18</span> <span class="t-red">-6</span></div>
+        <div class="tui-status"><span class="t-amber spin">✻</span> Pondering… <span class="t-faint">(esc to interrupt)</span></div>
+        <div class="tui-input">
+          <div class="tui-box"><span class="t-prompt">&gt;</span> <span id="phoneType">run the tests and fix what breaks</span><span class="caret-block" aria-hidden="true"></span></div>
+        </div>
+      </div>
+    </div>
+        <!--KB:START-->
+        <div id="softKeyboard">
+            <div id="kbCollapsed">
+                <div class="kb-row">
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Escape" data-i18n="softkey_escape" data-i18n-title="softkey_escape">Esc</button>
+                    <button class="kb-key kb-mod" data-lp="combos" id="skCtrl" data-act="toggle-modifier" data-arg-mod="ctrl" data-i18n="softkey_ctrl" data-i18n-title="softkey_ctrl">Ctrl</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Home" data-i18n="softkey_home" data-i18n-title="softkey_home">Home</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowUp" data-i18n-title="softkey_arrow_up">&#x2191;</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="End" data-i18n="softkey_end" data-i18n-title="softkey_end">End</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="PageUp" data-i18n="softkey_page_up" data-i18n-title="softkey_page_up">PgUp</button>
+                    <button class="kb-key kb-special" data-act="toggle-snippet-panel" data-i18n="softkey_snippets" data-i18n-title="softkey_snippets">Snip</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="Backspace" data-i18n-title="softkey_backspace">&#x232B;</button>
+                </div>
+                <div class="kb-row">
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Tab" data-i18n="softkey_tab" data-i18n-title="softkey_tab">Tab</button>
+                    <button class="kb-key kb-mod" id="skAlt" data-act="toggle-modifier" data-arg-mod="alt" data-i18n="softkey_alt" data-i18n-title="softkey_alt">Alt</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowLeft" data-i18n-title="softkey_arrow_left">&#x2190;</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowDown" data-i18n-title="softkey_arrow_down">&#x2193;</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowRight" data-i18n-title="softkey_arrow_right">&#x2192;</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="PageDown" data-i18n="softkey_page_down" data-i18n-title="softkey_page_down">PgDn</button>
+                    <button class="kb-key kb-special kb-icon" data-act="expand-soft-keyboard" data-i18n-title="softkey_expand_keyboard">&#x25B2;</button>
+                    <button class="kb-key kb-special kb-icon kb-enter" data-lp="repeat" data-act="soft-key" data-arg-key="Enter" data-i18n-title="softkey_enter"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M17 5.5 V13 H8"/><path d="M11.5 9.5 L8 13 L11.5 16.5"/></svg></button>
+                </div>
+            </div>
+
+            <div id="kbFull" style="display:none">
+                <div class="kb-row">
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Escape" data-i18n="softkey_escape" data-i18n-title="softkey_escape">Esc</button>
+                    <button class="kb-key kb-mod" data-lp="combos" id="skCtrl2" data-act="toggle-modifier" data-arg-mod="ctrl" data-i18n="softkey_ctrl" data-i18n-title="softkey_ctrl">Ctrl</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Home" data-i18n="softkey_home" data-i18n-title="softkey_home">Home</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowUp" data-i18n-title="softkey_arrow_up">&#x2191;</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="End" data-i18n="softkey_end" data-i18n-title="softkey_end">End</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="PageUp" data-i18n="softkey_page_up" data-i18n-title="softkey_page_up">PgUp</button>
+                    <button class="kb-key kb-special" data-act="toggle-snippet-panel" data-i18n="softkey_snippets" data-i18n-title="softkey_snippets">Snip</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Delete" data-i18n="softkey_delete" data-i18n-title="softkey_delete">Del</button>
+                </div>
+                <div class="kb-row">
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Tab" data-i18n="softkey_tab" data-i18n-title="softkey_tab">Tab</button>
+                    <button class="kb-key kb-mod" id="skAlt2" data-act="toggle-modifier" data-arg-mod="alt" data-i18n="softkey_alt" data-i18n-title="softkey_alt">Alt</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowLeft" data-i18n-title="softkey_arrow_left">&#x2190;</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowDown" data-i18n-title="softkey_arrow_down">&#x2193;</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowRight" data-i18n-title="softkey_arrow_right">&#x2192;</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="PageDown" data-i18n="softkey_page_down" data-i18n-title="softkey_page_down">PgDn</button>
+                    <button class="kb-key kb-special kb-icon" data-act="collapse-soft-keyboard" data-i18n-title="softkey_collapse_keyboard">▼</button>
+                    <button class="kb-key kb-special kb-icon" data-act="toggle-settings-panel" data-i18n-title="softkey_settings">&#x2699;</button>
+                </div>
+
+                <div id="qwertyLayer"></div>
+
+                <div id="symbolLayer" style="display:none">
+                    <div id="symGrid"></div>
+                    <div class="kb-row" id="symTabRow">
+                        <button class="kb-key kb-wide-1_5 kb-special" data-act="toggle-symbol-layer" data-i18n="sym_abc">ABC</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="keyPopup">
+                <div id="keyPopupCancel" data-i18n="softkey_popup_cancel">Release to cancel</div>
+                <div id="keyPopupInner"></div>
+            </div>
+
+            <div id="keyHint">
+                <div class="kh-title"></div>
+                <div class="kh-body"></div>
+            </div>
+
+            <div id="flickBadge"></div>
+
+            <div id="layoutMenu"></div>
+
+            <div id="kbSettingsPanel">
+                <div class="st-header">
+                    <span data-i18n="softkey_settings">Settings</span>
+                    <button data-act="toggle-settings-panel" data-i18n="close">Close</button>
+                </div>
+                <div class="st-body">
+                    <label class="st-toggle">
+                        <input type="checkbox" id="setFlick" checked data-act="set-flick-gesture">
+                        <span data-i18n="softkey_flick_anim">Letter animation on flick</span>
+                    </label>
+                    <label class="st-toggle">
+                        <input type="checkbox" id="setHaptic" checked data-act="set-haptic">
+                        <span data-i18n="softkey_haptic">Vibration feedback</span>
+                    </label>
+                    <div class="st-row">
+                        <span data-i18n="softkey_lp_delay">Long-press delay</span>
+                        <div class="st-seg" data-seg="lp-delay">
+                            <button data-act="set-lp-delay" data-arg-ms="250" data-i18n="softkey_opt_fast">Fast</button>
+                            <button data-act="set-lp-delay" data-arg-ms="350" data-i18n="softkey_opt_std">Normal</button>
+                            <button data-act="set-lp-delay" data-arg-ms="500" data-i18n="softkey_opt_slow">Slow</button>
+                        </div>
+                    </div>
+                    <div class="st-row">
+                        <span data-i18n="softkey_scrub_speed">Slide distance scale</span>
+                        <div class="st-seg" data-seg="scrub-speed">
+                            <button data-act="set-scrub-speed" data-arg-scale="1">1×</button>
+                            <button data-act="set-scrub-speed" data-arg-scale="2">2×</button>
+                            <button data-act="set-scrub-speed" data-arg-scale="3">3×</button>
+                            <button data-act="set-scrub-speed" data-arg-scale="4">4×</button>
+                            <button data-act="set-scrub-speed" data-arg-scale="5">5×</button>
+                        </div>
+                    </div>
+                    <div class="st-row">
+                        <span data-i18n="softkey_scrub_slop">Scrub engage distance</span>
+                        <div class="st-seg" data-seg="scrub-slop">
+                            <button data-act="set-scrub-slop" data-arg-gain="0.7" data-i18n="softkey_opt_near">Near</button>
+                            <button data-act="set-scrub-slop" data-arg-gain="1" data-i18n="softkey_opt_std">Normal</button>
+                            <button data-act="set-scrub-slop" data-arg-gain="1.5" data-i18n="softkey_opt_far">Far</button>
+                        </div>
+                    </div>
+                    <div class="st-help">
+                        <div class="st-help-title" data-i18n="softkey_gesture_title">Gestures</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_up">Up: alt char</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_down">Down: uppercase</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_lr">Left/Right: cursor scrub</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_hold">Long-press: candidates</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_shift">Shift: tap / hold</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_hint">Symbol keys: long-press shows sequence</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="snippetPanel">
+                <div class="sp-header">
+                    <span data-i18n="snippets">Snippets</span>
+                    <button data-act="start-add-snippet"><span aria-hidden="true">+</span> <span data-i18n="snippets_add">Add</span></button>
+                    <button id="spSortBtn" data-act="toggle-sort-mode" data-i18n="snippets_sort">Sort</button>
+                    <button data-act="toggle-snippet-panel" data-i18n="close">Close</button>
+                </div>
+                <div class="sp-form" id="spForm">
+                    <input type="text" id="spLabel" data-i18n-placeholder="snippets_label_placeholder" placeholder="Label (e.g. list files)" />
+                    <textarea id="spContent" rows="3" data-i18n-placeholder="snippets_content_placeholder" placeholder="Content (e.g. ls -la)"></textarea>
+                    <div class="sp-insert">
+                        <span data-i18n="snippets_insert">Insert:</span>
+                        <button type="button" data-act="insert-snippet-char" data-arg-char="nl" data-i18n="snippets_ins_newline">Newline</button>
+                        <button type="button" data-act="insert-snippet-char" data-arg-char="tab" data-i18n="snippets_ins_tab">Tab</button>
+                        <button type="button" data-act="insert-snippet-char" data-arg-char="esc" data-i18n="snippets_ins_esc">ESC</button>
+                    </div>
+                    <div class="sp-form-btns">
+                        <button class="sp-save" data-act="save-snippet" data-i18n="save">Save</button>
+                        <button class="sp-cancel" data-act="cancel-snippet-form" data-i18n="cancel">Cancel</button>
+                    </div>
+                </div>
+                <div class="sp-list" id="spList"></div>
+            </div>
+        </div>
+<!--KB:END-->
+  <div class="phone-home"></div>
+  </div>
+</div>
+<div id="app" hidden></div>
+<script src="assets/kb.js"></script>
+<script>
+  document.getElementById('softKeyboard').style.display = 'block';
+  try {
+    var kb = new SoftKeyboard({
+      isMobile: function () { return true; }, canSend: function () { return true; },
+      send: function () {}, requestFit: function () {}, syncGeometry: function () {},
+      inputSuppressed: function () { return false; }, forEachTextarea: function () {}, focusTerminal: function () {}
+    });
+    kb.setup();
+  } catch (e) {}
+</script>
+</body>
+</html>
