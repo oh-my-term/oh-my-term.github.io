@@ -1,0 +1,142 @@
+<!doctype html>
+<!--
+  Account deletion notice for the Oh My Term official service (issue #226).
+  Play's Data safety form links here; the page must let users request
+  account deletion without reinstalling the app. Static, script-free.
+
+  DRAFT: the contact address and "last updated" date are substitution
+  anchors (@@...@@) filled by deploy-remote from OMT_PRIVACY_CONTACT /
+  OMT_PRIVACY_LAST_UPDATED — the page is only installed when both are
+  configured.
+
+  SUBMISSION GATE: Play requires apps that support in-app account creation
+  to offer in-app deletion AND a web deletion resource. The in-app half is
+  #215 (account deletion API + settings UI) — it MUST be shipped and live
+  before these pages are deployed to a store-facing env and before the
+  Data safety form is filled in. Deploying the web page alone does not
+  satisfy the policy.
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="robots" content="noindex">
+  <title>Oh My Term · 账号删除 / Account Deletion</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090d0b;
+      --surface: #101612;
+      --text: #eaf1e9;
+      --muted: #a0afa3;
+      --line: #2a372d;
+      --accent: #a3ee92;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        color-scheme: light;
+        --bg: #f6f8f4;
+        --surface: #ffffff;
+        --text: #1a241b;
+        --muted: #5c6b5e;
+        --line: #d4ddd2;
+        --accent: #2c6b1f;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.8 var(--sans); }
+    .wrap { max-width: 46rem; margin: 0 auto; padding: 48px 20px 64px; }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 19px; margin: 36px 0 10px; }
+    p, li { color: var(--text); }
+    .meta { color: var(--muted); font: 13px/1.6 var(--mono); margin: 0 0 28px; }
+    .toc { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 18px; margin: 0 0 8px; }
+    .toc a { color: var(--accent); text-decoration: none; margin-right: 18px; font-size: 14px; }
+    .lang-divider { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+    .en h1 { font-size: 22px; }
+    ol li, ul li { margin-bottom: 6px; }
+    code { font-family: var(--mono); font-size: 13px; background: var(--surface); padding: 1px 5px; border-radius: 3px; }
+    footer { margin-top: 48px; color: var(--muted); font: 12px/1.7 var(--mono); }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="toc" aria-label="Language">
+      <a href="#zh">中文</a>
+      <a href="#en" lang="en">English</a>
+    </nav>
+
+    <section id="zh">
+      <h1>删除你的 Oh My Term 账号</h1>
+      <p class="meta">最后更新：2026-09-16 · 联系我们：privacy@ohmyterm.com</p>
+
+      <p>你可以随时删除 Oh My Term 官方服务的账号，无需重新安装应用。有两种方式：</p>
+
+      <h2>方式一：在应用内删除</h2>
+      <ol>
+        <li>打开 Oh My Term 客户端并登录</li>
+        <li>进入「<strong>设置 → 安全 → 删除账号</strong>」</li>
+        <li>按提示完成身份确认，确认后即执行删除</li>
+      </ol>
+
+      <h2>方式二：通过邮件请求删除</h2>
+      <ol>
+        <li>向 <strong>privacy@ohmyterm.com</strong> 发送邮件，主题注明「删除账号」</li>
+        <li>正文中写明你的账号用户名（如忘记用户名，提供注册邮箱或绑定的第三方登录方式）</li>
+        <li>我们会在 <strong>7 天内</strong> 完成删除并回复确认</li>
+      </ol>
+
+      <h2>删除的内容</h2>
+      <ul>
+        <li>账号信息（用户名、密码哈希、两步验证、第三方登录绑定）</li>
+        <li>所有已授权设备的授权记录</li>
+        <li>偏好设置、会话列表等与账号关联的数据</li>
+      </ul>
+      <p>删除操作不可恢复。你连接的自有机器（设备上安装的常驻进程）不受影响，可在设备上自行卸载。</p>
+
+      <h2>如果你使用的是自建服务器</h2>
+      <p>自建服务器的账号数据由该服务器的运营者掌握，请直接联系你的运营者删除。</p>
+    </section>
+
+    <hr class="lang-divider">
+
+    <section id="en" class="en" lang="en">
+      <h1>Delete your Oh My Term account</h1>
+      <p class="meta">Last updated: 2026-09-16 · Contact: privacy@ohmyterm.com</p>
+
+      <p>You can delete your official Oh My Term service account at any time — no app reinstall required. Two ways:</p>
+
+      <h2>Option 1: delete in the app</h2>
+      <ol>
+        <li>Open the Oh My Term client and sign in</li>
+        <li>Go to “<strong>Settings → Security → Delete account</strong>”</li>
+        <li>Confirm your identity when prompted, then confirm to delete the account</li>
+      </ol>
+
+      <h2>Option 2: request deletion by email</h2>
+      <ol>
+        <li>Email <strong>privacy@ohmyterm.com</strong> with the subject “Account deletion”</li>
+        <li>Include your account username (or, if forgotten, your sign-up email or linked sign-in method)</li>
+        <li>We complete the deletion and reply within <strong>7 days</strong></li>
+      </ol>
+
+      <h2>What gets deleted</h2>
+      <ul>
+        <li>Account info (username, password hash, two-factor settings, linked sign-ins)</li>
+        <li>Authorization records for all of your devices</li>
+        <li>Preferences, session lists and other account-linked data</li>
+      </ul>
+      <p>Deletion is irreversible. Machines you connected (running the device agent) are unaffected — uninstall the agent on the device itself if you no longer want it.</p>
+
+      <h2>If you use a self-hosted server</h2>
+      <p>Accounts on a self-hosted server belong to that server's operator — please contact them to delete your data.</p>
+    </section>
+
+    <footer>Oh My Term · <a href="index.html">ohmyterm</a> · <a href="privacy.html">隐私政策 / Privacy</a></footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!doctype html>
+<!--
+  Privacy policy for the Oh My Term official service (issue #226).
+  Static, script-free — same posture as the omtd landing page. Deployed by
+  deploy-remote alongside index.html/landing.js on landing-profile envs.
+
+  DRAFT: the contact address and "last updated" date are placeholders.
+  Replace both before a store submission, and have the wording reviewed
+  (see docs/guides/google-play-release.md).
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="robots" content="noindex">
+  <title>Oh My Term · 隐私政策 / Privacy Policy</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090d0b;
+      --surface: #101612;
+      --text: #eaf1e9;
+      --muted: #a0afa3;
+      --line: #2a372d;
+      --accent: #a3ee92;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        color-scheme: light;
+        --bg: #f6f8f4;
+        --surface: #ffffff;
+        --text: #1a241b;
+        --muted: #5c6b5e;
+        --line: #d4ddd2;
+        --accent: #2c6b1f;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.8 var(--sans); }
+    .wrap { max-width: 46rem; margin: 0 auto; padding: 48px 20px 64px; }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 19px; margin: 36px 0 10px; }
+    h3 { font-size: 16px; margin: 24px 0 8px; }
+    p, li { color: var(--text); }
+    .meta { color: var(--muted); font: 13px/1.6 var(--mono); margin: 0 0 28px; }
+    .toc { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 18px; margin: 0 0 8px; }
+    .toc a { color: var(--accent); text-decoration: none; margin-right: 18px; font-size: 14px; }
+    .lang-divider { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+    .en h1 { font-size: 22px; }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 12px 0; }
+    th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--surface); }
+    code { font-family: var(--mono); font-size: 13px; background: var(--surface); padding: 1px 5px; border-radius: 3px; }
+    footer { margin-top: 48px; color: var(--muted); font: 12px/1.7 var(--mono); }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="toc" aria-label="Language">
+      <a href="#zh">中文</a>
+      <a href="#en" lang="en">English</a>
+    </nav>
+
+    <section id="zh">
+      <h1>隐私政策</h1>
+      <p class="meta">最后更新：2026-09-16 · 联系我们：privacy@ohmyterm.com</p>
+
+      <p>本政策说明 Oh My Term 官方服务（官方演示服务器与相关网站）如何处理你的数据。<strong>Oh My Term 是一个远程终端工具：绝大多数情况下，你的数据只存在于你自己的设备和你连接的机器之间。</strong></p>
+
+      <h2>我们处理哪些数据</h2>
+      <table>
+        <tr><th>数据</th><th>用途</th></tr>
+        <tr><td>账号信息：用户名、密码（仅以 Argon2id 哈希形式存储）、可选的两步验证（TOTP）、可选的第三方登录绑定（如 GitHub 的用户标识）</td><td>注册、登录与账号安全</td></tr>
+        <tr><td>设备授权信息：你添加设备的名称、公钥、授权记录</td><td>在客户端展示设备列表并控制哪些设备可以连接</td></tr>
+        <tr><td>会话列表元数据：会话名称、启动命令、工作目录等</td><td>在多端之间同步你的会话列表</td></tr>
+        <tr><td>界面偏好设置（主题、排序等）</td><td>在多端之间同步你的个性化设置</td></tr>
+        <tr><td>连接记录：连接的 IP 地址与时间</td><td>安全防护（如登录失败限流）以及在设备管理界面展示最近活动</td></tr>
+      </table>
+
+      <h2>终端内容是端到端加密的</h2>
+      <p>你在终端中输入和看到的内容（按键、输出）在你的浏览器/客户端与你的设备之间<strong>端到端加密</strong>传输。官方服务器只承担加密数据的转发，无法读取终端内容。</p>
+
+      <h2>我们不做什么</h2>
+      <ul>
+        <li>不出售你的数据，不与第三方共享用于广告或营销</li>
+        <li>App 内没有广告和第三方跟踪组件</li>
+        <li>不请求与核心功能无关的系统权限（位置、通讯录等）</li>
+      </ul>
+
+      <h2>数据保留与删除</h2>
+      <p>你可以通过应用内的账号删除入口删除账号，也可以按 <a href="account-deletion.html">账号删除说明</a> 通过邮件请求删除。删除账号会一并删除其账号信息、设备授权、偏好设置与相关记录。</p>
+
+      <h2>如果你使用的是自建服务器</h2>
+      <p>Oh My Term 可以连接你自己（或你的组织）部署的服务器。这种情况下，上述数据由该服务器的运营者处理，本政策不适用——请向你的运营者了解其数据处理方式。</p>
+
+      <h2>政策变更</h2>
+      <p>如有重大变更，我们会在官方网站公布并更新本页面的「最后更新」日期。</p>
+    </section>
+
+    <hr class="lang-divider">
+
+    <section id="en" class="en" lang="en">
+      <h1>Privacy Policy</h1>
+      <p class="meta">Last updated: 2026-09-16 · Contact: privacy@ohmyterm.com</p>
+
+      <p>This policy explains how the official Oh My Term service (the official demo servers and related websites) handles your data. <strong>Oh My Term is a remote terminal tool: in almost all cases your data stays between your own devices and the machines you connect to.</strong></p>
+
+      <h2>What we process</h2>
+      <table>
+        <tr><th>Data</th><th>Purpose</th></tr>
+        <tr><td>Account info: username, password (stored only as an Argon2id hash), optional two-factor authentication (TOTP), optional third-party sign-in link (e.g. a GitHub user id)</td><td>Registration, sign-in, account security</td></tr>
+        <tr><td>Device authorization: names, public keys and grant records of devices you add</td><td>Showing your device list and controlling which devices may connect</td></tr>
+        <tr><td>Session list metadata: session names, start commands, working directories</td><td>Syncing your session list across devices</td></tr>
+        <tr><td>UI preferences (theme, sort order, …)</td><td>Syncing your settings across devices</td></tr>
+        <tr><td>Connection records: IP address and time of connections</td><td>Abuse protection (e.g. sign-in rate limiting) and showing recent activity in device management</td></tr>
+      </table>
+
+      <h2>Terminal content is end-to-end encrypted</h2>
+      <p>What you type and see in a terminal (keystrokes, output) travels <strong>end-to-end encrypted</strong> between your browser/client and your device. The official server only relays ciphertext and cannot read terminal content.</p>
+
+      <h2>What we do not do</h2>
+      <ul>
+        <li>We do not sell your data or share it with third parties for advertising or marketing</li>
+        <li>The app contains no ads and no third-party tracking components</li>
+        <li>We do not request system permissions unrelated to the core function (location, contacts, …)</li>
+      </ul>
+
+      <h2>Data retention and deletion</h2>
+      <p>You can delete your account through the in-app account deletion entry, or request deletion by email as described in the <a href="account-deletion.html" lang="en">account deletion notice</a>. Deleting an account removes its account info, device grants, preferences and related records.</p>
+
+      <h2>If you use a self-hosted server</h2>
+      <p>Oh My Term can connect to servers you (or your organization) host yourself. In that case the data described above is processed by that server's operator, and this policy does not apply — please contact your operator instead.</p>
+
+      <h2>Changes to this policy</h2>
+      <p>Material changes will be announced on the official website and reflected in the "last updated" date above.</p>
+    </section>
+
+    <footer>Oh My Term · <a href="index.html">ohmyterm</a></footer>
+  </div>
+</body>
+</html>
