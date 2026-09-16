@@ -88,6 +88,7 @@ em {
 
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--txt); }
 .brand-mark { width: 26px; height: 26px; filter: drop-shadow(0 0 8px var(--amber-glow)); }
+img.brand-mark { display: block; object-fit: contain; }
 .brand-name { font-family: var(--font-mono); font-weight: 600; font-size: 15.5px; letter-spacing: -0.02em; white-space: nowrap; }
 
 .nav-links { display: flex; gap: 26px; margin-left: 12px; }
