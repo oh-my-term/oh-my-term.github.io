@@ -27,6 +27,10 @@
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
     revealEls.forEach(function (el) { io.observe(el); });
+    /* safety net: never leave content invisible if the observer misfires */
+    setTimeout(function () {
+      revealEls.forEach(function (el) { el.classList.add('in'); });
+    }, 1500);
   }
 
   /* ---------- language toggle ---------- */
@@ -39,9 +43,10 @@
       root.classList.add('lang-' + next);
       root.lang = next;
       try { localStorage.setItem('omt-lang', next); } catch (e) {}
-      document.title = next === 'zh'
-        ? 'oh-my-term — 为 Vibe Coding 而生的终端管理器'
-        : 'oh-my-term — The terminal manager built for Vibe Coding';
+      var root = document.documentElement;
+      document.title = (next === 'zh'
+        ? root.getAttribute('data-title-zh')
+        : root.getAttribute('data-title-en')) || document.title;
       var frame = document.querySelector('.phone-frame');
       if (frame && frame.contentWindow && frame.contentWindow.__setLang) {
         try { frame.contentWindow.__setLang(next); } catch (e) {}
