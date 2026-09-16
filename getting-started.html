@@ -67,8 +67,8 @@
       <span class="l-en">Three steps to your own AI terminal</span>
     </h1>
     <p class="sec-sub reveal d2">
-      <span class="l-zh">准备一个 omts 服务端（自建，或先用官方免费版）→ 安装客户端 → 配对设备。全程可以让你的 AI agent 代劳。</span>
-      <span class="l-en">Get an omts server (self-hosted, or the free tier) → install the client → pair your devices. Your AI agent can do most of it.</span>
+      <span class="l-zh">准备一个 omts 服务端（自建，或先用官方免费版）→ 安装客户端 → 配对设备。服务端部署可以让 AI agent 代劳；之后的添加设备、创建会话是几分钟的人工操作。</span>
+      <span class="l-en">Get an omts server (self-hosted, or the free tier) → install the client → pair your devices. Handing the server deploy to an AI agent works well; adding devices and opening sessions are quick manual steps.</span>
     </p>
   </div>
 </section>
@@ -165,19 +165,21 @@
 <!-- ============================== STEP 3: PAIR ============================== -->
 <section class="gs-sec" id="pair">
   <div class="wrap">
-    <h2 class="gs-step reveal"><span class="gs-num">3</span><span class="l-zh">配对设备，打开会话</span><span class="l-en">Pair devices, open a session</span></h2>
+    <h2 class="gs-step reveal"><span class="gs-num">3</span><span class="l-zh">添加设备，创建会话</span><span class="l-en">Add a machine, open a session</span></h2>
     <div class="gs-pair reveal">
-      <div class="gs-pair-item"><b>1</b><span class="l-zh">omtc 在你的机器上注册到服务端</span><span class="l-en">Register omtc on your machine with the server</span></div>
-      <div class="gs-pair-item"><b>2</b><span class="l-zh">客户端核对 16 位 Bootstrap Commit（TOFU，防冒名）</span><span class="l-en">Verify the 16-character Bootstrap Commit in the client (TOFU anti-impersonation)</span></div>
-      <div class="gs-pair-item"><b>3</b><span class="l-zh">创建会话——关掉客户端，手机接着用</span><span class="l-en">Start a session — close the client, pick it up on your phone</span></div>
+      <div class="gs-pair-item"><b>1</b><span class="l-zh">客户端里点「添加机器」：它生成一条安装命令（一次性令牌，1 小时有效），复制下来</span><span class="l-en">In the client, click "Add a machine": it generates an install command (one-time token, valid 1 hour) — copy it</span></div>
+      <div class="gs-pair-item"><b>2</b><span class="l-zh">在要纳管的机器上执行这条命令完成注册；设备的 16 位指纹就在机器上：<code>~/.omt/bootstrap-commit</code>（或运行 <code>omtc init --bootstrap-only</code>）</span><span class="l-en">Run that command on the machine you want to manage; its 16-character fingerprint is on the machine: <code>~/.omt/bootstrap-commit</code> (or run <code>omtc init --bootstrap-only</code>)</span></div>
+      <div class="gs-pair-item"><b>3</b><span class="l-zh">回到客户端创建会话：首次连接时填入机器上展示的指纹，完成 TOFU 信任锚定（防中间人）</span><span class="l-en">Back in the client, create a session: on first connect, enter the fingerprint shown on the machine — TOFU anchoring against man-in-the-middle</span></div>
     </div>
-    <p class="gs-note reveal"><span class="l-zh">首次配对示例：</span><span class="l-en">First pairing looks like:</span></p>
+    <p class="gs-note reveal"><span class="l-zh">在设备上查看指纹：</span><span class="l-en">Reading the fingerprint on the device:</span></p>
     <div class="dep-term reveal">
       <div class="dep-term-bar"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span><span>omtc@build-server</span></div>
-      <pre>$ omtc register
-<span class="t-amber">Bootstrap Commit:</span> <b>a3f9 27c1 88b4 0e6d</b>
-<span class="t-green">✓ paired — waiting for first session</span></pre>
+      <pre><span class="t-faint"># <span class="l-zh">在要纳管的机器上，运行客户端「添加机器」给出的安装命令，然后：</span><span class="l-en">on the machine you are adding, run the install command from the client, then:</span></span>
+$ cat ~/.omt/bootstrap-commit
+<span class="t-amber">a3f9 27c1 88b4 0e6d</span>   <span class="t-faint"># 16-character device fingerprint</span>
+<span class="t-green">✓ registered — omtc is up and will start on boot</span></pre>
     </div>
+    <p class="gs-note reveal"><span class="l-zh">首次连接的 TOFU 对话里有三选：填入指纹（推荐）、跳过验证（浏览器将信任看到的第一个公钥，有中间人风险）、拒绝（安全默认）。如果你没有动过这台设备而指纹对不上，请拒绝并排查。</span><span class="l-en">The first-connect TOFU dialog offers three choices: enter the fingerprint (recommended), skip verification (the browser will trust the first key it sees — MITM risk), or reject (safe default). If you have not touched the machine and the fingerprint does not match, reject and investigate.</span></p>
   </div>
 </section>
 
