@@ -54,7 +54,10 @@
     p, li { color: var(--text); }
     .meta { color: var(--muted); font: 13px/1.6 var(--mono); margin: 0 0 28px; }
     .toc { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 18px; margin: 0 0 8px; }
-    .toc a { color: var(--accent); text-decoration: none; margin-right: 18px; font-size: 14px; }
+        .toc a { color: var(--accent); text-decoration: none; margin-right: 18px; font-size: 14px; }
+    .toc a.active { color: var(--text); font-weight: 600; }
+    html.legal-lang-zh #en, html.legal-lang-en #zh { display: none; }
+    html.legal-lang-zh .lang-divider, html.legal-lang-en .lang-divider { display: none; }
     .lang-divider { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
     .en h1 { font-size: 22px; }
     ol li, ul li { margin-bottom: 6px; }
@@ -62,12 +65,21 @@
     footer { margin-top: 48px; color: var(--muted); font: 12px/1.7 var(--mono); }
     footer a { color: var(--muted); }
   </style>
+  <script>
+    window.__legalLangTitles = { zh: "Oh My Term \u00b7 \u8d26\u53f7\u5220\u9664", en: "Oh My Term \u00b7 Account Deletion" };
+    (function () {
+      var l = null;
+      try { l = localStorage.getItem('omt-lang'); } catch (e) {}
+      if (l !== 'zh' && l !== 'en') l = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+      document.documentElement.classList.add('legal-lang-' + l);
+    })();
+  </script>
 </head>
 <body>
   <div class="wrap">
     <nav class="toc" aria-label="Language">
-      <a href="#zh">中文</a>
-      <a href="#en" lang="en">English</a>
+      <a href="#zh" data-lang="zh">中文</a>
+      <a href="#en" data-lang="en" lang="en">English</a>
     </nav>
 
     <section id="zh">
@@ -87,6 +99,7 @@
       <ol>
         <li>向 <strong>privacy@ohmyterm.com</strong> 发送邮件，主题注明「删除账号」</li>
         <li>正文中写明你的账号用户名（如忘记用户名，提供注册邮箱或绑定的第三方登录方式）</li>
+        <li>写明你使用的 omts 服务器地址（客户端登录页的 Server URL），以便我们确认你的账号属于官方服务</li>
         <li>我们会在 <strong>7 天内</strong> 完成删除并回复确认</li>
       </ol>
 
@@ -98,8 +111,8 @@
       </ul>
       <p>删除操作不可恢复。你连接的自有机器（设备上安装的常驻进程）不受影响，可在设备上自行卸载。</p>
 
-      <h2>如果你使用的是自建服务器</h2>
-      <p>自建服务器的账号数据由该服务器的运营者掌握，请直接联系你的运营者删除。</p>
+      <h2>如果你使用的不是官方服务器</h2>
+      <p>如果你使用的 omts 服务器不是官方运营的（自建、组织部署或第三方服务），账号数据由该服务器的运营者掌握——请直接联系你的服务提供方删除，官方无法处理第三方服务器上的账号。</p>
     </section>
 
     <hr class="lang-divider">
@@ -121,6 +134,7 @@
       <ol>
         <li>Email <strong>privacy@ohmyterm.com</strong> with the subject “Account deletion”</li>
         <li>Include your account username (or, if forgotten, your sign-up email or linked sign-in method)</li>
+        <li>Include the omts server URL you use (the Server URL on the client's sign-in page) so we can confirm your account is on the official service</li>
         <li>We complete the deletion and reply within <strong>7 days</strong></li>
       </ol>
 
@@ -132,11 +146,31 @@
       </ul>
       <p>Deletion is irreversible. Machines you connected (running the device agent) are unaffected — uninstall the agent on the device itself if you no longer want it.</p>
 
-      <h2>If you use a self-hosted server</h2>
-      <p>Accounts on a self-hosted server belong to that server's operator — please contact them to delete your data.</p>
+      <h2>If you use a non-official server</h2>
+      <p>If the omts server you use is not operated by Oh My Term (self-hosted, organization-deployed, or a third-party service), your account belongs to that server's operator — contact your service provider to delete it. We cannot delete accounts on third-party servers.</p>
     </section>
 
     <footer>Oh My Term · <a href="index.html">ohmyterm</a> · <a href="privacy.html">隐私政策 / Privacy</a></footer>
   </div>
+  <script>
+    (function () {
+      var titles = window.__legalLangTitles;
+      var root = document.documentElement;
+      function apply(l) {
+        root.classList.toggle('legal-lang-zh', l === 'zh');
+        root.classList.toggle('legal-lang-en', l === 'en');
+        root.lang = l === 'zh' ? 'zh-CN' : 'en';
+        document.title = titles[l];
+        document.querySelectorAll('.toc a[data-lang]').forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('data-lang') === l);
+        });
+        try { localStorage.setItem('omt-lang', l); } catch (e) {}
+      }
+      document.querySelectorAll('.toc a[data-lang]').forEach(function (a) {
+        a.addEventListener('click', function (e) { e.preventDefault(); apply(a.getAttribute('data-lang')); });
+      });
+      apply(root.classList.contains('legal-lang-zh') ? 'zh' : 'en');
+    })();
+  </script>
 </body>
 </html>
