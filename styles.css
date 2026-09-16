@@ -798,9 +798,10 @@ img.brand-mark { display: block; object-fit: contain; }
   border: 1px solid var(--line2); border-radius: 14px;
   overflow: hidden;
 }
-.arch-fig .arch-shot { display: block; cursor: zoom-in; }
-.arch-fig img { display: block; width: 100%; height: auto; opacity: 0.92; transition: opacity 0.25s, transform 0.35s; }
-.arch-fig:hover img { opacity: 1; transform: scale(1.008); }
+.arch-fig .arch-live {
+  display: block; width: 100%; height: auto; aspect-ratio: 8 / 5;
+  border: 0; background: #0b0e14;
+}
 .arch-fig figcaption {
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
   padding: 13px 18px; border-top: 1px solid var(--line);

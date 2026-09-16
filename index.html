@@ -278,9 +278,7 @@
       <span class="l-en">Client, relay and device agent each do one job: the relay only forwards ciphertext, and P2P wins whenever the network allows.</span>
     </p>
     <figure class="arch-fig reveal">
-      <a class="arch-shot" href="architecture/overview.html" target="_blank" rel="noopener" aria-label="oh-my-term architecture diagram">
-        <img src="assets/arch-overview.png" alt="oh-my-term architecture diagram" width="1280" height="800" decoding="async" loading="lazy">
-      </a>
+      <iframe class="arch-live" src="architecture/overview.html?theme=dark&embed=1" title="oh-my-term architecture diagram" loading="lazy" width="1280" height="800"></iframe>
       <figcaption>
         <span class="fig-cap"><span class="l-zh">整体架构：omtn 客户端 · omts 中继 · omtc 设备端</span><span class="l-en">The whole picture: omtn client · omts relay · omtc device agent</span></span>
         <a class="arch-link" href="architecture/overview.html" target="_blank" rel="noopener"><span class="l-zh">交互版 ↗</span><span class="l-en">Interactive ↗</span></a>
@@ -388,9 +386,7 @@
     </div>
 
     <figure class="arch-fig reveal d1">
-      <a class="arch-shot" href="architecture/trust.html" target="_blank" rel="noopener" aria-label="oh-my-term trust chain diagram">
-        <img src="assets/arch-trust.png" alt="oh-my-term trust chain diagram" width="1280" height="800" decoding="async" loading="lazy">
-      </a>
+      <iframe class="arch-live" src="architecture/trust.html?theme=dark&embed=1" title="oh-my-term trust chain diagram" loading="lazy" width="1280" height="800"></iframe>
       <figcaption>
         <span class="fig-cap"><span class="l-zh">会话身份（TOFU）与签名更新，各自成链</span><span class="l-en">Session identity (TOFU) and signed updates — two separate chains</span></span>
         <a class="arch-link" href="architecture/trust.html" target="_blank" rel="noopener"><span class="l-zh">交互版 ↗</span><span class="l-en">Interactive ↗</span></a>
@@ -459,9 +455,7 @@ $ omtc register
 <span class="t-green">✓ paired — waiting for first session</span></pre>
     </div>
     <figure class="arch-fig reveal d1">
-      <a class="arch-shot" href="architecture/deploy.html" target="_blank" rel="noopener" aria-label="oh-my-term deployment topology diagram">
-        <img src="assets/arch-deploy.png" alt="oh-my-term deployment topology diagram" width="1280" height="800" decoding="async" loading="lazy">
-      </a>
+      <iframe class="arch-live" src="architecture/deploy.html?theme=dark&embed=1" title="oh-my-term deployment topology diagram" loading="lazy" width="1280" height="800"></iframe>
       <figcaption>
         <span class="fig-cap"><span class="l-zh">部署拓扑：多节点共享 MySQL，滚动升级客户端自动重连</span><span class="l-en">Deployment topology: nodes share MySQL — rolling upgrades keep clients connected</span></span>
         <a class="arch-link" href="architecture/deploy.html" target="_blank" rel="noopener"><span class="l-zh">交互版 ↗</span><span class="l-en">Interactive ↗</span></a>
