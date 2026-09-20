@@ -1,0 +1,146 @@
+        <div id="softKeyboard">
+            <div id="kbCollapsed">
+                <div class="kb-row">
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Escape" data-i18n="softkey_escape" data-i18n-title="softkey_escape">Esc</button>
+                    <button class="kb-key kb-mod" data-lp="combos" id="skCtrl" data-act="toggle-modifier" data-arg-mod="ctrl" data-i18n="softkey_ctrl" data-i18n-title="softkey_ctrl">Ctrl</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Home" data-i18n="softkey_home" data-i18n-title="softkey_home">Home</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowUp" data-i18n-title="softkey_arrow_up">&#x2191;</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="End" data-i18n="softkey_end" data-i18n-title="softkey_end">End</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="PageUp" data-i18n="softkey_page_up" data-i18n-title="softkey_page_up">PgUp</button>
+                    <button class="kb-key kb-special" data-act="toggle-snippet-panel" data-i18n="softkey_snippets" data-i18n-title="softkey_snippets">Snip</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="Backspace" data-i18n-title="softkey_backspace">&#x232B;</button>
+                </div>
+                <div class="kb-row">
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Tab" data-i18n="softkey_tab" data-i18n-title="softkey_tab">Tab</button>
+                    <button class="kb-key kb-mod" id="skAlt" data-act="toggle-modifier" data-arg-mod="alt" data-i18n="softkey_alt" data-i18n-title="softkey_alt">Alt</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowLeft" data-i18n-title="softkey_arrow_left">&#x2190;</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowDown" data-i18n-title="softkey_arrow_down">&#x2193;</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowRight" data-i18n-title="softkey_arrow_right">&#x2192;</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="PageDown" data-i18n="softkey_page_down" data-i18n-title="softkey_page_down">PgDn</button>
+                    <button class="kb-key kb-special kb-icon" data-act="expand-soft-keyboard" data-i18n-title="softkey_expand_keyboard">&#x25B2;</button>
+                    <button class="kb-key kb-special kb-icon kb-enter" data-lp="repeat" data-act="soft-key" data-arg-key="Enter" data-i18n-title="softkey_enter"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M17 5.5 V13 H8"/><path d="M11.5 9.5 L8 13 L11.5 16.5"/></svg></button>
+                </div>
+            </div>
+
+            <div id="kbFull" style="display:none">
+                <div class="kb-row">
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Escape" data-i18n="softkey_escape" data-i18n-title="softkey_escape">Esc</button>
+                    <button class="kb-key kb-mod" data-lp="combos" id="skCtrl2" data-act="toggle-modifier" data-arg-mod="ctrl" data-i18n="softkey_ctrl" data-i18n-title="softkey_ctrl">Ctrl</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Home" data-i18n="softkey_home" data-i18n-title="softkey_home">Home</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowUp" data-i18n-title="softkey_arrow_up">&#x2191;</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="End" data-i18n="softkey_end" data-i18n-title="softkey_end">End</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="PageUp" data-i18n="softkey_page_up" data-i18n-title="softkey_page_up">PgUp</button>
+                    <button class="kb-key kb-special" data-act="toggle-snippet-panel" data-i18n="softkey_snippets" data-i18n-title="softkey_snippets">Snip</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Delete" data-i18n="softkey_delete" data-i18n-title="softkey_delete">Del</button>
+                </div>
+                <div class="kb-row">
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="Tab" data-i18n="softkey_tab" data-i18n-title="softkey_tab">Tab</button>
+                    <button class="kb-key kb-mod" id="skAlt2" data-act="toggle-modifier" data-arg-mod="alt" data-i18n="softkey_alt" data-i18n-title="softkey_alt">Alt</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowLeft" data-i18n-title="softkey_arrow_left">&#x2190;</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowDown" data-i18n-title="softkey_arrow_down">&#x2193;</button>
+                    <button class="kb-key kb-special kb-icon" data-lp="repeat" data-act="soft-key" data-arg-key="ArrowRight" data-i18n-title="softkey_arrow_right">&#x2192;</button>
+                    <button class="kb-key kb-special" data-lp="repeat" data-act="soft-key" data-arg-key="PageDown" data-i18n="softkey_page_down" data-i18n-title="softkey_page_down">PgDn</button>
+                    <button class="kb-key kb-special kb-icon" data-act="collapse-soft-keyboard" data-i18n-title="softkey_collapse_keyboard">▼</button>
+                    <button class="kb-key kb-special kb-icon" data-act="toggle-settings-panel" data-i18n-title="softkey_settings">&#x2699;</button>
+                </div>
+
+                <div id="qwertyLayer"></div>
+
+                <div id="symbolLayer" style="display:none">
+                    <div id="symGrid"></div>
+                    <div class="kb-row" id="symTabRow">
+                        <button class="kb-key kb-wide-1_5 kb-special" data-act="toggle-symbol-layer" data-i18n="sym_abc">ABC</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="keyPopup">
+                <div id="keyPopupCancel" data-i18n="softkey_popup_cancel">Release to cancel</div>
+                <div id="keyPopupInner"></div>
+            </div>
+
+            <div id="keyHint">
+                <div class="kh-title"></div>
+                <div class="kh-body"></div>
+            </div>
+
+            <div id="flickBadge"></div>
+
+            <div id="layoutMenu"></div>
+
+            <div id="kbSettingsPanel">
+                <div class="st-header">
+                    <span data-i18n="softkey_settings">Settings</span>
+                    <button data-act="toggle-settings-panel" data-i18n="close">Close</button>
+                </div>
+                <div class="st-body">
+                    <label class="st-toggle">
+                        <input type="checkbox" id="setFlick" checked data-act="set-flick-gesture">
+                        <span data-i18n="softkey_flick_anim">Letter animation on flick</span>
+                    </label>
+                    <label class="st-toggle">
+                        <input type="checkbox" id="setHaptic" checked data-act="set-haptic">
+                        <span data-i18n="softkey_haptic">Vibration feedback</span>
+                    </label>
+                    <div class="st-row">
+                        <span data-i18n="softkey_lp_delay">Long-press delay</span>
+                        <div class="st-seg" data-seg="lp-delay">
+                            <button data-act="set-lp-delay" data-arg-ms="250" data-i18n="softkey_opt_fast">Fast</button>
+                            <button data-act="set-lp-delay" data-arg-ms="350" data-i18n="softkey_opt_std">Normal</button>
+                            <button data-act="set-lp-delay" data-arg-ms="500" data-i18n="softkey_opt_slow">Slow</button>
+                        </div>
+                    </div>
+                    <div class="st-row">
+                        <span data-i18n="softkey_scrub_speed">Slide distance scale</span>
+                        <div class="st-seg" data-seg="scrub-speed">
+                            <button data-act="set-scrub-speed" data-arg-scale="1">1×</button>
+                            <button data-act="set-scrub-speed" data-arg-scale="2">2×</button>
+                            <button data-act="set-scrub-speed" data-arg-scale="3">3×</button>
+                            <button data-act="set-scrub-speed" data-arg-scale="4">4×</button>
+                            <button data-act="set-scrub-speed" data-arg-scale="5">5×</button>
+                        </div>
+                    </div>
+                    <div class="st-row">
+                        <span data-i18n="softkey_scrub_slop">Scrub engage distance</span>
+                        <div class="st-seg" data-seg="scrub-slop">
+                            <button data-act="set-scrub-slop" data-arg-gain="0.7" data-i18n="softkey_opt_near">Near</button>
+                            <button data-act="set-scrub-slop" data-arg-gain="1" data-i18n="softkey_opt_std">Normal</button>
+                            <button data-act="set-scrub-slop" data-arg-gain="1.5" data-i18n="softkey_opt_far">Far</button>
+                        </div>
+                    </div>
+                    <div class="st-help">
+                        <div class="st-help-title" data-i18n="softkey_gesture_title">Gestures</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_up">Up: alt char</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_down">Down: uppercase</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_lr">Left/Right: cursor scrub</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_hold">Long-press: candidates</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_shift">Shift: tap / hold</div>
+                        <div class="st-help-line" data-i18n="softkey_gesture_hint">Symbol keys: long-press shows sequence</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="snippetPanel">
+                <div class="sp-header">
+                    <span data-i18n="snippets">Snippets</span>
+                    <button data-act="start-add-snippet"><span aria-hidden="true">+</span> <span data-i18n="snippets_add">Add</span></button>
+                    <button id="spSortBtn" data-act="toggle-sort-mode" data-i18n="snippets_sort">Sort</button>
+                    <button data-act="toggle-snippet-panel" data-i18n="close">Close</button>
+                </div>
+                <div class="sp-form" id="spForm">
+                    <input type="text" id="spLabel" data-i18n-placeholder="snippets_label_placeholder" placeholder="Label (e.g. list files)" />
+                    <textarea id="spContent" rows="3" data-i18n-placeholder="snippets_content_placeholder" placeholder="Content (e.g. ls -la)"></textarea>
+                    <div class="sp-insert">
+                        <span data-i18n="snippets_insert">Insert:</span>
+                        <button type="button" data-act="insert-snippet-char" data-arg-char="nl" data-i18n="snippets_ins_newline">Newline</button>
+                        <button type="button" data-act="insert-snippet-char" data-arg-char="tab" data-i18n="snippets_ins_tab">Tab</button>
+                        <button type="button" data-act="insert-snippet-char" data-arg-char="esc" data-i18n="snippets_ins_esc">ESC</button>
+                    </div>
+                    <div class="sp-form-btns">
+                        <button class="sp-save" data-act="save-snippet" data-i18n="save">Save</button>
+                        <button class="sp-cancel" data-act="cancel-snippet-form" data-i18n="cancel">Cancel</button>
+                    </div>
+                </div>
+                <div class="sp-list" id="spList"></div>
+            </div>
+        </div>

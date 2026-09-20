@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh" class="lang-zh" data-title-zh="文档 — oh-my-term" data-title-en="Docs — oh-my-term">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>oh-my-term — 文档 · Docs</title>
+<meta name="description" content="oh-my-term 项目文档：总览、服务端 omts（部署与启动参数）、设备端 omtc（命令与配置）、客户端 omtn。Project documentation for oh-my-term.">
+<link rel="canonical" href="https://ohmyterm.com/docs.html">
+<meta property="og:title" content="oh-my-term — Docs">
+<meta property="og:description" content="Overview, deployment and references for omts / omtc / omtn.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#08090d">
+<link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('omt-theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+  var m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', t === 'light' ? '#f6f7f5' : '#08090d');
+})();
+</script>
+<script>
+(function () {
+  var l = null;
+  try { l = localStorage.getItem('omt-lang'); } catch (e) {}
+  if (l !== 'zh' && l !== 'en') {
+    l = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+  var r = document.documentElement;
+  r.classList.remove('lang-zh', 'lang-en');
+  r.classList.add('lang-' + l);
+  r.lang = l;
+  document.title = l === 'zh'
+    ? r.getAttribute('data-title-zh') || document.title
+    : r.getAttribute('data-title-en') || document.title;
+})();
+</script>
+</head>
+<body>
+
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html" aria-label="oh-my-term">
+      <img class="brand-mark" src="logo-mark.png" alt="" aria-hidden="true">
+      <span class="brand-name">oh-my-term</span>
+    </a>
+    <nav class="nav-links">
+      <a href="getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="docs.html" aria-current="page"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="index.html#features"><span class="l-zh">特性</span><span class="l-en">Features</span></a>
+      <a href="index.html#security"><span class="l-zh">安全</span><span class="l-en">Security</span></a>
+      <a href="index.html#deploy"><span class="l-zh">部署</span><span class="l-en">Deploy</span></a>
+      <a href="getting-started.html#download"><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+    </nav>
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light / dark theme"><span class="t-light">☀</span><span class="t-dark">☾</span></button>
+      <button id="navBurger" class="nav-burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+      <button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">
+        <span class="l-zh">EN</span><span class="l-en">中文</span>
+      </button>
+      <a class="btn btn-primary btn-sm" href="getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a class="btn btn-ghost btn-sm" href="https://github.com/oh-my-term" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="docs-hero">
+  <div class="wrap">
+    <p class="sec-eyebrow">// <span class="l-zh">文档</span><span class="l-en">docs</span></p>
+    <h1 class="sec-title"><span class="l-zh">项目文档</span><span class="l-en">Documentation</span></h1>
+    <p class="sec-sub">
+      <span class="l-zh">总览与各组件的完整参考。快速上手（三步部署/下载/配对）在<a href="getting-started.html">开始使用</a>页。</span>
+      <span class="l-en">The overview and full per-component references. The quick start (deploy / download / pair in three steps) lives on the <a href="getting-started.html">Get started</a> page.</span>
+    </p>
+  </div>
+</section>
+
+<div class="wrap docs-index">
+  <a class="doc-card gs-cta reveal" href="getting-started.html">
+    <div class="doc-card-num">✦</div>
+    <div>
+      <h3><span class="l-zh">快速上手</span><span class="l-en">Get started</span></h3>
+      <p><span class="l-zh">三步：服务端 → 客户端 → 添加设备。含给 agent 的部署提示词。</span><span class="l-en">Three steps: server → client → add a device, with a paste-ready agent prompt.</span></p>
+    </div>
+  </a>
+  <div class="doc-cards">
+    <a class="doc-card reveal" href="docs/overview.html">
+      <div class="doc-card-num">01</div>
+      <div>
+        <h3><span class="l-zh">总览</span><span class="l-en">Overview</span></h3>
+        <p><span class="l-zh">组件模型（omts / omtc / omtn / omta）、安全模型、版本号体系、下载与校验。</span><span class="l-en">Components, security model, versioning, downloads &amp; verification.</span></p>
+      </div>
+    </a>
+    <a class="doc-card reveal d1" href="docs/omts.html">
+      <div class="doc-card-num">02</div>
+      <div>
+        <h3><span class="l-zh">服务端 omts</span><span class="l-en">Server · omts</span></h3>
+        <p><span class="l-zh">单机与多节点部署、nginx 配置、启动参数全表、网络要求。</span><span class="l-en">Single-node &amp; multi-node deployment, nginx, the full CLI reference, networking.</span></p>
+      </div>
+    </a>
+    <a class="doc-card reveal d2" href="docs/omtc.html">
+      <div class="doc-card-num">03</div>
+      <div>
+        <h3><span class="l-zh">设备端 omtc</span><span class="l-en">Device agent · omtc</span></h3>
+        <p><span class="l-zh">安装注册、全部命令、client.conf 配置键、磁盘布局、自升级信任链。</span><span class="l-en">Install, every command, client.conf keys, on-disk layout, the update trust chain.</span></p>
+      </div>
+    </a>
+    <a class="doc-card reveal d3" href="docs/omtn.html">
+      <div class="doc-card-num">04</div>
+      <div>
+        <h3><span class="l-zh">客户端手册</span><span class="l-en">Client manual</span></h3>
+        <p><span class="l-zh">主界面与会话、终端、软键盘、文件、设备、信任、账号、更新——omtn 桌面与移动端的完整用户手册。</span><span class="l-en">Sessions, terminal, soft keyboard, files, devices, trust, accounts, updates — the full user manual for omtn desktop and mobile.</span></p>
+      </div>
+    </a>
+    <a class="doc-card reveal d3" href="docs/admin.html">
+      <div class="doc-card-num">05</div>
+      <div>
+        <h3><span class="l-zh">管理员手册</span><span class="l-en">Admin manual</span></h3>
+        <p><span class="l-zh">用户管理、OAuth 登录配置、系统设置、审计日志、集群节点与诊断——自建 omts 运维参考。</span><span class="l-en">Users, OAuth configuration, system settings, audit log, cluster nodes, diagnostics — the self-hosted omts operations reference.</span></p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <img class="brand-mark" src="logo-mark.png" alt="" aria-hidden="true">
+      <span class="foot-name">oh-my-term</span>
+      <span class="foot-tag"><span class="l-zh">为 Vibe Coding 而生的终端管理器</span><span class="l-en">The terminal built for Vibe Coding</span></span>
+    </div>
+    <div class="foot-links">
+      <a href="index.html"><span class="l-zh">首页</span><span class="l-en">Home</span></a>
+      <a href="getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="docs.html" aria-current="page"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="https://github.com/oh-my-term" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="foot-meta">© 2026 oh-my-term · Apache-2.0</div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

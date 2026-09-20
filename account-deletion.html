@@ -1,0 +1,176 @@
+<!doctype html>
+<!--
+  Account deletion notice for the Oh My Term official service (issue #226).
+  Play's Data safety form links here; the page must let users request
+  account deletion without reinstalling the app. Static, script-free.
+
+  DRAFT: the contact address and "last updated" date are substitution
+  anchors (@@...@@) filled by deploy-remote from OMT_PRIVACY_CONTACT /
+  OMT_PRIVACY_LAST_UPDATED — the page is only installed when both are
+  configured.
+
+  SUBMISSION GATE: Play requires apps that support in-app account creation
+  to offer in-app deletion AND a web deletion resource. The in-app half is
+  #215 (account deletion API + settings UI) — it MUST be shipped and live
+  before these pages are deployed to a store-facing env and before the
+  Data safety form is filled in. Deploying the web page alone does not
+  satisfy the policy.
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="robots" content="noindex">
+  <title>Oh My Term · 账号删除 / Account Deletion</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090d0b;
+      --surface: #101612;
+      --text: #eaf1e9;
+      --muted: #a0afa3;
+      --line: #2a372d;
+      --accent: #a3ee92;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        color-scheme: light;
+        --bg: #f6f8f4;
+        --surface: #ffffff;
+        --text: #1a241b;
+        --muted: #5c6b5e;
+        --line: #d4ddd2;
+        --accent: #2c6b1f;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.8 var(--sans); }
+    .wrap { max-width: 46rem; margin: 0 auto; padding: 48px 20px 64px; }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 19px; margin: 36px 0 10px; }
+    p, li { color: var(--text); }
+    .meta { color: var(--muted); font: 13px/1.6 var(--mono); margin: 0 0 28px; }
+    .toc { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 18px; margin: 0 0 8px; }
+        .toc a { color: var(--accent); text-decoration: none; margin-right: 18px; font-size: 14px; }
+    .toc a.active { color: var(--text); font-weight: 600; }
+    html.legal-lang-zh #en, html.legal-lang-en #zh { display: none; }
+    html.legal-lang-zh .lang-divider, html.legal-lang-en .lang-divider { display: none; }
+    .lang-divider { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+    .en h1 { font-size: 22px; }
+    ol li, ul li { margin-bottom: 6px; }
+    code { font-family: var(--mono); font-size: 13px; background: var(--surface); padding: 1px 5px; border-radius: 3px; }
+    footer { margin-top: 48px; color: var(--muted); font: 12px/1.7 var(--mono); }
+    footer a { color: var(--muted); }
+  </style>
+  <script>
+    window.__legalLangTitles = { zh: "Oh My Term \u00b7 \u8d26\u53f7\u5220\u9664", en: "Oh My Term \u00b7 Account Deletion" };
+    (function () {
+      var l = null;
+      try { l = localStorage.getItem('omt-lang'); } catch (e) {}
+      if (l !== 'zh' && l !== 'en') l = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+      document.documentElement.classList.add('legal-lang-' + l);
+    })();
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="toc" aria-label="Language">
+      <a href="#zh" data-lang="zh">中文</a>
+      <a href="#en" data-lang="en" lang="en">English</a>
+    </nav>
+
+    <section id="zh">
+      <h1>删除你的 Oh My Term 账号</h1>
+      <p class="meta">最后更新：2026-09-16 · 联系我们：privacy@ohmyterm.com</p>
+
+      <p>你可以随时删除 Oh My Term 官方服务的账号，无需重新安装应用。有两种方式：</p>
+
+      <h2>方式一：在应用内删除</h2>
+      <ol>
+        <li>打开 Oh My Term 客户端并登录</li>
+        <li>进入「<strong>设置 → 安全 → 删除账号</strong>」</li>
+        <li>按提示完成身份确认，确认后即执行删除</li>
+      </ol>
+
+      <h2>方式二：通过邮件请求删除</h2>
+      <ol>
+        <li>向 <strong>privacy@ohmyterm.com</strong> 发送邮件，主题注明「删除账号」</li>
+        <li>正文中写明你的账号用户名（如忘记用户名，提供注册邮箱或绑定的第三方登录方式）</li>
+        <li>写明你使用的 omts 服务器地址（客户端登录页的 Server URL），以便我们确认你的账号属于官方服务</li>
+        <li>我们会在 <strong>7 天内</strong> 完成删除并回复确认</li>
+      </ol>
+
+      <h2>删除的内容</h2>
+      <ul>
+        <li>账号信息（用户名、密码哈希、两步验证、第三方登录绑定）</li>
+        <li>所有已授权设备的授权记录</li>
+        <li>偏好设置、会话列表等与账号关联的数据</li>
+      </ul>
+      <p>删除操作不可恢复。你连接的自有机器（设备上安装的常驻进程）不受影响，可在设备上自行卸载。</p>
+
+      <h2>如果你使用的不是官方服务器</h2>
+      <p>如果你使用的 omts 服务器不是官方运营的（自建、组织部署或第三方服务），账号数据由该服务器的运营者掌握——请直接联系你的服务提供方删除，官方无法处理第三方服务器上的账号。</p>
+    </section>
+
+    <hr class="lang-divider">
+
+    <section id="en" class="en" lang="en">
+      <h1>Delete your Oh My Term account</h1>
+      <p class="meta">Last updated: 2026-09-16 · Contact: privacy@ohmyterm.com</p>
+
+      <p>You can delete your official Oh My Term service account at any time — no app reinstall required. Two ways:</p>
+
+      <h2>Option 1: delete in the app</h2>
+      <ol>
+        <li>Open the Oh My Term client and sign in</li>
+        <li>Go to “<strong>Settings → Security → Delete account</strong>”</li>
+        <li>Confirm your identity when prompted, then confirm to delete the account</li>
+      </ol>
+
+      <h2>Option 2: request deletion by email</h2>
+      <ol>
+        <li>Email <strong>privacy@ohmyterm.com</strong> with the subject “Account deletion”</li>
+        <li>Include your account username (or, if forgotten, your sign-up email or linked sign-in method)</li>
+        <li>Include the omts server URL you use (the Server URL on the client's sign-in page) so we can confirm your account is on the official service</li>
+        <li>We complete the deletion and reply within <strong>7 days</strong></li>
+      </ol>
+
+      <h2>What gets deleted</h2>
+      <ul>
+        <li>Account info (username, password hash, two-factor settings, linked sign-ins)</li>
+        <li>Authorization records for all of your devices</li>
+        <li>Preferences, session lists and other account-linked data</li>
+      </ul>
+      <p>Deletion is irreversible. Machines you connected (running the device agent) are unaffected — uninstall the agent on the device itself if you no longer want it.</p>
+
+      <h2>If you use a non-official server</h2>
+      <p>If the omts server you use is not operated by Oh My Term (self-hosted, organization-deployed, or a third-party service), your account belongs to that server's operator — contact your service provider to delete it. We cannot delete accounts on third-party servers.</p>
+    </section>
+
+    <footer>Oh My Term · <a href="index.html">ohmyterm</a> · <a href="privacy.html">隐私政策 / Privacy</a></footer>
+  </div>
+  <script>
+    (function () {
+      var titles = window.__legalLangTitles;
+      var root = document.documentElement;
+      function apply(l) {
+        root.classList.toggle('legal-lang-zh', l === 'zh');
+        root.classList.toggle('legal-lang-en', l === 'en');
+        root.lang = l === 'zh' ? 'zh-CN' : 'en';
+        document.title = titles[l];
+        document.querySelectorAll('.toc a[data-lang]').forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('data-lang') === l);
+        });
+        try { localStorage.setItem('omt-lang', l); } catch (e) {}
+      }
+      document.querySelectorAll('.toc a[data-lang]').forEach(function (a) {
+        a.addEventListener('click', function (e) { e.preventDefault(); apply(a.getAttribute('data-lang')); });
+      });
+      apply(root.classList.contains('legal-lang-zh') ? 'zh' : 'en');
+    })();
+  </script>
+</body>
+</html>

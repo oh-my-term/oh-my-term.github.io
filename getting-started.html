@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh" class="lang-zh" data-title-zh="开始使用 — oh-my-term" data-title-en="Get Started — oh-my-term">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>oh-my-term — 开始使用 · Get Started</title>
+<meta name="description" content="三步开始使用 oh-my-term：部署（或选用）omts 服务端、安装桌面/移动客户端、配对设备。Get started with oh-my-term in three steps.">
+<link rel="canonical" href="https://ohmyterm.com/getting-started.html">
+<meta property="og:title" content="oh-my-term — Get Started">
+<meta property="og:description" content="Deploy a server (or use the free P2P tier), install the client, pair your devices.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#08090d">
+<link rel="icon" type="image/svg+xml" href="favicon.ico">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('omt-theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+  var m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', t === 'light' ? '#f6f7f5' : '#08090d');
+})();
+</script>
+<script>
+(function () {
+  var l = null;
+  try { l = localStorage.getItem('omt-lang'); } catch (e) {}
+  if (l !== 'zh' && l !== 'en') {
+    l = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+  var r = document.documentElement;
+  r.classList.remove('lang-zh', 'lang-en');
+  r.classList.add('lang-' + l);
+  r.lang = l;
+  document.title = l === 'zh'
+    ? r.getAttribute('data-title-zh') || document.title
+    : r.getAttribute('data-title-en') || document.title;
+})();
+</script>
+</head>
+<body>
+
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html" aria-label="oh-my-term">
+      <img class="brand-mark" src="logo-mark.png" alt="" aria-hidden="true">
+      <span class="brand-name">oh-my-term</span>
+    </a>
+    <nav class="nav-links">
+      <a href="getting-started.html" aria-current="page"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="index.html#features"><span class="l-zh">特性</span><span class="l-en">Features</span></a>
+      <a href="index.html#security"><span class="l-zh">安全</span><span class="l-en">Security</span></a>
+      <a href="index.html#deploy"><span class="l-zh">部署</span><span class="l-en">Deploy</span></a>
+      <a href="#download"><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+    </nav>
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light / dark theme"><span class="t-light">☀</span><span class="t-dark">☾</span></button>
+      <button id="navBurger" class="nav-burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+      <button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">
+        <span class="l-zh">EN</span><span class="l-en">中文</span>
+      </button>
+      <a class="btn btn-primary btn-sm" href="getting-started.html" aria-current="page"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a class="btn btn-ghost btn-sm" href="https://github.com/oh-my-term" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== HERO ============================== -->
+<section class="gs-hero">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">// <span class="l-zh">开始使用</span><span class="l-en">get started</span></p>
+    <h1 class="sec-title reveal d1">
+      <span class="l-zh">三步，把 AI 终端装进自己的机器</span>
+      <span class="l-en">Three steps to your own AI terminal</span>
+    </h1>
+    <p class="sec-sub reveal d2">
+      <span class="l-zh">准备一个 omts 服务端（自建，或先用官方免费版）→ 安装客户端 → 添加设备。</span>
+      <span class="l-en">Get an omts server (self-hosted, or the free tier) → install the client → add a machine.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ============================== STEP 1: SERVER ============================== -->
+<section class="gs-sec" id="server">
+  <div class="wrap">
+    <h2 class="gs-step reveal"><span class="gs-num">1</span><span class="l-zh">服务端：自建，或先用免费版</span><span class="l-en">Server: self-host, or start free</span></h2>
+
+    <div class="gs-grid">
+      <article class="gs-card reveal">
+        <div class="gs-card-head"><span class="gs-badge">Free · P2P only</span></div>
+        <h3><span class="l-zh">官方免费 omts</span><span class="l-en">Official free omts</span></h3>
+        <p><span class="l-zh">零部署直接用，实例部署在美国：只支持设备与客户端之间的 P2P 直连，不含中继转发——网络条件差时无法回落。客户端 Server 栏填：</span><span class="l-en">Zero setup, hosted in the US: devices and clients connect peer-to-peer only. No relay forwarding, so weak networks have no fallback. Set it as the Server in the client:</span></p>
+        <p class="gs-addr-row"><code class="gs-addr">https://public-us.ohmyterm.com</code></p>
+      </article>
+      <article class="gs-card gs-rec reveal d1">
+        <div class="gs-card-head"><span class="gs-badge gs-badge-amber">Recommended</span></div>
+        <h3><span class="l-zh">自建 omts（推荐）</span><span class="l-en">Self-host omts (recommended)</span></h3>
+        <p><span class="l-zh">数据完全在自己手里，解锁中继回退（弱网也能连）、企业登录与多节点扩容。分单机和集群两种形态，见下。</span><span class="l-en">Your data stays yours. Unlocks the relay fallback for weak networks, enterprise sign-in, and multi-node scaling. Single-node or cluster, below.</span></p>
+      </article>
+    </div>
+
+    <div class="dep-grid">
+      <article class="dcard reveal">
+        <div class="dcard-head"><span class="dnum">01</span>
+          <h3><span class="l-zh">单机部署</span><span class="l-en">Single node</span></h3>
+        </div>
+        <p><span class="l-zh">一台 Linux 服务器：docker compose 拉起 omts + MySQL，nginx 做 TLS 反代公网入口。omts 只听 loopback，容器非 root、无 capability 运行。适合个人与小型团队。</span><span class="l-en">One Linux host: a docker compose file brings up omts + MySQL, with nginx in front as the TLS ingress. omts listens on loopback only; containers run non-root, no capabilities. For individuals and small teams.</span></p>
+      </article>
+      <article class="dcard reveal d1">
+        <div class="dcard-head"><span class="dnum">02</span>
+          <h3><span class="l-zh">集群部署（高可用）</span><span class="l-en">Cluster (high availability)</span></h3>
+        </div>
+        <p><span class="l-zh">需要高可用时：云商 LB 挂多个 omts 实例，后端接高可用 MySQL（如 RDS）。节点无状态共享会话数据，滚动升级时在线任务不中断、客户端自动重连。</span><span class="l-en">For HA: put a cloud LB in front of several omts instances backed by a managed HA MySQL (e.g. RDS). Nodes are stateless and share session data — rolling upgrades keep live tasks attached while clients reconnect automatically.</span></p>
+      </article>
+    </div>
+
+    <div class="dep-term reveal" aria-hidden="false">
+      <div class="dep-term-bar"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span><span>your-agent@any-shell</span></div>
+      <pre><span class="t-faint"># <span class="l-zh">部署交给 agent：把这段贴给你的 Claude Code / Codex（推荐 docker 部署）</span><span class="l-en">hand it to your agent — paste this into Claude Code / Codex (docker is the recommended path)</span></span>
+<span class="l-zh">用 docker 在这台服务器上部署 omts（oh-my-term 服务端）：</span><span class="l-en">Deploy omts (the oh-my-term server) on this host with docker:</span>
+1. <span class="l-zh">docker 起 MySQL 8（数据落卷），创建 omts 数据库与用户</span><span class="l-en">Start MySQL 8 in docker (data on a volume), create the omts database and user</span>
+2. <span class="l-zh">从 github.com/oh-my-term/release-omts 取最新 omts 发行版，核对 SHA256SUMS</span><span class="l-en">Fetch the latest omts release from github.com/oh-my-term/release-omts and verify SHA256SUMS</span>
+3. <span class="l-zh">omts 以容器运行：非 root、只监听 127.0.0.1，数据库连接走环境变量注入</span><span class="l-en">Run omts in a container: non-root, listening on 127.0.0.1 only, DB injected via environment</span>
+4. <span class="l-zh">nginx 以 TLS 反代 443 到 omts</span><span class="l-en">Put nginx in front with TLS on :443, proxying to omts</span>
+5. <span class="l-zh">验证 </span><span class="l-en">Verify </span>https://&lt;my-domain&gt;/api/v1/version <span class="l-zh">返回 200</span><span class="l-en">returns 200</span>
+6. <span class="l-zh">放行 P2P STUN 端口（UDP 3478）：iptables 与云防火墙/安全组两层都要放</span><span class="l-en">Open the P2P STUN port (UDP 3478) in BOTH the host iptables and the cloud firewall / security group</span></pre>
+    </div>
+    <p class="gs-note reveal"><span class="l-zh">集群部署同理：把第 1 步换成托管高可用 MySQL，第 3 步在每台节点重复，入口换成云商 LB。详细 runbook 随发行版提供。注意：每个节点的 STUN 端口（UDP 3478）都要在云商防火墙/安全组放行，只改 iptables 不够。</span><span class="l-en">The cluster path is the same recipe: managed HA MySQL in step 1, repeat step 3 per node, and swap the ingress for your cloud LB. The detailed runbook ships with each release. Mind the STUN port (UDP 3478) per node: it must be open in the cloud firewall / security group too — iptables alone is not enough.</span></p>
+  </div>
+</section>
+
+<!-- ============================== STEP 2: CLIENTS ============================== -->
+<section class="gs-sec" id="download">
+  <div class="wrap">
+    <h2 class="gs-step reveal"><span class="gs-num">2</span><span class="l-zh">客户端：桌面直接下，移动端即将上架</span><span class="l-en">Clients: desktop today, mobile soon</span><span class="gs-ver" id="dlVer" hidden></span></h2>
+
+    <div class="src-bar reveal d1">
+      <span class="src-label"><span class="l-zh">下载源</span><span class="l-en">Source</span></span>
+      <div class="src-opts" id="srcOpts" role="group" aria-label="Download source">
+        <button type="button" class="src-opt" data-src="auto"><span class="l-zh">自动</span><span class="l-en">Auto</span></button>
+        <button type="button" class="src-opt" data-src="github">GitHub</button>
+        <button type="button" class="src-opt" data-src="gitee"><span class="l-zh">Gitee 镜像</span><span class="l-en">Gitee mirror</span></button>
+      </div>
+      <span class="src-hint" aria-live="polite"><span class="l-zh" id="srcHintZh"></span><span class="l-en" id="srcHintEn"></span></span>
+    </div>
+
+    <div class="dl-tabs reveal" id="dlTabs" role="tablist" aria-label="Platform">
+      <button type="button" class="dl-tab" role="tab" aria-selected="false" data-tab="windows">Windows</button>
+      <button type="button" class="dl-tab" role="tab" aria-selected="false" data-tab="macos">macOS</button>
+      <button type="button" class="dl-tab" role="tab" aria-selected="false" data-tab="linux">Linux</button>
+      <button type="button" class="dl-tab" role="tab" aria-selected="false" data-tab="android">Android</button>
+      <button type="button" class="dl-tab" role="tab" aria-selected="false" data-tab="ios">iOS</button>
+    </div>
+    <p class="dl-detect reveal" id="dlDetect" hidden><span class="l-zh" id="dlDetectZh"></span><span class="l-en" id="dlDetectEn"></span></p>
+
+    <div class="dl-panel reveal d1">
+      <div class="dl-pane" data-pane="windows" role="tabpanel">
+        <div class="dl-desc">
+          <h3>Windows</h3>
+          <p><span class="l-zh">x64（x86_64）构建，zip 压缩包，附 SHA-256 校验和。</span><span class="l-en">x86_64 build as a zip, with SHA-256 checksum.</span></p>
+        </div>
+        <div class="dl-actions">
+          <a class="gs-dl-btn" data-dl="windows" href="https://github.com/oh-my-term/release-omtn/releases/latest"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l3.8-3.8 1.4 1.4-6.2 6.2-6.2-6.2 1.4-1.4 3.8 3.8V3h2ZM5 19h14v2H5v-2Z"/></svg><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+          <a class="gs-dl" data-dl-page href="https://github.com/oh-my-term/release-omtn/releases/latest" target="_blank" rel="noopener"><span class="l-zh">全部版本 ↗</span><span class="l-en">All releases ↗</span></a>
+        </div>
+      </div>
+      <div class="dl-pane" data-pane="macos" role="tabpanel" hidden>
+        <div class="dl-desc">
+          <h3>macOS</h3>
+          <p><span class="l-zh">Apple Silicon（M 系列）构建，签名分发。</span><span class="l-en">Apple Silicon build, signed.</span></p>
+        </div>
+        <div class="dl-actions">
+          <a class="gs-dl-btn" data-dl="macos" href="https://github.com/oh-my-term/release-omtn/releases/latest"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l3.8-3.8 1.4 1.4-6.2 6.2-6.2-6.2 1.4-1.4 3.8 3.8V3h2ZM5 19h14v2H5v-2Z"/></svg><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+          <a class="gs-dl" data-dl-page href="https://github.com/oh-my-term/release-omtn/releases/latest" target="_blank" rel="noopener"><span class="l-zh">全部版本 ↗</span><span class="l-en">All releases ↗</span></a>
+        </div>
+      </div>
+      <div class="dl-pane" data-pane="linux" role="tabpanel" hidden>
+        <div class="dl-desc">
+          <h3>Linux</h3>
+          <p><span class="l-zh">x64（x86_64）构建；omtc 设备端由客户端生成的安装命令自动部署。</span><span class="l-en">x86_64 build; the omtc agent installs via the command your client generates.</span></p>
+        </div>
+        <div class="dl-actions">
+          <a class="gs-dl-btn" data-dl="linux" href="https://github.com/oh-my-term/release-omtn/releases/latest"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l3.8-3.8 1.4 1.4-6.2 6.2-6.2-6.2 1.4-1.4 3.8 3.8V3h2ZM5 19h14v2H5v-2Z"/></svg><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+          <a class="gs-dl" data-dl-page href="https://github.com/oh-my-term/release-omtn/releases/latest" target="_blank" rel="noopener"><span class="l-zh">全部版本 ↗</span><span class="l-en">All releases ↗</span></a>
+        </div>
+      </div>
+      <div class="dl-pane" data-pane="android" role="tabpanel" hidden>
+        <div class="dl-desc">
+          <h3>Google Play</h3>
+          <p><span class="l-zh">Android 客户端，含定制软键盘。</span><span class="l-en">The Android client, custom keyboard included.</span></p>
+        </div>
+        <div class="dl-actions"><span class="gs-soon-tag"><span class="l-zh">即将上架</span><span class="l-en">Coming soon</span></span></div>
+      </div>
+      <div class="dl-pane" data-pane="ios" role="tabpanel" hidden>
+        <div class="dl-desc">
+          <h3>App Store</h3>
+          <p><span class="l-zh">iOS 客户端。</span><span class="l-en">The iOS client.</span></p>
+        </div>
+        <div class="dl-actions"><span class="gs-soon-tag"><span class="l-zh">即将上架</span><span class="l-en">Coming soon</span></span></div>
+      </div>
+    </div>
+
+
+    <p class="gs-note reveal"><span class="l-zh">桌面产物在 GitHub 与 Gitee 镜像同步发布，文件名一致；下载后可用对应仓的 SHA256SUMS.txt 校验。</span><span class="l-en">Desktop artifacts ship to GitHub and the Gitee mirror in sync, with identical filenames; verify against the repo's SHA256SUMS.txt after download.</span></p>
+  </div>
+</section>
+
+<!-- ============================== STEP 3: PAIR ============================== -->
+<section class="gs-sec" id="pair">
+  <div class="wrap">
+    <h2 class="gs-step reveal"><span class="gs-num">3</span><span class="l-zh">添加设备，创建会话</span><span class="l-en">Add a machine, open a session</span></h2>
+    <div class="gs-pair reveal">
+      <div class="gs-pair-item"><b>1</b><span class="l-zh">客户端里点「添加机器」：它生成一条安装命令（一次性令牌，1 小时有效），复制下来</span><span class="l-en">In the client, click "Add a machine": it generates an install command (one-time token, valid 1 hour) — copy it</span></div>
+      <div class="gs-pair-item"><b>2</b><span class="l-zh">在要纳管的机器上执行这条命令完成注册；设备的 16 位指纹就在机器上：<code>~/.omt/bootstrap-commit</code>（或运行 <code>omtc init --bootstrap-only</code>）</span><span class="l-en">Run that command on the machine you want to manage; its 16-character fingerprint is on the machine: <code>~/.omt/bootstrap-commit</code> (or run <code>omtc init --bootstrap-only</code>)</span></div>
+      <div class="gs-pair-item"><b>3</b><span class="l-zh">回到客户端创建会话：首次连接时填入机器上展示的指纹，完成 TOFU 信任锚定（防中间人）</span><span class="l-en">Back in the client, create a session: on first connect, enter the fingerprint shown on the machine — TOFU anchoring against man-in-the-middle</span></div>
+    </div>
+    <p class="gs-note reveal"><span class="l-zh">在设备上查看指纹：</span><span class="l-en">Reading the fingerprint on the device:</span></p>
+    <div class="dep-term reveal">
+      <div class="dep-term-bar"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span><span>omtc@build-server</span></div>
+      <pre><span class="t-faint"># <span class="l-zh">在要纳管的机器上，运行客户端「添加机器」给出的安装命令，然后：</span><span class="l-en">on the machine you are adding, run the install command from the client, then:</span></span>
+$ cat ~/.omt/bootstrap-commit
+<span class="t-amber">a3f9 27c1 88b4 0e6d</span>   <span class="t-faint"># 16-character device fingerprint</span>
+<span class="t-green">✓ registered — omtc is up and will start on boot</span></pre>
+    </div>
+    <p class="gs-note reveal"><span class="l-zh">首次连接的 TOFU 对话里有三选：填入指纹（推荐）、跳过验证（浏览器将信任看到的第一个公钥，有中间人风险）、拒绝（安全默认）。如果你没有动过这台设备而指纹对不上，请拒绝并排查。</span><span class="l-en">The first-connect TOFU dialog offers three choices: enter the fingerprint (recommended), skip verification (the browser will trust the first key it sees — MITM risk), or reject (safe default). If you have not touched the machine and the fingerprint does not match, reject and investigate.</span></p>
+  </div>
+</section>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <img class="brand-mark" src="logo-mark.png" alt="" aria-hidden="true">
+      <span class="foot-name">oh-my-term</span>
+      <span class="foot-tag"><span class="l-zh">为 Vibe Coding 而生的终端管理器</span><span class="l-en">The terminal manager built for Vibe Coding</span></span>
+    </div>
+    <div class="foot-links">
+      <a href="index.html"><span class="l-zh">首页</span><span class="l-en">Home</span></a>
+      <a href="getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="https://github.com/oh-my-term" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="foot-meta">© 2026 oh-my-term · Apache-2.0</div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="downloads.js"></script>
+</body>
+</html>

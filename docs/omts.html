@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh" class="lang-zh" data-title-zh="服务端 omts — oh-my-term 文档" data-title-en="Server omts — oh-my-term Docs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>oh-my-term — 文档 · 服务端 omts</title>
+<meta name="description" content="omts 服务端参考：单机部署与多节点部署的完整步骤（MySQL、docker compose、nginx 配置、滚动升级）、启动参数全表与网络要求。">
+<link rel="canonical" href="https://ohmyterm.com/docs/omts.html">
+<meta name="theme-color" content="#08090d">
+<link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('omt-theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+  var m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', t === 'light' ? '#f6f7f5' : '#08090d');
+})();
+</script>
+<script>
+(function () {
+  var l = null;
+  try { l = localStorage.getItem('omt-lang'); } catch (e) {}
+  if (l !== 'zh' && l !== 'en') {
+    l = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+  var r = document.documentElement;
+  r.classList.remove('lang-zh', 'lang-en');
+  r.classList.add('lang-' + l);
+  r.lang = l;
+  document.title = l === 'zh'
+    ? r.getAttribute('data-title-zh') || document.title
+    : r.getAttribute('data-title-en') || document.title;
+})();
+</script>
+</head>
+<body data-doc="omts">
+
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <a class="brand" href="../index.html" aria-label="oh-my-term">
+      <img class="brand-mark" src="../logo-mark.png" alt="" aria-hidden="true">
+      <span class="brand-name">oh-my-term</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="../docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="../index.html#features"><span class="l-zh">特性</span><span class="l-en">Features</span></a>
+      <a href="../index.html#security"><span class="l-zh">安全</span><span class="l-en">Security</span></a>
+      <a href="../index.html#deploy"><span class="l-zh">部署</span><span class="l-en">Deploy</span></a>
+      <a href="../getting-started.html#download"><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+    </nav>
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light / dark theme"><span class="t-light">☀</span><span class="t-dark">☾</span></button>
+      <button id="navBurger" class="nav-burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+      <button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">
+        <span class="l-zh">EN</span><span class="l-en">中文</span>
+      </button>
+      <a class="btn btn-primary btn-sm" href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a class="btn btn-ghost btn-sm" href="https://github.com/oh-my-term" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="docs-hero">
+  <div class="wrap">
+    <p class="sec-eyebrow">// <span class="l-zh">文档 · 服务端</span><span class="l-en">docs · server</span></p>
+    <h1 class="sec-title"><span class="l-zh">服务端 omts</span><span class="l-en">Server · omts</span></h1>
+    <p class="sec-sub">
+      <span class="l-zh">部署（单机 / 多节点）、nginx 配置、启动参数全表。参数与默认值以各版本随附的 <code>--help</code> 为最终依据。</span>
+      <span class="l-en">Deployment (single-node / multi-node), nginx configuration, and the full CLI flag reference. Your installed <code>--help</code> output is the final word.</span>
+    </p>
+  </div>
+</section>
+
+<div class="wrap docs-layout">
+  <nav class="doc-side" aria-label="Documentation">
+    <div class="doc-side-title">Contents</div>
+    <div class="doc-nav" id="docNav"></div>
+  </nav>
+
+  <main>
+  <section class="doc-sec">
+    <p>
+      <span class="l-zh">omts 是 API 与 WebSocket 中继服务：浏览器用户认证（密码/TOTP/OAuth）、设备注册与会话管理、浏览器与 omtc 之间的密文中继，以及 P2P 信令与 STUN 响应。它不接触明文载荷——加密发生在两端。库表启动时自动迁移，无需手工 schema。</span>
+      <span class="l-en">omts is the API and WebSocket relay: browser authentication (password/TOTP/OAuth), device registry and session management, ciphertext relay between browsers and omtc, plus P2P signaling and a STUN responder. It never touches plaintext payloads — encryption happens at the endpoints. Schema migrations run automatically at startup.</span>
+    </p>
+
+    <h3 id="deploy-single"><span class="l-zh">单机部署</span><span class="l-en">Single-node deployment</span></h3>
+    <p>
+      <span class="l-zh">一台 Linux 主机：宿主机 nginx 终止 TLS，omts 在容器里监听 loopback，后接本机 MySQL。绝大多数自托管场景从这里开始。</span>
+      <span class="l-en">One Linux host: host nginx terminates TLS, omts listens on loopback inside a container, backed by local MySQL. Where most self-hosted setups start.</span>
+    </p>
+<pre class="doc-pre">浏览器 / omtc ──https──▶ nginx :443 ──▶ omts 127.0.0.1:6444 ──▶ MySQL 127.0.0.1:3306</pre>
+    <ul>
+      <li><span class="l-zh"><b>前置</b>：Linux 主机（glibc 动态链接，Alpine 跑不起来）、Docker + docker compose、宿主机 nginx（或其他能配 WebSocket upgrade 的反代）、编译好的 <code>omts</code> 二进制（源码仓 <code>cargo build --release -p omts</code>，或从 Releases 取）。</span><span class="l-en"><b>Prerequisites</b>: a Linux host (glibc, not Alpine), Docker + compose, host nginx (or any proxy that can pass WebSocket upgrades), and the <code>omts</code> binary (<code>cargo build --release -p omts</code> from source, or from Releases).</span></li>
+      <li><span class="l-zh"><b>MySQL</b>：docker 起一个 MySQL 8（数据落卷、绑定 127.0.0.1），创建 omts 库与用户。建表由 omts 启动时自动完成。</span><span class="l-en"><b>MySQL</b>: run MySQL 8 in docker (data on a volume, bound to 127.0.0.1) and create the omts database and user. Tables are created automatically at startup.</span></li>
+      <li><span class="l-zh"><b>目录</b>：<code>/opt/omt/bin/omts</code>（二进制，volume 挂进容器）、<code>/opt/omt/data/</code>（运行状态，属主 65532:65532）、<code>docker-compose.yml</code> 与 <code>.env</code>。</span><span class="l-en"><b>Layout</b>: <code>/opt/omt/bin/omts</code> (the binary, mounted read-only into the container), <code>/opt/omt/data/</code> (state, owned 65532:65532), plus <code>docker-compose.yml</code> and <code>.env</code>.</span></li>
+    </ul>
+    <p><span class="l-zh"><b><code>.env</code> 最小集合</b>（secrets 用 <code>SC_*</code> 命名，compose 显式映射到进程的 <code>OMT_*</code>）：</span><span class="l-en"><b>Minimal <code>.env</code></b> (secrets use <code>SC_*</code> names; compose maps them onto the process's <code>OMT_*</code> explicitly):</span></p>
+<pre class="doc-pre">SC_REG_TOKEN=&lt;设备注册令牌&gt;
+SC_JWT_SECRET=&lt;随机串&gt;
+SC_CRYPTO_SECRET=&lt;随机串&gt;
+SC_DB_URL=mysql://omts:&lt;password&gt;@127.0.0.1:3306/omts
+OMT_ENV_ROLE=production
+OMT_ENV_SERVER_URL=https://omt.example.com
+OMT_ENV_URL_PREFIX=/omt
+OMT_TRUST_PROXY=true
+OMT_METRICS_ALLOW_CIDRS=127.0.0.1/32</pre>
+    <p><span class="l-zh"><b>compose 要点</b>（安全内建，勿弱化）：</span><span class="l-en"><b>Compose essentials</b> (hardened by default — do not weaken):</span></p>
+    <ul>
+      <li><span class="l-zh">容器 <code>network_mode: host</code> + omts 监听 <code>127.0.0.1:6444</code>——只有 nginx 能到达。</span><span class="l-en">Container uses <code>network_mode: host</code> while omts binds <code>127.0.0.1:6444</code> — only nginx can reach it.</span></li>
+      <li><span class="l-zh">以非 root（65532）运行，<code>cap_drop: [ALL]</code>、<code>pids_limit</code>；二进制只读挂载。</span><span class="l-en">Runs as non-root (65532) with <code>cap_drop: [ALL]</code> and a <code>pids_limit</code>; the binary is mounted read-only.</span></li>
+      <li><span class="l-zh">secrets 经 <b>显式 environment 列表</b>注入（不要改回 <code>env_file</code>——那会把全部 secret 整包暴露给 <code>docker inspect</code>）。</span><span class="l-en">Secrets are injected via an <b>explicit environment list</b> (do not switch back to <code>env_file</code> — it exposes every secret wholesale to <code>docker inspect</code>).</span></li>
+    </ul>
+    <p><span class="l-zh"><b>nginx</b>：TLS 终止在 nginx；WebSocket 必须透传 <code>Upgrade</code>/<code>Connection</code>，读超时要放宽到会话级别：</span><span class="l-en"><b>nginx</b>: terminate TLS here; WebSocket upgrade headers must pass through, and read timeouts must be session-scale:</span></p>
+<pre class="doc-pre">location /omt/ {
+    proxy_pass http://127.0.0.1:6444;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_read_timeout 3600s;          # 会话长连接
+}</pre>
+    <p>
+      <span class="l-zh">要浏览器 UX，还需把官方 dist 静态集（<code>ui/</code> 页面、<code>metainfo.json</code>、版本化下载物）放到 nginx 静态目录，由 nginx 直接 serve（生产模板随源码仓提供，含 CSP、安全头与缓存策略）。只要 CLI（omtc）用法则完全不需要静态文件。</span>
+      <span class="l-en">For the browser UX, also place the official dist static set (<code>ui/</code> pages, <code>metainfo.json</code>, versioned downloads) in an nginx-served directory (the production template ships with the source repo, covering CSP, security headers, and caching). A CLI-only (omtc) deployment needs no static files at all.</span>
+    </p>
+    <ul>
+      <li><span class="l-zh"><b>首次启动</b>：<code>docker compose up -d</code> 后 <code>curl http://127.0.0.1:6444/api/v1/version</code> 应返回 200；<code>/opt/omt/data/</code> 会落一份一次性 bootstrap 管理员密码（0600），用它登录管理页后删除。</span><span class="l-en"><b>First boot</b>: after <code>docker compose up -d</code>, <code>curl http://127.0.0.1:6444/api/v1/version</code> should return 200; a one-time bootstrap admin password (0600) lands in <code>/opt/omt/data/</code> — log in once, then delete it.</span></li>
+      <li><span class="l-zh"><b>升级</b>：新二进制 <code>cp</code> 到 <code>bin/omts</code>（temp+rename，运行中的旧 inode 不受影响）后 <code>docker compose up -d</code> 重建容器。schema 迁移自动且只增列，可回滚到上一个二进制；单机重启会断在线会话（客户端自动重连），要求无感请用多节点。</span><span class="l-en"><b>Upgrades</b>: <code>cp</code> the new binary into <code>bin/omts</code> (temp+rename — the running old inode is untouched) and <code>docker compose up -d</code> to recreate the container. Migrations are additive-only and rollback-safe; a single-node restart drops live sessions (clients reconnect) — use multi-node for zero-interruption.</span></li>
+    </ul>
+
+    <h3 id="deploy-multi"><span class="l-zh">多节点部署</span><span class="l-en">Multi-node deployment</span></h3>
+    <p>
+      <span class="l-zh">同一主机（或多台主机）跑多个 omts 实例，共享同一个 MySQL。价值：滚动升级时在线会话不中断（节点逐个 drain）并扩容。节点之间没有任何直接通信——所有协调（会话归属、epoch、租约）都走共享数据库。</span>
+      <span class="l-en">Run several omts instances (same host or many) over one shared MySQL. The payoff: rolling upgrades without dropping live sessions (nodes drain one by one) and more capacity. Nodes never talk to each other directly — all coordination (session ownership, epochs, leases) happens through the shared database.</span>
+    </p>
+<pre class="doc-pre">                ┌─▶ omts1 (--node-id 1, 127.0.0.1:6444) ─┐
+浏览器/omtc ──▶ nginx（omts_pool 轮询 + /n1/ /n2/ 钉定） ├─▶ MySQL（同一实例）
+                └─▶ omts2 (--node-id 2, 127.0.0.1:6445) ─┘</pre>
+    <ul>
+      <li><span class="l-zh"><b>起点</b>：先完成单机部署。集群 compose 与单机文件<b>并存不替换</b>——回滚就是 <code>multi-node down &amp;&amp; 单机 up</code>。</span><span class="l-en"><b>Start from</b> a finished single-node deployment. The cluster compose file <b>coexists with</b> (does not replace) the single-node one — rollback is <code>multi-node down &amp;&amp; single-node up</code>.</span></li>
+      <li><span class="l-zh"><b>compose 差异</b>：两个 service（<code>omts1</code> <code>--node-id 1</code> :6444 / <code>omts2</code> <code>--node-id 2</code> :6445）；同一个 DSN 与 <code>./data</code> 卷；<code>stop_grace_period: 75s</code>——SIGTERM 后先广播 reconnect_hint、等在线设备离开（最长 60s drain），compose 默认 10s 会在排水中途 SIGKILL。</span><span class="l-en"><b>Compose differences</b>: two services (<code>omts1</code> <code>--node-id 1</code> :6444 / <code>omts2</code> <code>--node-id 2</code> :6445); the same DSN and <code>./data</code> volume; <code>stop_grace_period: 75s</code> — after SIGTERM the node broadcasts a reconnect hint and waits for online devices to leave (up to 60s drain); the compose default of 10s would SIGKILL mid-drain.</span></li>
+      <li><span class="l-zh"><b>nginx 装两段</b>：<code>upstream</code>/<code>map</code> 属 http 作用域、<code>location</code> 属 server 作用域，drop-in 被 include 在 server 里，所以要拆两个文件（upstreams 放 <code>sites-enabled/</code>，路由放 <code>sites-available/</code>）：</span><span class="l-en"><b>nginx needs two files</b>: <code>upstream</code>/<code>map</code> live in the http scope while <code>location</code> lives in the server scope, and drop-ins are included inside server blocks — so split them (upstreams into <code>sites-enabled/</code>, routing into <code>sites-available/</code>):</span></li>
+    </ul>
+<pre class="doc-pre"># http 作用域：upstreams.conf
+upstream omts_pool {
+    server 127.0.0.1:6444;
+    server 127.0.0.1:6445;
+}
+
+# server 作用域：路由 drop-in
+location /omt/n1/ { proxy_pass http://127.0.0.1:6444; }   # 钉定节点（排障/灰度）
+location /omt/n2/ { proxy_pass http://127.0.0.1:6445; }
+location /omt/    { proxy_pass http://omts_pool; }        # 默认轮询
+# （同单机：每个 location 都要透传 Upgrade/Connection 与长读超时）</pre>
+    <ul>
+      <li><span class="l-zh"><b>顺序</b>：先装 nginx 再起第二节点（<code>/n2/</code> 路由在节点注册前就该存在）。<b>备份文件不要放 <code>sites-enabled/</code></b>——nginx glob 会把它当第二份配置加载（duplicate upstream）。</span><span class="l-en"><b>Order</b>: install the nginx config before starting the second node (the <code>/n2/</code> route must exist before the node registers). <b>Never park backup files in <code>sites-enabled/</code></b> — nginx globs them in as a second copy (duplicate upstream).</span></li>
+      <li><span class="l-zh"><b>启动与验证</b>：<code>docker compose -f docker-compose.multi-node.yml up -d</code>；管理页的集群面板应显示两个 epoch 成员。P2P 的 STUN 地址按节点配置（<code>OMT_STUN_LISTEN</code>/<code>OMT_STUN_PUBLIC_ADDR</code> 每节点一对），第二节点缺 STUN 对会<b>静默退化成中继</b>——部署后 <code>ss -ulnp | grep 3478</code> 核对。</span><span class="l-en"><b>Start &amp; verify</b>: <code>docker compose -f docker-compose.multi-node.yml up -d</code>; the admin cluster panel should show both epoch members. STUN is per-node (<code>OMT_STUN_LISTEN</code>/<code>OMT_STUN_PUBLIC_ADDR</code>, one pair each); a node missing its STUN pair <b>silently degrades to relay</b> — check with <code>ss -ulnp | grep 3478</code> after deploying.</span></li>
+      <li><span class="l-zh"><b>滚动升级</b>：替换二进制后逐节点重建——先 n2 后 n1（n1 是默认池成员，最后动）。在线设备收到 reconnect_hint 后换节点重连，会话不中断。</span><span class="l-en"><b>Rolling upgrade</b>: swap the binary, then recreate node by node — n2 first, n1 last (n1 is the default pool member). Online devices follow the reconnect hint to the other node; sessions survive.</span></li>
+      <li><span class="l-zh"><b>回滚到单机</b>：<code>docker compose -f docker-compose.multi-node.yml down</code> 然后 <code>docker compose up -d</code>（单机栈从未被修改）。</span><span class="l-en"><b>Roll back to single node</b>: <code>docker compose -f docker-compose.multi-node.yml down</code>, then <code>docker compose up -d</code> (the single-node stack was never modified).</span></li>
+    </ul>
+
+    <h3 id="omts-cli"><span class="l-zh">启动参数</span><span class="l-en">CLI flags</span></h3>
+    <p>
+      <span class="l-zh">每个参数都有对应的环境变量绑定（表中 env 列）；带 secret 的参数只走环境变量。</span>
+      <span class="l-en">Every flag has an environment binding (the env column); secret-bearing flags are env-only.</span>
+    </p>
+
+    <h4 class="doc-h4"><span class="l-zh">监听与 TLS</span><span class="l-en">Listen &amp; TLS</span></h4>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th>flag</th><th>env</th><th><span class="l-zh">默认</span><span class="l-en">Default</span></th><th><span class="l-zh">说明</span><span class="l-en">Description</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>--listen</code></td><td>—</td><td class="mono">127.0.0.1:8443</td><td><span class="l-zh">监听地址。默认 loopback，裸启动不可能把明文监听暴露到公网。</span><span class="l-en">Listen address; loopback by default so a bare start can never expose plaintext on a public interface.</span></td></tr>
+        <tr><td><code>--allow-plaintext-listen</code></td><td>—</td><td class="mono">false</td><td><span class="l-zh">无 TLS 证书绑定非 loopback 时必须显式开启（同机反代终止 TLS 的场景）。</span><span class="l-en">Required to bind non-loopback without TLS certs (same-host reverse proxy terminating TLS).</span></td></tr>
+        <tr><td><code>--tls-cert</code> / <code>--tls-key</code></td><td>—</td><td class="mono">—</td><td><span class="l-zh">TLS 证书与私钥文件；公网部署通常交给 nginx 终止。</span><span class="l-en">TLS cert and key files; public deployments usually terminate TLS at nginx instead.</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h4 class="doc-h4"><span class="l-zh">数据库与密钥</span><span class="l-en">Database &amp; secrets</span></h4>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th>flag</th><th>env</th><th><span class="l-zh">默认</span><span class="l-en">Default</span></th><th><span class="l-zh">说明</span><span class="l-en">Description</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>--db-url</code></td><td class="mono">OMT_DB_URL</td><td class="mono">—</td><td><span class="l-zh">MySQL DSN（<code>mysql://user:pass@host:3306/db</code>）。secret 只经环境变量传入，绝不进命令行。</span><span class="l-en">MySQL DSN (<code>mysql://user:pass@host:3306/db</code>). Env-only by design — never a command-line argument.</span></td></tr>
+        <tr><td><code>--reg-token</code></td><td class="mono">OMT_REG_TOKEN</td><td class="mono"><span class="l-zh">自动生成</span><span class="l-en">generated</span></td><td><span class="l-zh">设备注册令牌，<code>omtc register -r</code> 使用。</span><span class="l-en">Device registration token, consumed by <code>omtc register -r</code>.</span></td></tr>
+        <tr><td><code>--jwt-secret</code></td><td class="mono">OMT_JWT_SECRET</td><td class="mono"><span class="l-zh">自动生成</span><span class="l-en">generated</span></td><td><span class="l-zh">JWT 签名密钥。</span><span class="l-en">JWT signing secret.</span></td></tr>
+        <tr><td><code>--crypto-secret</code></td><td class="mono">OMT_CRYPTO_SECRET</td><td class="mono">—</td><td><span class="l-zh">存储凭据（TOTP、OAuth secret）的加密密钥。</span><span class="l-en">Encryption key for stored credentials (TOTP, OAuth secrets).</span></td></tr>
+        <tr><td><code>--bootstrap-password-dir</code></td><td>—</td><td class="mono">.</td><td><span class="l-zh">一次性 bootstrap 管理员密码文件的落盘目录；容器部署指到挂载卷。</span><span class="l-en">Directory for the one-time bootstrap admin password file; point it at a mounted volume in containers.</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h4 class="doc-h4"><span class="l-zh">对外地址与多节点 / P2P</span><span class="l-en">URL, multi-node &amp; P2P</span></h4>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th>flag</th><th>env</th><th><span class="l-zh">默认</span><span class="l-en">Default</span></th><th><span class="l-zh">说明</span><span class="l-en">Description</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>--server-url</code></td><td>—</td><td class="mono">—</td><td><span class="l-zh">对外可达的 HTTPS 地址（生成绝对链接用）。</span><span class="l-en">Externally reachable HTTPS URL (used for absolute links).</span></td></tr>
+        <tr><td><code>--url-prefix</code></td><td class="mono">SC_URL_PREFIX</td><td class="mono">—</td><td><span class="l-zh">整站挂载的子路径（如 <code>/omt</code>）；必须以 <code>/</code> 开头、不以 <code>/</code> 结尾，nginx 侧同样配置。</span><span class="l-en">Sub-path the site is mounted under (e.g. <code>/omt</code>); must start with <code>/</code> and not end with it — mirrored on the nginx side.</span></td></tr>
+        <tr><td><code>--node-id</code></td><td class="mono">OMT_NODE_ID</td><td class="mono">1（WARN）</td><td><span class="l-zh">多节点身份。单节点不填也行；多节点必须钉死——节点段 <code>/n&lt;id&gt;/</code> 是可收藏 URL 的一部分。</span><span class="l-en">Multi-node identity. Fine to omit on a single node; mandatory in clusters — the <code>/n&lt;id&gt;/</code> segment is part of bookmarkable URLs.</span></td></tr>
+        <tr><td><code>--stun-listen</code></td><td class="mono">OMT_STUN_LISTEN</td><td class="mono"><span class="l-zh">空=禁用</span><span class="l-en">empty=off</span></td><td><span class="l-zh">STUN UDP 绑定地址（如 <code>0.0.0.0:3478</code>）。留空时 P2P 走 host candidates（同网直连仍可用）。</span><span class="l-en">STUN UDP bind (e.g. <code>0.0.0.0:3478</code>). Empty disables the responder; P2P then relies on host candidates (same-network direct still works).</span></td></tr>
+        <tr><td><code>--stun-public-addr</code></td><td class="mono">OMT_STUN_PUBLIC_ADDR</td><td class="mono">—</td><td><span class="l-zh">STUN 公网 <code>host:port</code>；与 <code>--stun-listen</code> 成对出现，多节点共享公网 IP 时各用不同端口。</span><span class="l-en">Public <code>host:port</code> for the STUN responder; paired with <code>--stun-listen</code>, distinct ports when nodes share a public IP.</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h4 class="doc-h4"><span class="l-zh">限流、观测与不活跃清理</span><span class="l-en">Limits, observability &amp; inactivity</span></h4>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th>flag</th><th>env</th><th><span class="l-zh">默认</span><span class="l-en">Default</span></th><th><span class="l-zh">说明</span><span class="l-en">Description</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>--trust-proxy</code></td><td class="mono">OMT_TRUST_PROXY</td><td class="mono">false</td><td><span class="l-zh">信任反代的 <code>X-Real-IP</code>（限流与审计 IP）。omts 能被不可信客户端直连时必须为 false；开启时反代必须逐请求覆写该头。</span><span class="l-en">Trust the proxy's <code>X-Real-IP</code> (rate-limit and audit IPs). Must stay false if untrusted clients can reach omts directly; when true the proxy MUST overwrite the header on every request.</span></td></tr>
+        <tr><td><code>--metrics-allow-cidrs</code></td><td class="mono">OMT_METRICS_ALLOW_CIDRS</td><td class="mono"><span class="l-zh">空=禁用</span><span class="l-en">empty=off</span></td><td><span class="l-zh"><code>/metrics</code> 的 CIDR 白名单，逗号分隔；留空对远端全部关闭。</span><span class="l-en">Comma-separated CIDR allowlist for <code>/metrics</code>; empty disables it for all remote callers.</span></td></tr>
+        <tr><td><code>--ws-max-frame-size</code></td><td class="mono">OMT_WS_MAX_FRAME_SIZE</td><td class="mono">1 MiB</td><td><span class="l-zh">单个 WebSocket 帧上限。</span><span class="l-en">Max size of a single WebSocket frame.</span></td></tr>
+        <tr><td><code>--ws-max-message-size</code></td><td class="mono">OMT_WS_MAX_MESSAGE_SIZE</td><td class="mono">4 MiB</td><td><span class="l-zh">完整 WebSocket 消息上限。</span><span class="l-en">Max size of a complete WebSocket message.</span></td></tr>
+        <tr><td><code>--inactivity-enabled</code></td><td class="mono">OMT_INACTIVITY_ENABLED</td><td class="mono">false</td><td><span class="l-zh">开启不活跃账号的「禁用 → 删除」生命周期。开放注册的公共实例建议开启；私有部署默认关。</span><span class="l-en">Enable the inactivity disable→delete lifecycle. Recommended for public open-registration instances; off by default for private deployments.</span></td></tr>
+        <tr><td><code>--inactivity-disable-days</code></td><td class="mono">OMT_INACTIVITY_DISABLE_DAYS</td><td class="mono">180</td><td><span class="l-zh">连续 N 天无「完成登录」即自动禁用（页面一直开着不算）。</span><span class="l-en">Auto-disable after N days without a completed login (a page kept open does not count).</span></td></tr>
+        <tr><td><code>--inactivity-delete-days</code></td><td class="mono">OMT_INACTIVITY_DELETE_DAYS</td><td class="mono">90</td><td><span class="l-zh">被禁用账号再过 N 天可恢复，之后连同数据删除。</span><span class="l-en">A disabled account stays recoverable for N more days, then is deleted with its data.</span></td></tr>
+        <tr><td><code>--inactivity-sweep-interval-secs</code></td><td class="mono">OMT_INACTIVITY_SWEEP_INTERVAL_SECS</td><td class="mono">3600</td><td><span class="l-zh">清扫周期（秒）。</span><span class="l-en">Sweep interval in seconds.</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h4 class="doc-h4"><span class="l-zh">登录与企业集成</span><span class="l-en">Auth &amp; integrations</span></h4>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th>flag</th><th><span class="l-zh">说明</span><span class="l-en">Description</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>--feishu-app-id</code> / <code>--feishu-app-secret</code> / <code>--feishu-redirect-uri</code> / <code>--feishu-allowed-user</code> / <code>--feishu-webhook</code></td><td><span class="l-zh">飞书 OAuth 登录与通知 webhook。DingTalk / GitHub / Google 登录经管理页配置（存库），无需命令行参数。</span><span class="l-en">Feishu OAuth login and notification webhook. DingTalk / GitHub / Google sign-in is configured in the admin UI (stored in the DB) — no flags needed.</span></td></tr>
+        <tr><td><code>--legacy-web-ui</code></td><td><span class="l-zh">保留旧版 HTML 界面路由，默认开启；传 <code>--legacy-web-ui=false</code> 显式关闭。</span><span class="l-en">Keep the legacy HTML UI routes (default on); pass <code>--legacy-web-ui=false</code> to disable explicitly.</span></td></tr>
+        <tr><td><code>--test-token</code> / <code>--enable-test-auth</code></td><td><span class="l-zh"><b>仅测试环境</b>（E2E 冒烟用）。生产一律不开。</span><span class="l-en"><b>Test environments only</b> (E2E smoke). Never enable in production.</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <p><span class="l-zh"><b>子命令</b>：<code>omts config set &lt;key&gt; &lt;value&gt; [--db-url …] [--dry-run]</code> 绕过 HTTP 管理 API、直改库内配置项（按 key 类型校验）。</span><span class="l-en"><b>Subcommand</b>: <code>omts config set &lt;key&gt; &lt;value&gt; [--db-url …] [--dry-run]</code> sets a config key directly in the DB, bypassing the HTTP admin API (type-checked per key).</span></p>
+
+    <h3 id="omts-net"><span class="l-zh">网络要求</span><span class="l-en">Networking</span></h3>
+    <ul>
+      <li><span class="l-zh">P2P 直连需要 STUN 端口（默认 UDP 3478）可达：<b>宿主机 iptables 与云防火墙/安全组两层都要放行</b>，只开一层会静默退化为中继。集群每个节点要独立的公网 STUN 端口。</span><span class="l-en">P2P direct needs the STUN port (UDP 3478 by default) reachable: <b>open it in BOTH host iptables and the cloud firewall/security group</b> — one layer alone silently degrades to relay. Each cluster node needs its own public STUN port.</span></li>
+      <li><span class="l-zh">中继走 HTTPS/WSS 443，无额外端口；弱网下自动回落。</span><span class="l-en">The relay rides HTTPS/WSS on 443 with no extra ports, and is the automatic weak-network fallback.</span></li>
+    </ul>
+  </section>
+
+  <div class="doc-pager" id="docPager"></div>
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <img class="brand-mark" src="../logo-mark.png" alt="" aria-hidden="true">
+      <span class="foot-name">oh-my-term</span>
+      <span class="foot-tag"><span class="l-zh">为 Vibe Coding 而生的终端管理器</span><span class="l-en">The terminal built for Vibe Coding</span></span>
+    </div>
+    <div class="foot-links">
+      <a href="../index.html"><span class="l-zh">首页</span><span class="l-en">Home</span></a>
+      <a href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="../docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="https://github.com/oh-my-term" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="foot-meta">© 2026 oh-my-term · Apache-2.0</div>
+  </div>
+</footer>
+
+<script src="../app.js"></script>
+<script src="docs-nav.js"></script>
+</body>
+</html>

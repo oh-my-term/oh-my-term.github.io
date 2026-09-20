@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh" class="lang-zh" data-title-zh="oh-my-term — 为 Vibe Coding 而生的终端管理器" data-title-en="oh-my-term — The terminal manager built for Vibe Coding">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>oh-my-term — 为 Vibe Coding 而生的终端管理器 · The terminal built for Vibe Coding</title>
+<meta name="description" content="oh-my-term：把 AI 编码智能体跑在自己的机器上，手机随时接管会话。会话不断线、端到端加密、P2P + 中继双通道、全平台客户端。Run AI coding agents on your own machines — sessions never die, E2E encrypted, P2P + relay, native on every platform.">
+<meta property="og:title" content="oh-my-term — The terminal built for Vibe Coding">
+<meta property="og:description" content="Sessions never die. E2E encrypted. P2P + relay. A terminal keyboard rebuilt for mobile. Native on Android, iOS, macOS, Windows, Linux.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ohmyterm.com/">
+<link rel="canonical" href="https://ohmyterm.com/">
+<meta property="og:image" content="https://ohmyterm.com/assets/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ohmyterm.com/assets/og.png">
+<meta name="theme-color" content="#08090d">
+<link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('omt-theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+  var m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', t === 'light' ? '#f6f7f5' : '#08090d');
+})();
+</script>
+<script>
+(function () {
+  var l = null;
+  try { l = localStorage.getItem('omt-lang'); } catch (e) {}
+  if (l !== 'zh' && l !== 'en') {
+    l = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+  var r = document.documentElement;
+  r.classList.remove('lang-zh', 'lang-en');
+  r.classList.add('lang-' + l);
+  r.lang = l;
+  document.title = (l === 'zh'
+    ? r.getAttribute('data-title-zh')
+    : r.getAttribute('data-title-en')) || document.title;
+})();
+</script>
+</head>
+<body>
+
+<!-- ============================== NAV ============================== -->
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="oh-my-term">
+      <img class="brand-mark" src="logo-mark.png" alt="" aria-hidden="true">
+      <span class="brand-name">oh-my-term</span>
+    </a>
+    <nav class="nav-links">
+      <a href="getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="#features"><span class="l-zh">特性</span><span class="l-en">Features</span></a>
+      <a href="#security"><span class="l-zh">安全</span><span class="l-en">Security</span></a>
+      <a href="#deploy"><span class="l-zh">部署</span><span class="l-en">Deploy</span></a>
+      <a href="getting-started.html#download"><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+    </nav>
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light / dark theme"><span class="t-light">☀</span><span class="t-dark">☾</span></button>
+      <button id="navBurger" class="nav-burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+      <button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">
+        <span class="l-zh">EN</span><span class="l-en">中文</span>
+      </button>
+      <a class="btn btn-primary btn-sm" href="getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a class="btn btn-ghost btn-sm" href="https://github.com/oh-my-term" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== HERO ============================== -->
+<section class="hero">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-grid-bg" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow reveal">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span class="l-zh">核心开源 · Apache-2.0 · 端到端加密</span>
+        <span class="l-en">Core open source · Apache-2.0 · E2E encrypted</span>
+      </p>
+      <h1 class="reveal d1">
+        <span class="l-zh">为 <em>Vibe Coding</em> 而生的终端管理器</span>
+        <span class="l-en">The terminal manager<br>built for <em>Vibe&nbsp;Coding</em></span>
+      </h1>
+      <p class="hero-sub reveal d2">
+        <span class="l-zh">把 AI 编码智能体跑在自己的机器上，手机随时接管会话。用户端关掉、网络断开，任务照常运行——端到端加密，全平台随身。</span>
+        <span class="l-en">Run AI coding agents on your own machines and take sessions over from your phone. Close the client, drop the network — tasks keep running. End-to-end encrypted, native everywhere.</span>
+      </p>
+      <div class="hero-cta reveal d3">
+        <a class="btn btn-primary" href="getting-started.html">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M5 3l14 9-14 9V3Z"/></svg>
+          <span class="l-zh">开始使用</span><span class="l-en">Get started</span>
+        </a>
+        <a class="btn btn-ghost" href="getting-started.html#download">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l3.8-3.8 1.4 1.4-6.2 6.2-6.2-6.2 1.4-1.4 3.8 3.8V3h2ZM5 19h14v2H5v-2Z"/></svg>
+          <span class="l-zh">下载</span><span class="l-en">Download</span>
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/oh-my-term" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+          <span class="l-zh">GitHub 组织</span><span class="l-en">GitHub organization</span>
+        </a>
+      </div>
+      <p class="hero-note reveal d4">
+        <span class="l-zh">所有产物在 GitHub Releases 与 Gitee 镜像同步分发，附 SHA-256 校验和。</span>
+        <span class="l-en">Everything ships via GitHub Releases and the Gitee mirror, with SHA-256 checksums.</span>
+      </p>
+    </div>
+
+    <!-- ======== hero visual: desktop window + live phone ======== -->
+    <div class="hero-visual reveal d2" data-front="phone">
+
+      <!-- desktop window reproducing the real omtn client (mac build);
+           clicking it brings it in front of the phone -->
+      <div class="desk" role="group" aria-label="oh-my-term desktop client: device-grouped sessions and a live Claude TUI">
+        <div class="desk-title">
+          <span class="tl" aria-hidden="true"><i class="tl-r"></i><i class="tl-y"></i><i class="tl-g"></i></span>
+          <span class="desk-win-title">claude [build-server-01]</span>
+        </div>
+        <div class="desk-bar">
+          <span class="desk-burger" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="desk-word">Oh My Term</span>
+          <span class="desk-live"></span>
+          <span class="desk-sess">claude [build-server-01]</span>
+          <span class="desk-actions">
+            <span class="desk-btn primary" id="deskViewTerm" role="button">&gt;_ Terminal</span>
+            <span class="desk-btn" id="deskViewFiles" role="button">▣ Files</span>
+            <span class="desk-btn sq">▥</span>
+            <span class="desk-btn sq">◈</span>
+            <span class="desk-btn sq">⚙</span>
+          </span>
+        </div>
+        <div class="desk-body">
+          <aside class="desk-side">
+            <div class="desk-tabs">
+              <span class="desk-tab on" data-pane="sessions" role="button">Sessions</span>
+              <span class="desk-tab" data-pane="devices" role="button">Devices</span>
+            </div>
+            <div class="new-sess-row">
+              <div class="new-sess-btn">＋ Session</div>
+              <div class="side-filters" aria-hidden="true"><i>◉</i><i class="fil-on">✓</i><i>⧉</i></div>
+            </div>
+
+            <div class="side-pane" data-pane-body="sessions">
+            <div class="dev">
+              <div class="dev-head"><span class="caret">▾</span>build-server-01 <span class="dev-n">3</span></div>
+              <div class="sess sel"><span class="s-dot"></span><span class="s-name">claude [build-server-01]</span><span class="s-act work" title="Working"></span><span class="s-kebab">⋮</span>
+                <span class="tip"><i class="ti-id">id s-9k3f2a</i><i class="ti-p2p">p2p ✓ direct · 12ms</i></span></div>
+              <div class="sess"><span class="s-dot"></span><span class="s-name">deploy [build-server-01]</span><span class="s-kebab">⋮</span>
+                <span class="tip"><i class="ti-id">id s-4mq8t1</i><i class="ti-p2p">p2p ✓ direct · 9ms</i></span></div>
+              <div class="sess"><span class="s-dot"></span><span class="s-name">cargo [build-server-01]</span><span class="s-done">✓</span><span class="s-kebab">⋮</span>
+                <span class="tip"><i class="ti-id">id s-7h2pd0</i><i><span class="l-zh">已退出 · 输出已留存</span><span class="l-en">exited · output kept</span></i></span></div>
+            </div>
+
+            <div class="dev">
+              <div class="dev-head"><span class="caret">▾</span>gpu-rig <span class="dev-n">2</span></div>
+              <div class="sess"><span class="s-dot"></span><span class="s-name">train [gpu-rig]</span><span class="s-act work"></span><span class="s-kebab">⋮</span>
+                <span class="tip"><i class="ti-id">id s-c5j1xw</i><i class="ti-relay">p2p ⇄ relay</i></span></div>
+              <div class="sess"><span class="s-dot"></span><span class="s-name">bench [gpu-rig]</span><span class="s-done">✓</span><span class="s-kebab">⋮</span>
+                <span class="tip"><i class="ti-id">id s-t8n4he</i><i><span class="l-zh">已退出 · 输出已留存</span><span class="l-en">exited · output kept</span></i></span></div>
+            </div>
+
+            <div class="dev">
+              <div class="dev-head"><span class="caret">▾</span>macbook-pro <span class="dev-n">2</span></div>
+              <div class="sess"><span class="s-dot"></span><span class="s-name">vim [macbook-pro]</span><span class="s-kebab">⋮</span>
+                <span class="tip"><i class="ti-id">id s-k2s9vy</i><i class="ti-p2p">p2p ✓ direct · 8ms</i></span></div>
+              <div class="sess"><span class="s-dot"></span><span class="s-name">htop [macbook-pro]</span><span class="s-done">✓</span><span class="s-kebab">⋮</span>
+                <span class="tip"><i class="ti-id">id s-m4w7cq</i><i><span class="l-zh">已退出 · 输出已留存</span><span class="l-en">exited · output kept</span></i></span></div>
+            </div>
+            </div>
+
+            <div class="side-pane" data-pane-body="devices" hidden>
+              <div class="dev-item"><span class="s-dot"></span><span class="s-name">build-server-01</span><span class="dev-n">4</span>
+                <span class="tip"><i class="ti-id">omtc 3.86.19</i><i class="ti-p2p">p2p ✓ direct</i></span></div>
+              <div class="dev-item"><span class="s-dot"></span><span class="s-name">gpu-rig</span><span class="dev-n">3</span>
+                <span class="tip"><i class="ti-id">omtc 3.86.19</i><i class="ti-relay">p2p ⇄ relay</i></span></div>
+              <div class="dev-item"><span class="s-dot"></span><span class="s-name">macbook-pro</span><span class="dev-n">2</span>
+                <span class="tip"><i class="ti-id">omtc 3.86.19</i><i class="ti-p2p">p2p ✓ direct</i></span></div>
+              <div class="dev-item"><span class="s-dot"></span><span class="s-name">fermi</span><span class="dev-n">1</span>
+                <span class="tip"><i class="ti-id">omtc 3.85.6</i><i class="ti-p2p">p2p ✓ direct</i></span></div>
+            </div>
+          </aside>
+
+          <div class="desk-main">
+            <div class="tui">
+              <div class="tui-welcome">
+<span class="t-amber">✻</span> <span class="t-dim">Welcome to</span> Claude Code!<br>
+&nbsp;&nbsp;&nbsp;<span class="t-faint">/help for help&nbsp;&nbsp;·&nbsp;&nbsp;Status: <span class="t-green">● healthy</span></span>
+              </div>
+              <div class="tui-tools">
+                <div class="tool"><span class="t-cyan">⏺</span> Read<span class="t-faint">(src/auth/session.rs)</span></div>
+                <div class="tool-out t-faint">&nbsp;&nbsp;⎿ <span class="t-green">Read 142 lines</span></div>
+                <div class="tool"><span class="t-cyan">⏺</span> Edit<span class="t-faint">(src/auth/middleware.rs)</span></div>
+                <div class="tool-out t-faint">&nbsp;&nbsp;⎿ <span class="t-green">+18</span> <span class="t-red">-6</span></div>
+                <div class="tool"><span class="t-cyan">⏺</span> Bash<span class="t-faint">(cargo test -p omt-auth)</span></div>
+                <div class="tool-out t-faint">&nbsp;&nbsp;⎿ <span class="t-green">47 passed · 0 failed</span></div>
+              </div>
+              <div class="tui-status"><span class="t-amber spin">✻</span> <span class="l-zh">思考中…</span><span class="l-en">Pondering…</span> <span class="t-faint">(esc to interrupt · 12s)</span></div>
+              <div class="tui-input">
+                <div class="tui-box">
+                  <span class="t-prompt">&gt;</span> <span id="heroType"></span><span class="caret-block" aria-hidden="true"></span>
+                </div>
+              </div>
+            </div>
+            <div class="desk-files" hidden>
+              <div class="df-crumb">~/code/oh-my-term <span class="t-faint">/ crates</span></div>
+              <div class="df-row"><i>▾</i><b>crates/</b><span class="df-meta">—</span></div>
+              <div class="df-row df-ind"><i>▸</i><b>omts/</b><span class="df-meta">server · api + relay</span></div>
+              <div class="df-row df-ind"><i>▾</i><b>omtc/</b><span class="df-meta">device agent</span></div>
+              <div class="df-row df-ind df-ind2"><i>·</i><b>main.rs</b><span class="df-meta">2.1 MB · 09:41</span></div>
+              <div class="df-row df-ind df-ind2"><i>·</i><b>session.rs</b><span class="df-meta">318 KB · 09:12</span></div>
+              <div class="df-row df-ind"><i>▸</i><b>omt-common/</b><span class="df-meta">shared types</span></div>
+              <div class="df-row df-ind"><i>▸</i><b>omt-auth/</b><span class="df-meta">ed25519 identity</span></div>
+              <div class="df-row"><i>▸</i><b>vendor/</b><span class="df-meta">vt100</span></div>
+              <div class="df-row"><i>·</i><b>Cargo.toml</b><span class="df-meta">9 KB · 08:55</span></div>
+            </div>
+            <div class="desk-foot"><span class="t-faint">sonnet-4-5[1m] | ~/code/oh-my-term | 84.2k/410k | 41.2%</span><span class="t-red">bypass permissions on · 1 shell</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- phone with the REAL soft keyboard (same-origin iframe: the component
+           gets its own viewport, so its fixed popups and storage stay isolated) -->
+      <div class="phone-wrap">
+        <iframe class="phone-frame" src="demo-phone.html" title="oh-my-term mobile demo with the live custom terminal keyboard"></iframe>
+        <p class="phone-hint">
+          <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="M12 2 4.5 9.5H9v6h6v-6h4.5L12 2ZM5 18h14v2.5H5V18Z"/></svg>
+          <span class="l-zh">真键盘，能按 · 点击设备可换前后</span>
+          <span class="l-en">Real keys, pressable · click a device to swap</span>
+        </p>
+</div>
+    </div>
+  </div>
+
+  <!-- platform strip -->
+  <div class="wrap platforms reveal d4">
+    <span class="pf"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.7 12.9c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.9-1.6 0-3.1 1-4 2.4-1.7 2.9-.4 7.3 1.2 9.7.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.6-1-2.6-3.7ZM14.3 5.6c.7-.8 1.1-1.9 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4Z"/></svg>iOS</span>
+    <span class="pf"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.7 12.9c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.9-1.6 0-3.1 1-4 2.4-1.7 2.9-.4 7.3 1.2 9.7.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.6-1-2.6-3.7ZM14.3 5.6c.7-.8 1.1-1.9 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4Z"/></svg>macOS</span>
+    <span class="pf"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 3.5 12.9 2.5v8.9H6V3.5ZM14 2.3 21.5 1.2v10.2H14V2.3ZM6 12.6h6.9v8.9L6 20.5v-7.9ZM14 12.6h7.5v10.2L14 21.7v-9.1Z"/></svg>Windows</span>
+    <span class="pf"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c-.7 0-1.2.5-1.6 1.3-.3.8-.5 1.9-.4 3-.5.5-.9 1.3-1.2 2.2-.2.7-.6 1-1.3 1.5-.9.6-1.9 1.5-2.3 3.1-.2.8-.6 1.2-1.1 1.7-.6.6-1.3 1.4-1.5 2.8-.1 1 .2 1.7.8 2 .5.3 1.2.3 1.9.1.7-.2 1.5-.5 2.3-.5.6 0 1.1.2 1.7.4.9.4 1.8.8 3 .6 1.4-.2 2.6-1 3.6-2 1.6-1.5 2.7-3.5 2.9-5.5.2-1.9-.4-3.7-1.9-5-.1-.9-.4-1.7-.8-2.3-.4-.7-1-1.1-1.7-1.1-.5 0-.9.2-1.3.4-.2-1.3-.6-2.4-1.2-3.1C12.9 2.3 12.5 2 12 2Z"/></svg>Linux</span>
+    <span class="pf"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4.5 9.2 4 6 13.6c-.5 1.7 0 2.7 1.4 2.7h7.9l.6-2H8.9L12 4.6c.4-1.2-.1-2-1.4-2L7 4.5ZM13.5 6.5h8L21 9h-8l.5-2.5ZM12.7 10h8l-.5 2.5h-8l.5-2.5ZM11.9 13.5h8l-.5 2.5h-8l.5-2.5Z"/></svg>Android</span>
+  </div>
+</section>
+
+<!-- ============================== TICKER ============================== -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="tk"><b class="tk-work">● working</b> claude refactor-auth</span><span class="tk"><b class="tk-done">✓ done</b> cargo test -r auth</span><span class="tk">$ vim src/auth/middleware.rs</span><span class="tk"><b class="tk-work">● working</b> claude fix-flaky-e2e</span><span class="tk"><b class="tk-done">✓ done</b> npm run build</span><span class="tk">$ htop</span><span class="tk"><b class="tk-work">● working</b> claude write-release-notes</span><span class="tk">$ tail -f deploy.log</span><span class="tk"><b class="tk-done">✓ done</b> docker compose up</span><span class="tk"><b class="tk-work">● working</b> claude migrate-storage</span>
+    <span class="tk"><b class="tk-work">● working</b> claude refactor-auth</span><span class="tk"><b class="tk-done">✓ done</b> cargo test -r auth</span><span class="tk">$ vim src/auth/middleware.rs</span><span class="tk"><b class="tk-work">● working</b> claude fix-flaky-e2e</span><span class="tk"><b class="tk-done">✓ done</b> npm run build</span><span class="tk">$ htop</span><span class="tk"><b class="tk-work">● working</b> claude write-release-notes</span><span class="tk">$ tail -f deploy.log</span><span class="tk"><b class="tk-done">✓ done</b> docker compose up</span><span class="tk"><b class="tk-work">● working</b> claude migrate-storage</span>
+  </div>
+</div>
+
+<!-- ============================== MANIFESTO ============================== -->
+<section class="manifesto">
+  <div class="wrap">
+    <h2 class="reveal">
+      <span class="l-zh">用户端可以关，<br>会话不会停。</span>
+      <span class="l-en">Close the client.<br>The session lives on.</span>
+    </h2>
+    <p class="reveal d1">
+      <span class="l-zh">每个会话都跑在设备端 agent 里，与用户端生命周期完全解耦。手机锁屏、用户端退出、地铁里断网——回来时终端画面原样恢复，最近的输出都在。机器开着，任务就一直跑。</span>
+      <span class="l-en">Every session runs inside the on-device agent, fully decoupled from the client. Lock your phone, quit the client, lose signal on the subway — come back and the screen is restored, recent output right where you left it. As long as the host is awake, the task keeps running.</span>
+    </p>
+    <div class="manifesto-chips reveal d2">
+      <span class="mchip"><b>screen / tmux</b><span class="l-zh">级的会话保持</span><span class="l-en">-style persistence</span></span>
+      <span class="mchip"><b>0</b><span class="l-zh">条需要记住的命令</span><span class="l-en">commands to memorize</span></span>
+      <span class="mchip"><b>✓</b><span class="l-zh">重连自动回放现场</span><span class="l-en">auto-replay on reattach</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== FEATURES ============================== -->
+<section class="arch">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">// <span class="l-zh">架构</span><span class="l-en">architecture</span></p>
+    <h2 class="sec-title reveal d1">
+      <span class="l-zh">会话是怎么流动的</span><span class="l-en">How a session flows</span>
+    </h2>
+    <p class="sec-sub reveal d2">
+      <span class="l-zh">客户端、中继、设备端 agent 三层各司其职：中继只转发密文，能直连就直连。</span>
+      <span class="l-en">Client, relay and device agent each do one job: the relay only forwards ciphertext, and P2P wins whenever the network allows.</span>
+    </p>
+    <figure class="arch-fig reveal">
+      <iframe class="arch-live" src="architecture/overview.html?theme=dark&embed=1" title="oh-my-term architecture diagram" loading="lazy" width="1280" height="800"></iframe>
+      <figcaption>
+        <span class="fig-cap"><span class="l-zh">整体架构：omtn 客户端 · omts 中继 · omtc 设备端</span><span class="l-en">The whole picture: omtn client · omts relay · omtc device agent</span></span>
+        <a class="arch-link" href="architecture/overview.html" target="_blank" rel="noopener"><span class="l-zh">交互版 ↗</span><span class="l-en">Interactive ↗</span></a>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">// <span class="l-zh">特性</span><span class="l-en">features</span></p>
+    <h2 class="sec-title reveal d1">
+      <span class="l-zh">为智能体工作流重做的每一处细节</span>
+      <span class="l-en">Every detail, reworked for agent workflows</span>
+    </h2>
+
+    <div class="bento">
+      <article class="cell cell-a reveal">
+        <h3><span class="l-zh">会话不断线</span><span class="l-en">Sessions never die</span></h3>
+        <p><span class="l-zh">类 screen/tmux 的会话保持，但不需要学任何命令。设备端 agent 守护每个 PTY：用户端关掉、网络断开都不影响任务，重连自动恢复现场，最近输出随时回看。</span><span class="l-en">screen/tmux-style persistence, without learning any new commands. The device agent keeps every PTY alive — closing the client or dropping the network never touches the task. Reattach restores the screen; recent output stays reviewable.</span></p>
+        <div class="mini mini-detach" aria-hidden="true">
+          <span class="md-chip md-red">⟂ <span class="l-zh">连接断开</span><span class="l-en">connection lost</span></span>
+          <span class="md-arrow">···</span>
+          <span class="md-chip md-green">✓ <span class="l-zh">已重连 · 回放 128 行</span><span class="l-en">reattached · replayed 128 lines</span></span>
+        </div>
+      </article>
+
+      <article class="cell cell-b reveal d1">
+        <h3><span class="l-zh">移动端定制软键盘</span><span class="l-en">A keyboard built for terminals</span></h3>
+        <p><span class="l-zh">Esc、Ctrl、方向键、PgUp/PgDn 都在拇指够得着的地方；长按出组合键，上滑直出符号。手机上开 TUI 也能得心应手。</span><span class="l-en">Esc, Ctrl, arrows and PgUp/PgDn within thumb's reach; long-press for combos, flick up for symbols. Driving a TUI from a phone finally feels natural.</span></p>
+        <div class="mini mini-keys" aria-hidden="true">
+          <span class="kk">Esc</span><span class="kk kk-mod">Ctrl</span><span class="kk">Home</span><span class="kk">↑</span><span class="kk">End</span><span class="kk">PgUp</span>
+          <span class="kk">Tab</span><span class="kk kk-mod">Alt</span><span class="kk">←</span><span class="kk">↓</span><span class="kk">→</span><span class="kk kk-enter">⏎</span>
+        </div>
+      </article>
+
+      <article class="cell reveal">
+        <h3><span class="l-zh">Claude TUI 全屏模式</span><span class="l-en">Fullscreen Claude TUI</span></h3>
+        <p><span class="l-zh">Claude Code、vim、htop 的全屏界面原样呈现：alt-screen、256 色、滚动区域，一个都不丢。</span><span class="l-en">Claude Code, vim and htop render exactly as designed — alt-screen, 256 colors, scroll regions, nothing lost.</span></p>
+        <div class="mini mini-tui" aria-hidden="true"><span class="t-amber">✻</span> <span class="t-faint">Pondering…</span><br><span class="t-cyan">⏺</span> Bash<span class="t-faint">(make test)</span></div>
+      </article>
+
+      <article class="cell reveal d1">
+        <h3><span class="l-zh">Working / Done 标记</span><span class="l-en">Working / Done marks</span></h3>
+        <p><span class="l-zh">给会话打上 Working / Done：哪只智能体在干活、哪只已收工，列表里一眼扫完。</span><span class="l-en">Mark sessions Working or Done and see at a glance which agent is busy and which has finished.</span></p>
+        <div class="mini mini-marks" aria-hidden="true">
+          <span class="mk mk-work"><i></i><span class="l-zh">运行中</span><span class="l-en">Working</span></span>
+          <span class="mk mk-done"><i>✓</i><span class="l-zh">已完成</span><span class="l-en">Done</span></span>
+        </div>
+      </article>
+
+      <article class="cell reveal d2">
+        <h3><span class="l-zh">多设备多会话</span><span class="l-en">Many devices, many sessions</span></h3>
+        <p><span class="l-zh">手机、平板、电脑同时在线；每台设备几十个会话，侧栏随切随走，attach 状态跨设备接力。</span><span class="l-en">Phone, tablet and desktop stay online together. Dozens of sessions per device, one tap to switch, hand a session off mid-run.</span></p>
+        <div class="mini mini-devs" aria-hidden="true"><span class="dd dd-on">build-server · 3</span><span class="dd dd-on">macbook-pro · 2</span><span class="dd dd-off">gpu-rig · offline</span></div>
+      </article>
+
+      <article class="cell reveal">
+        <h3><span class="l-zh">P2P + Relay 双通道</span><span class="l-en">P2P direct, relay fallback</span></h3>
+        <p><span class="l-zh">网络条件允许时自动建立 WebRTC 直连，延迟更低；直连不成无缝回落加密中继。通道切换，会话无感。</span><span class="l-en">Automatic WebRTC direct when the network allows, seamless fallback to the encrypted relay. The channel switches; the session never notices.</span></p>
+        <div class="mini mini-p2p" aria-hidden="true">
+          <span class="pp">📱 <i></i><i></i><i></i> 💻 <b class="l-zh">直连</b><b class="l-en">direct</b></span>
+          <span class="pp pp-alt">📱 ⋀ ⋀ ⋀ ☁ ⋀ ⋀ ⋀ 💻 <b class="l-zh">中继</b><b class="l-en">relay</b></span>
+        </div>
+      </article>
+
+      <article class="cell reveal d1">
+        <h3><span class="l-zh">文件管理</span><span class="l-en">Files that follow the session</span></h3>
+        <p><span class="l-zh">浏览远端目录、上传下载、把文件直接粘贴进会话——不用另开 scp。</span><span class="l-en">Browse remote directories, upload and download, paste files straight into a session — no scp detour.</span></p>
+        <div class="mini mini-files" aria-hidden="true">
+          <span class="ff">📁 src/</span><span class="ff">📄 session.rs</span><span class="ff">⇅ middleware.rs</span>
+        </div>
+      </article>
+
+      <article class="cell reveal d2">
+        <h3><span class="l-zh">企业登录</span><span class="l-en">Log in with your identity</span></h3>
+        <p><span class="l-zh">内置钉钉、飞书、GitHub 登录，配置好企业应用即可启用，自建部署也能接上公司的账号体系。</span><span class="l-en">DingTalk, Feishu and GitHub sign-in built in — configure your enterprise app and it just works, self-hosted deployments included.</span></p>
+        <div class="mini mini-oauth" aria-hidden="true"><span class="oo">DingTalk</span><span class="oo">Feishu</span><span class="oo">GitHub</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SECURITY ============================== -->
+<section class="security" id="security">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">// <span class="l-zh">安全</span><span class="l-en">security</span></p>
+    <h2 class="sec-title reveal d1">
+      <span class="l-zh">不信任链路上的任何一环</span>
+      <span class="l-en">Trust nothing in between</span>
+    </h2>
+    <p class="sec-sub reveal d2">
+      <span class="l-zh">omt 按零信任模型设计：服务器本身就是不可信的中继，安全建立在端到端的密码学之上，而不是对基础设施的信任。</span>
+      <span class="l-en">omt assumes zero trust: the server itself is an untrusted relay. Security comes from end-to-end cryptography, not from trusting the infrastructure.</span>
+    </p>
+
+    <div class="chain reveal d2" aria-hidden="true">
+      <div class="ch-node"><span class="ch-k">Ed25519</span><span class="ch-v l-zh">设备密钥本地生成</span><span class="ch-v l-en">keys born on device</span></div>
+      <div class="ch-link"><span class="ch-lab">16-hex commit</span></div>
+      <div class="ch-node"><span class="ch-k">TOFU</span><span class="ch-v l-zh">首次接入人工确认</span><span class="ch-v l-en">pinned on first connect</span></div>
+      <div class="ch-link"><span class="ch-lab">AES-256-GCM</span></div>
+      <div class="ch-node"><span class="ch-k">E2E</span><span class="ch-v l-zh">中继只见密文</span><span class="ch-v l-en">relay sees ciphertext</span></div>
+      <div class="ch-link"><span class="ch-lab">signed metainfo</span></div>
+      <div class="ch-node"><span class="ch-k">UPDATE</span><span class="ch-v l-zh">验签后才自升级</span><span class="ch-v l-en">verify, then update</span></div>
+    </div>
+
+    <figure class="arch-fig reveal d1">
+      <iframe class="arch-live" src="architecture/trust.html?theme=dark&embed=1" title="oh-my-term trust chain diagram" loading="lazy" width="1280" height="800"></iframe>
+      <figcaption>
+        <span class="fig-cap"><span class="l-zh">会话身份（TOFU）与签名更新，各自成链</span><span class="l-en">Session identity (TOFU) and signed updates — two separate chains</span></span>
+        <a class="arch-link" href="architecture/trust.html" target="_blank" rel="noopener"><span class="l-zh">交互版 ↗</span><span class="l-en">Interactive ↗</span></a>
+      </figcaption>
+    </figure>
+
+    <div class="sec-grid">
+      <article class="scard reveal">
+        <h3><span class="l-zh">中继读不到内容</span><span class="l-en">The relay reads no content</span></h3>
+        <p><span class="l-zh">终端与文件载荷全程 AES-256-GCM 端到端加密——中继服务器只转发它读不懂的密文。</span><span class="l-en">Terminal and file payloads travel end-to-end encrypted with AES-256-GCM. The relay forwards ciphertext it cannot read — session content does not exist for it.</span></p>
+      </article>
+      <article class="scard reveal d1">
+        <h3><span class="l-zh">Ed25519 身份 + TOFU</span><span class="l-en">Ed25519 identity, TOFU-pinned</span></h3>
+        <p><span class="l-zh">设备密钥在设备本地生成，首次接入核对 16 位校验码（Bootstrap Commit），此后双向验证，拦截冒名设备。</span><span class="l-en">Device keys are generated on the device; the first connection is pinned by verifying a 16-character Bootstrap Commit, then verified mutually — impostor devices are rejected.</span></p>
+      </article>
+      <article class="scard reveal d2">
+        <h3><span class="l-zh">签名更新信任链</span><span class="l-en">Signed update chain</span></h3>
+        <p><span class="l-zh">发布物经 Ed25519 签名，设备核对钉住公钥的签名与产物哈希后才执行自升级；二进制在 GitHub 公开分发，附 SHA-256 校验和。</span><span class="l-en">Releases are Ed25519-signed; devices verify the signature against the pinned key and check payload hashes before any self-update. Binaries ship publicly on GitHub with SHA-256 checksums.</span></p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== DEPLOY ============================== -->
+<section class="deploy" id="deploy">
+  <div class="wrap">
+    <p class="sec-eyebrow reveal">// <span class="l-zh">部署</span><span class="l-en">deploy</span></p>
+    <h2 class="sec-title reveal d1">
+      <span class="l-zh">自己的服务器，自己的数据</span>
+      <span class="l-en">Your server, your data</span>
+    </h2>
+
+    <div class="dep-grid">
+      <article class="dcard reveal">
+        <div class="dcard-head"><span class="dnum">01</span>
+          <h3><span class="l-zh">单机上线</span><span class="l-en">Single node</span></h3>
+        </div>
+        <p><span class="l-zh">一条 docker compose 拉起 omts + MySQL，宿主机 nginx 反代公网入口。omts 只听 loopback，容器非 root、无 capability 运行。</span><span class="l-en">One docker compose file brings up omts + MySQL, with host nginx in front as the public ingress. omts listens on loopback only; containers run non-root, with no capabilities.</span></p>
+      </article>
+      <article class="dcard reveal d1">
+        <div class="dcard-head"><span class="dnum">02</span>
+          <h3><span class="l-zh">集群滚动升级</span><span class="l-en">Cluster, rolling updates</span></h3>
+        </div>
+        <p><span class="l-zh">多节点共享 MySQL，滚动升级保留在线任务、客户端自动重连；会话与设备状态全量持久化。</span><span class="l-en">Multiple nodes share MySQL; rolling upgrades preserve live tasks and clients reconnect automatically. Session and device state persist in full.</span></p>
+      </article>
+      <article class="dcard reveal d2">
+        <div class="dcard-head"><span class="dnum">03</span>
+          <h3><span class="l-zh">设备端一行接入</span><span class="l-en">Devices join in one line</span></h3>
+        </div>
+        <p><span class="l-zh">omtc 是单个 Rust 二进制：从 GitHub Releases 下载、SHA-256 校验后运行，带签名自升级通道，保持自身更新。</span><span class="l-en">omtc is a single Rust binary: fetch it from GitHub Releases, verify the SHA-256 checksum, run. Signed self-updates keep it current.</span></p>
+      </article>
+    </div>
+    <figure class="arch-fig reveal d1">
+      <iframe class="arch-live" src="architecture/deploy.html?theme=dark&embed=1" title="oh-my-term deployment topology diagram" loading="lazy" width="1280" height="800"></iframe>
+      <figcaption>
+        <span class="fig-cap"><span class="l-zh">部署拓扑：多节点共享 MySQL，滚动升级客户端自动重连</span><span class="l-en">Deployment topology: nodes share MySQL — rolling upgrades keep clients connected</span></span>
+        <a class="arch-link" href="architecture/deploy.html" target="_blank" rel="noopener"><span class="l-zh">交互版 ↗</span><span class="l-en">Interactive ↗</span></a>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================== FINAL CTA ============================== -->
+<section class="cta">
+  <div class="wrap">
+    <h2 class="reveal">
+      <span class="l-zh">把终端装进口袋。</span>
+      <span class="l-en">Put your terminal in your pocket.</span>
+    </h2>
+    <p class="reveal d1">
+      <span class="l-zh">下载客户端，把每台机器装进口袋。</span>
+      <span class="l-en">Get the client and carry every machine in your pocket.</span>
+    </p>
+    <div class="hero-cta reveal d2">
+      <a class="btn btn-primary" href="getting-started.html#download">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 3v10.6l3.8-3.8 1.4 1.4-6.2 6.2-6.2-6.2 1.4-1.4 3.8 3.8V3h2ZM5 19h14v2H5v-2Z"/></svg>
+        <span class="l-zh">下载</span><span class="l-en">Download</span>
+      </a>
+      <a class="btn btn-ghost" href="https://github.com/oh-my-term" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        <span class="l-zh">GitHub 组织</span><span class="l-en">GitHub organization</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <img class="brand-mark" src="logo-mark.png" alt="" aria-hidden="true">
+      <div>
+        <div class="foot-name">oh-my-term</div>
+        <div class="foot-tag"><span class="l-zh">为 Vibe Coding 而生的终端管理器</span><span class="l-en">The terminal built for Vibe Coding</span></div>
+      </div>
+    </div>
+    <nav class="foot-links">
+      <a href="https://github.com/oh-my-term" target="_blank" rel="noopener">GitHub</a>
+      <a href="getting-started.html#download"><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+      <a href="docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="#security"><span class="l-zh">安全模型</span><span class="l-en">Security</span></a>
+      <a href="privacy.html"><span class="l-zh">隐私政策</span><span class="l-en">Privacy</span></a>
+      <a href="terms.html"><span class="l-zh">服务条款</span><span class="l-en">Terms</span></a>
+      <a href="account-deletion.html"><span class="l-zh">账号删除</span><span class="l-en">Delete account</span></a>
+    </nav>
+    <div class="foot-meta">Apache-2.0 · © 2026 oh-my-term</div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

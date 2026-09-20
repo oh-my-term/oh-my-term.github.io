@@ -1,0 +1,184 @@
+<!doctype html>
+<!--
+  Terms of service for the Oh My Term official service (gitea#4 follow-up).
+  Static, script-free — same posture as the privacy / account-deletion pages.
+  Deployed by deploy-remote alongside them on landing-profile envs, and
+  rendered into the public Pages repo by the same script.
+
+  Values (privacy@ohmyterm.com / 2026-09-16) are filled by
+  render_privacy_pages.py from OMT_PRIVACY_CONTACT / OMT_PRIVACY_LAST_UPDATED.
+  Plain template wording — have it reviewed before store submission, same as
+  the privacy pages (docs/guides/google-play-release.md).
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="robots" content="noindex">
+  <title>Oh My Term · 服务条款 / Terms of Service</title>
+  <script>
+    window.__legalLangTitles = { zh: "Oh My Term · 服务条款", en: "Oh My Term · Terms of Service" };
+    (function () {
+      var l = null;
+      try { l = localStorage.getItem('omt-lang'); } catch (e) {}
+      if (l !== 'zh' && l !== 'en') l = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+      document.documentElement.classList.add('legal-lang-' + l);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090d0b;
+      --surface: #101612;
+      --text: #eaf1e9;
+      --muted: #a0afa3;
+      --line: #2a372d;
+      --accent: #a3ee92;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        color-scheme: light;
+        --bg: #f6f8f4;
+        --surface: #ffffff;
+        --text: #1a241b;
+        --muted: #5c6b5e;
+        --line: #d4ddd2;
+        --accent: #2c6b1f;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.8 var(--sans); }
+    .wrap { max-width: 46rem; margin: 0 auto; padding: 48px 20px 64px; }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 19px; margin: 36px 0 10px; }
+    p, li { color: var(--text); }
+    .meta { color: var(--muted); font: 13px/1.6 var(--mono); margin: 0 0 28px; }
+    .toc { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 18px; margin: 0 0 8px; }
+    .toc a { color: var(--accent); text-decoration: none; margin-right: 18px; font-size: 14px; }
+    .toc a.active { color: var(--text); font-weight: 600; }
+    html.legal-lang-zh #en, html.legal-lang-en #zh { display: none; }
+    html.legal-lang-zh .lang-divider, html.legal-lang-en .lang-divider { display: none; }
+    .lang-divider { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+    .en h1 { font-size: 22px; }
+    ul { padding-left: 22px; }
+    code { font-family: var(--mono); font-size: 13px; background: var(--surface); padding: 1px 5px; border-radius: 3px; }
+    footer { margin-top: 48px; color: var(--muted); font: 12px/1.7 var(--mono); }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="toc" aria-label="Language">
+      <a href="#zh" data-lang="zh">中文</a>
+      <a href="#en" data-lang="en" lang="en">English</a>
+    </nav>
+
+    <section id="zh">
+      <h1>服务条款</h1>
+      <p class="meta">最后更新：2026-09-16 · 联系我们：privacy@ohmyterm.com</p>
+
+      <p>本条款适用于 Oh My Term 官方运营的服务（官方服务器实例，含免费公共实例，以及相关网站）。免费公共实例仅供体验演示与临时使用。<strong>Oh My Term 软件本身以 Apache-2.0 协议开源</strong>：自建或第三方运营的 omts 服务器不属于本服务，由其运营者自行约定条款。</p>
+
+      <h2>账号</h2>
+      <ul>
+        <li>注册时提供的信息应真实；保管好你的密码与两步验证凭据，账号下的活动由你负责。</li>
+        <li>你可以随时删除账号（应用内「设置 → 安全 → 删除账号」，或按 <a href="account-deletion.html">账号删除说明</a> 邮件请求）。</li>
+        <li>长期不活跃的免费账号可能被清理，重要数据请自行备份。</li>
+      </ul>
+
+      <h2>可接受的使用</h2>
+      <ul>
+        <li>不得将服务用于违法用途，或用于攻击、扫描、干扰服务与他人设备。</li>
+        <li>不得绕过或试图绕过服务的访问控制与限流措施。</li>
+        <li>免费实例的资源按合理方式使用；对滥用（含影响其他用户的行为），官方可以限流、暂停或终止相关账号。</li>
+      </ul>
+
+      <h2>服务的可用性与变更</h2>
+      <ul>
+        <li>服务按「现状」提供，不承诺不中断或无错误。终端内容端到端加密，但服务器与网络的可用性取决于多种因素。</li>
+        <li>官方提供的免费 omts 不承诺可用性：它只是演示与临时使用方案，生产或长期工作负载请自建服务器。</li>
+        <li>免费服务的功能、配额与可用性可能调整、暂停或终止；重大变更会在官方网站公告。</li>
+      </ul>
+
+      <h2>知识产权</h2>
+      <ul>
+        <li>Oh My Term 软件依据 <a href="https://github.com/oh-my-term" rel="noopener">Apache-2.0</a> 开源，你可以按该协议自用、修改与分发。</li>
+        <li>网站内容、品牌名称与标识归 Oh My Term 项目所有，未经许可不得用于暗示官方背书。</li>
+      </ul>
+
+      <h2>免责声明与责任限制</h2>
+      <p>在法律允许的最大范围内：服务按「现状」与「可用之现状」提供，不作任何明示或默示担保（包括适销性、特定用途适用性）；对于使用服务产生的间接、附带或后果性损失，官方不承担责任；官方在你请求前 12 个月内就该服务向你收取的费用（免费用户为零）是累计责任总额的上限。</p>
+
+      <h2>条款变更</h2>
+      <p>条款如有重大变更，会在官方网站公布并更新本页的「最后更新」日期；变更后继续使用服务即视为接受更新后的条款。</p>
+    </section>
+
+    <hr class="lang-divider">
+
+    <section id="en" class="en" lang="en">
+      <h1>Terms of Service</h1>
+      <p class="meta">Last updated: 2026-09-16 · Contact: privacy@ohmyterm.com</p>
+
+      <p>These terms apply to the service operated by Oh My Term (official server instances, including the free public instance, and related websites). The free public instance is meant for trying things out and temporary use only. <strong>The Oh My Term software itself is open source under Apache-2.0</strong>: self-hosted or third-party-operated omts servers are not part of this service and are governed by their operators' own terms.</p>
+
+      <h2>Accounts</h2>
+      <ul>
+        <li>Provide accurate information when registering; keep your password and two-factor credentials safe — activity under your account is your responsibility.</li>
+        <li>You can delete your account at any time (in the app: “Settings → Security → Delete account”, or by email as described in the <a href="account-deletion.html" lang="en">account deletion notice</a>).</li>
+        <li>Long-inactive free accounts may be cleaned up; back up anything important.</li>
+      </ul>
+
+      <h2>Acceptable use</h2>
+      <ul>
+        <li>Do not use the service for unlawful purposes, or to attack, scan, or interfere with the service or other people's devices.</li>
+        <li>Do not bypass or attempt to bypass access controls or rate limits.</li>
+        <li>Use free-instance resources reasonably. For abuse (including behavior that affects other users), we may rate-limit, suspend or terminate the accounts involved.</li>
+      </ul>
+
+      <h2>Availability and changes</h2>
+      <ul>
+        <li>The service is provided “as is”, with no promise of uninterrupted or error-free operation. Terminal content is end-to-end encrypted, but availability of servers and networks depends on many factors.</li>
+        <li>The official free omts comes with no availability commitment: it is a demo and stopgap — run your own server for production or long-lived workloads.</li>
+        <li>Features, quotas and availability of the free service may change, be suspended or discontinued; material changes will be announced on the official website.</li>
+      </ul>
+
+      <h2>Intellectual property</h2>
+      <ul>
+        <li>The Oh My Term software is open source under <a href="https://github.com/oh-my-term" rel="noopener" lang="en">Apache-2.0</a> — you may use, modify and distribute it under that license.</li>
+        <li>The website content, brand name and marks belong to the Oh My Term project and may not be used in ways that imply official endorsement.</li>
+      </ul>
+
+      <h2>Disclaimer and limitation of liability</h2>
+      <p>To the maximum extent permitted by law: the service is provided “as is” and “as available”, without warranties of any kind (including merchantability or fitness for a particular purpose); we are not liable for indirect, incidental or consequential losses arising from use of the service; the total fees you paid us for the service in the 12 months before your claim (zero for free users) cap our aggregate liability.</p>
+
+      <h2>Changes to these terms</h2>
+      <p>Material changes will be announced on the official website and reflected in the “last updated” date above. Continuing to use the service after a change means you accept the updated terms.</p>
+    </section>
+
+    <footer>Oh My Term · <a href="index.html">ohmyterm</a> · <a href="privacy.html">隐私政策 / Privacy</a></footer>
+  </div>
+  <script>
+    (function () {
+      var titles = window.__legalLangTitles;
+      var root = document.documentElement;
+      function apply(l) {
+        root.classList.toggle('legal-lang-zh', l === 'zh');
+        root.classList.toggle('legal-lang-en', l === 'en');
+        root.lang = l === 'zh' ? 'zh-CN' : 'en';
+        document.title = titles[l];
+        document.querySelectorAll('.toc a[data-lang]').forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('data-lang') === l);
+        });
+        try { localStorage.setItem('omt-lang', l); } catch (e) {}
+      }
+      document.querySelectorAll('.toc a[data-lang]').forEach(function (a) {
+        a.addEventListener('click', function (e) { e.preventDefault(); apply(a.getAttribute('data-lang')); });
+      });
+      apply(root.classList.contains('legal-lang-zh') ? 'zh' : 'en');
+    })();
+  </script>
+</body>
+</html>

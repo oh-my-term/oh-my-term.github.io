@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh" class="lang-zh" data-title-zh="设备端 omtc — oh-my-term 文档" data-title-en="Device agent omtc — oh-my-term Docs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>oh-my-term — 文档 · 设备端 omtc</title>
+<meta name="description" content="omtc 设备端参考：安装注册、全部命令（start/takeover/upgrade/attach…）、~/.omt/client.conf 配置键、磁盘布局与自升级信任链。">
+<link rel="canonical" href="https://ohmyterm.com/docs/omtc.html">
+<meta name="theme-color" content="#08090d">
+<link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('omt-theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+  var m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', t === 'light' ? '#f6f7f5' : '#08090d');
+})();
+</script>
+<script>
+(function () {
+  var l = null;
+  try { l = localStorage.getItem('omt-lang'); } catch (e) {}
+  if (l !== 'zh' && l !== 'en') {
+    l = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+  var r = document.documentElement;
+  r.classList.remove('lang-zh', 'lang-en');
+  r.classList.add('lang-' + l);
+  r.lang = l;
+  document.title = l === 'zh'
+    ? r.getAttribute('data-title-zh') || document.title
+    : r.getAttribute('data-title-en') || document.title;
+})();
+</script>
+</head>
+<body data-doc="omtc">
+
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <a class="brand" href="../index.html" aria-label="oh-my-term">
+      <img class="brand-mark" src="../logo-mark.png" alt="" aria-hidden="true">
+      <span class="brand-name">oh-my-term</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="../docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="../index.html#features"><span class="l-zh">特性</span><span class="l-en">Features</span></a>
+      <a href="../index.html#security"><span class="l-zh">安全</span><span class="l-en">Security</span></a>
+      <a href="../index.html#deploy"><span class="l-zh">部署</span><span class="l-en">Deploy</span></a>
+      <a href="../getting-started.html#download"><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+    </nav>
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light / dark theme"><span class="t-light">☀</span><span class="t-dark">☾</span></button>
+      <button id="navBurger" class="nav-burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+      <button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">
+        <span class="l-zh">EN</span><span class="l-en">中文</span>
+      </button>
+      <a class="btn btn-primary btn-sm" href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a class="btn btn-ghost btn-sm" href="https://github.com/oh-my-term" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="docs-hero">
+  <div class="wrap">
+    <p class="sec-eyebrow">// <span class="l-zh">文档 · 设备端</span><span class="l-en">docs · device agent</span></p>
+    <h1 class="sec-title"><span class="l-zh">设备端 omtc</span><span class="l-en">Device agent · omtc</span></h1>
+    <p class="sec-sub">
+      <span class="l-zh">安装注册、全部命令、<code>client.conf</code> 配置键、磁盘布局与自升级信任链。</span>
+      <span class="l-en">Install, every command, the <code>client.conf</code> keys, on-disk layout, and the self-update trust chain.</span>
+    </p>
+  </div>
+</section>
+
+<div class="wrap docs-layout">
+  <nav class="doc-side" aria-label="Documentation">
+    <div class="doc-side-title">Contents</div>
+    <div class="doc-nav" id="docNav"></div>
+  </nav>
+
+  <main>
+  <section class="doc-sec">
+    <p>
+      <span class="l-zh">omtc 是设备上的常驻 agent：守护每一个 PTY 会话（客户端断开不影响任务）、维护到 omts 的 WebSocket 传输、执行签名验证的自升级。会话从客户端创建；omtc 负责让它们活着。</span>
+      <span class="l-en">omtc is the resident agent on each managed machine: it guards every PTY session (a dropped client never touches the task), maintains the WebSocket transport to omts, and performs signature-verified self-updates. Sessions are created from the client; omtc keeps them alive.</span>
+    </p>
+
+    <h3 id="omtc-install"><span class="l-zh">安装与注册</span><span class="l-en">Install &amp; registration</span></h3>
+    <p>
+      <span class="l-zh">推荐路径：客户端「添加机器」生成一条一次性安装命令（Linux/macOS 为 <code>install-v3.sh</code>，Windows 为 <code>install-v3.ps1</code>），在目标机器执行——脚本换取一次性注册令牌、下载并校验二进制、完成 <code>register</code> 与 <code>init</code>，客户端界面随后显示设备上线。也可以手动执行 <code>omtc register</code>（见下表）。</span>
+      <span class="l-en">Recommended path: the client's "Add a machine" generates a one-time install command (<code>install-v3.sh</code> on Linux/macOS, <code>install-v3.ps1</code> on Windows) — run it on the target machine and the script exchanges the setup token, downloads and verifies the binary, then runs <code>register</code> and <code>init</code>; the client UI flips to online. Manual <code>omtc register</code> works too (see below).</span>
+    </p>
+
+    <h3 id="omtc-cmds"><span class="l-zh">命令</span><span class="l-en">Commands</span></h3>
+    <h4 class="doc-h4"><span class="l-zh">注册与信任</span><span class="l-en">Registration &amp; trust</span></h4>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th><span class="l-zh">命令</span><span class="l-en">Command</span></th><th><span class="l-zh">说明</span><span class="l-en">Description</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>omtc register</code></td><td><span class="l-zh">向 omts 注册设备。常用参数：<code>-n/--name</code>（设备名）、<code>-r/--reg-token</code>（注册令牌）或 <code>-c/--code</code>（<code>&lt;server-url&gt;/&lt;token&gt;</code> 一体码）、<code>-s/--server-url</code>、<code>--release-pubkey</code>（升级通道公钥）、<code>--insecure</code>（自签 TLS 测试端点）。注册前打印解析出的服务器地址并要求交互确认（<code>-y</code> 跳过）。</span><span class="l-en">Register the device with omts. Common flags: <code>-n/--name</code>, <code>-r/--reg-token</code> or <code>-c/--code</code> (<code>&lt;server-url&gt;/&lt;token&gt;</code>), <code>-s/--server-url</code>, <code>--release-pubkey</code> (update-channel key), <code>--insecure</code> (self-signed TLS test endpoints). Prints the resolved server URL and asks for confirmation (<code>-y</code> skips).</span></td></tr>
+        <tr><td><code>omtc init</code></td><td><span class="l-zh">首装引导：记录升级公钥（<code>--release-pubkey</code>）、生成或复用 16 位 Bootstrap Commit 并展示（<code>--bootstrap-only</code> 只出指纹；<code>--force</code> 轮换；<code>--identity</code> 指定 SSH 私钥）。</span><span class="l-en">First-install bootstrap: records the release pubkey (<code>--release-pubkey</code>), creates or reuses the 16-hex Bootstrap Commit and displays it (<code>--bootstrap-only</code> prints the fingerprint only; <code>--force</code> rotates; <code>--identity</code> selects an SSH key).</span></td></tr>
+        <tr><td><code>omtc re-register</code></td><td><span class="l-zh">只清升级公钥，供可信安装器写入轮换后的 key；设备身份与令牌保留。</span><span class="l-en">Clears only the release pubkey so a trusted installer can write the rotated key; device identity and tokens are preserved.</span></td></tr>
+        <tr><td><code>omtc passwd [--clear]</code></td><td><span class="l-zh">可选的设备连接密码：免去 authorized_keys 仪式直接连接新浏览器。密码本身不上线——浏览器用 Argon2id 派生密钥 + HMAC 证明认证。设置 <code>--clear</code> 清除。<b>请用长密码</b>：录制的握手可被离线猜解。</span><span class="l-en">Opt-in device password: connect a new browser without the authorized_keys ceremony. The password never crosses the wire — the browser authenticates with an Argon2id-derived key + HMAC proof. <b>Use a long password</b>: a recorded handshake can be guessed offline.</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h4 class="doc-h4"><span class="l-zh">日常运维</span><span class="l-en">Everyday operations</span></h4>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th><span class="l-zh">命令</span><span class="l-en">Command</span></th><th><span class="l-zh">说明</span><span class="l-en">Description</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>omtc start</code></td><td><span class="l-zh">启动到 omts 的常驻传输（幂等）：健康则 no-op，需恢复则自动接管，什么都没有则前台运行（开机自启执行的就是它）。</span><span class="l-en">Start the persistent transport to omts (idempotent): no-op when healthy, automatic takeover when recovery is needed, foreground run otherwise — this is what the autostart entries exec.</span></td></tr>
+        <tr><td><code>omtc stop [-y]</code></td><td><span class="l-zh">停传输并停 pty-holder——<b>活会话会被终止</b>。需确认，<code>-y</code> 跳过。</span><span class="l-en">Stop the transport AND the pty-holder — <b>live sessions are terminated</b>. Asks for confirmation; <code>-y</code> skips.</span></td></tr>
+        <tr><td><code>omtc takeover</code></td><td><span class="l-zh">保会话重启：只换传输，pty-holder 与全部活会话原地不动。升级后的标准动作。</span><span class="l-en">Session-preserving restart: replaces the transport while the pty-holder and every live session stay put. The standard move after an upgrade.</span></td></tr>
+        <tr><td><code>omtc restart [-y]</code></td><td><span class="l-zh">完整重启：传输与 holder 都回收，<b>活会话丢失</b>（保会话用 takeover）。</span><span class="l-en">Full restart: recycles transport and holder — <b>live sessions are lost</b> (use takeover to preserve them).</span></td></tr>
+        <tr><td><code>omtc upgrade</code></td><td><span class="l-zh">自升级：按 <code>client.conf</code> 里的服务器与公钥取 <code>metainfo.json</code>，验 Ed25519 签名与 SHA-256 后原子替换自身，必要时自动 takeover。<code>-y</code> 免确认；<code>--from-manifest</code> / <code>--release-host</code> 走旧版发布主机通道（覆盖需一次性确认并持久记录）。</span><span class="l-en">Self-update: reads the server + pinned key from <code>client.conf</code>, fetches <code>metainfo.json</code>, verifies the Ed25519 signature and SHA-256, atomically replaces itself, then takes over as needed. <code>-y</code> skips prompts; <code>--from-manifest</code> / <code>--release-host</code> use the legacy release-host channel (overrides need a one-time confirmation, persisted).</span></td></tr>
+        <tr><td><code>omtc status</code></td><td><span class="l-zh">一览：版本、注册的服务器、传输与 holder 进程、运行时新鲜度、自启条目状态。</span><span class="l-en">One glance: version, registered server, transport + holder processes, runtime freshness, autostart entry state.</span></td></tr>
+        <tr><td><code>omtc ls</code></td><td><span class="l-zh">列出本地 holder 里的会话（id 前缀、显示名、末行输出）。走本地 IPC，omts 不可达也能用。</span><span class="l-en">List the local holder's sessions (id prefix, display name, last screen line). Talks local IPC, so it works with omts unreachable.</span></td></tr>
+        <tr><td><code>omtc attach [&lt;id&gt;]</code></td><td><span class="l-zh">把会话接到当前终端——本地版的 web 终端，路径上没有 omts。本地 attach 与 web 客户端可同时观看同一会话。不带 id 时出交互选择器；detach 是 screen 式 Ctrl+A 前缀（见下）。</span><span class="l-en">Attach a session to the current terminal — the local counterpart of the web terminal with no omts in the path. A local attach and the web client can watch the same session at once. Without an id it opens the interactive picker; detach is screen-style via the Ctrl+A prefix (below).</span></td></tr>
+        <tr><td><code>omtc autostart …</code></td><td><span class="l-zh">开机自启管理：<code>on</code>/<code>off</code>/<code>status</code>/<code>pause</code>/<code>resume</code>。macOS 交互开启时可选 <code>--system</code>（登录前启动，推荐）或 <code>--user</code>（登录后启动）；Linux 用 crontab。</span><span class="l-en">Boot-start management: <code>on</code>/<code>off</code>/<code>status</code>/<code>pause</code>/<code>resume</code>. On macOS an interactive enable offers <code>--system</code> (starts before login, recommended) or <code>--user</code> (after login); Linux uses crontab.</span></td></tr>
+        <tr><td><code>omtc uninstall</code></td><td><span class="l-zh">关自启、从 omts 注销设备（尽力）、停本地进程、删除 <code>~/.omt/</code>。</span><span class="l-en">Disables autostart, unregisters from omts (best effort), stops local processes, deletes <code>~/.omt/</code>.</span></td></tr>
+        <tr><td><code>omtc version</code></td><td><span class="l-zh">打印版本号。</span><span class="l-en">Prints the version string.</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h4 class="doc-h4"><span class="l-zh">attach 的 Ctrl+A 前缀键（screen 习惯）</span><span class="l-en">The Ctrl+A prefix inside attach (screen habits)</span></h4>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th><span class="l-zh">按键</span><span class="l-en">Keys</span></th><th><span class="l-zh">效果</span><span class="l-en">Effect</span></th></tr></thead>
+      <tbody>
+        <tr><td class="mono">Ctrl+A D / Ctrl+A Ctrl+D</td><td><span class="l-zh">detach（打印 <code>[detached]</code>，退出码 0）</span><span class="l-en">detach (prints <code>[detached]</code>, exit 0)</span></td></tr>
+        <tr><td class="mono">Ctrl+A A / Ctrl+A Ctrl+A</td><td><span class="l-zh">向会话发送一个字面 Ctrl+A</span><span class="l-en">send one literal Ctrl+A to the session</span></td></tr>
+        <tr><td class="mono">Ctrl+A ?</td><td><span class="l-zh">一行按键提示</span><span class="l-en">one-line key reminder</span></td></tr>
+        <tr><td class="mono">Ctrl+A &lt;other&gt;</td><td><span class="l-zh">两个键原样进会话</span><span class="l-en">both keys pass through to the session</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 id="omtc-conf"><span class="l-zh">配置文件：~/.omt/client.conf</span><span class="l-en">Config: ~/.omt/client.conf</span></h3>
+    <p>
+      <span class="l-zh">key=value 文本格式，权限 0600，由 <code>register</code>/<code>init</code>/<code>upgrade</code> 维护，一般不需要手改。可选键改完重启传输生效（<code>omtc restart</code>；<code>takeover</code> 不重读 holder 相关键）。</span>
+      <span class="l-en">A key=value text file, mode 0600, maintained by <code>register</code>/<code>init</code>/<code>upgrade</code> — manual edits are rarely needed. Optional keys take effect after a transport restart (<code>omtc restart</code>; <code>takeover</code> does not re-read holder-scoped keys).</span>
+    </p>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th>key</th><th><span class="l-zh">默认</span><span class="l-en">Default</span></th><th><span class="l-zh">说明</span><span class="l-en">Description</span></th></tr></thead>
+      <tbody>
+        <tr><td><code>device_id</code> / <code>device_token</code></td><td class="mono">—</td><td><span class="l-zh">注册时写入的设备身份与令牌。</span><span class="l-en">Device identity and token, written at registration.</span></td></tr>
+        <tr><td><code>server_url_cache</code></td><td class="mono">—</td><td><span class="l-zh">注册的 omts 地址缓存（自升级取 metainfo 的基准）。</span><span class="l-en">Cached omts URL (the base for metainfo during self-update).</span></td></tr>
+        <tr><td><code>release_pubkey_b64</code></td><td class="mono">—</td><td><span class="l-zh">升级通道信任锚：Ed25519 公钥。manifest 轮换 key 时 upgrade 会自动采纳新值。</span><span class="l-en">The update-channel trust anchor: the Ed25519 pubkey. When a manifest rotates the key, upgrade adopts the new value automatically.</span></td></tr>
+        <tr><td><code>output_flush_ms</code></td><td class="mono">5</td><td><span class="l-zh">holder→WS 终端输出合并窗口（毫秒，1–1000）。</span><span class="l-en">Holder→WS terminal output coalescing in ms (1–1000).</span></td></tr>
+        <tr><td><code>activity_echo_window_secs</code></td><td class="mono">5</td><td><span class="l-zh">浏览器触发的刷新/resize 后，该窗口内的输出视为回显、不计入 Working 状态（0 关闭，0–60）。</span><span class="l-en">Output within this window after a browser-driven resize/refresh counts as viewer echo, not Working activity (0 disables, 0–60).</span></td></tr>
+        <tr><td><code>activity_idle_after_secs</code></td><td class="mono">15</td><td><span class="l-zh">最后一次真实输出后多久从 Working 转为空闲（5–3600）。</span><span class="l-en">How long a session stays Working after its last real output (5–3600).</span></td></tr>
+        <tr><td><code>snapshot_style_mode</code></td><td class="mono">visible</td><td><span class="l-zh">attach 快照样式：<code>visible</code> 只保留可见屏样式；<code>full</code> 保留整份快照（同字节上限下回放深度变浅）。</span><span class="l-en">Attach-snapshot styling: <code>visible</code> keeps styling for the restored screen only; <code>full</code> styles the entire snapshot (shallower retained history under the same byte cap).</span></td></tr>
+        <tr><td><code>p2p_enabled</code></td><td class="mono">true</td><td><span class="l-zh">设备侧 P2P 开关；<code>false</code> 拒绝一切 viewer 信令、立即走中继。环境变量 <code>OMT_DISABLE_P2P=1</code> 单次运行强制关闭。</span><span class="l-en">Device-side P2P switch; <code>false</code> refuses every viewer signal and falls back to the relay. <code>OMT_DISABLE_P2P=1</code> forces it off for one run.</span></td></tr>
+        <tr><td><code>file_max_upload_size</code> / <code>file_max_download_size</code></td><td class="mono">0</td><td><span class="l-zh">文件上传/下载上限（字节，0=不限）——设备保护自己的盘，中继与 P2P 传输都生效。</span><span class="l-en">File upload/download caps in bytes (0 = unlimited) — the device protecting its own disk; applies to relayed and P2P transfers alike.</span></td></tr>
+        <tr><td><code>max_alive_sessions</code></td><td class="mono">64</td><td><span class="l-zh">并发活会话硬上限（0=不限），防失控创建循环；holder 启动时读取，改后需 <code>omtc restart</code>。</span><span class="l-en">Hard cap on concurrent alive sessions (0 = unlimited) against runaway create loops; read once at holder start — <code>omtc restart</code> picks up changes.</span></td></tr>
+        <tr><td><code>identity_fp</code></td><td class="mono">—</td><td><span class="l-zh">诊断键：传输最近一次使用的身份密钥指纹；变化时打告警（意味着浏览器会要求重新 TOFU）。</span><span class="l-en">Diagnostic: SSH fingerprint of the identity key the transport last used; a change logs a warning (browsers will demand TOFU re-verification).</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3><span class="l-zh">磁盘布局</span><span class="l-en">On-disk layout</span></h3>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th><span class="l-zh">路径</span><span class="l-en">Path</span></th><th><span class="l-zh">内容</span><span class="l-en">Contents</span></th></tr></thead>
+      <tbody>
+        <tr><td class="mono">~/.omt/client.conf</td><td><span class="l-zh">配置（上表）。</span><span class="l-en">Config (table above).</span></td></tr>
+        <tr><td class="mono">~/.omt/bootstrap-commit</td><td><span class="l-zh">16 位设备指纹（TOFU 校验用）。</span><span class="l-en">The 16-hex device fingerprint (for TOFU verification).</span></td></tr>
+        <tr><td class="mono">~/.omt/identity.ed</td><td><span class="l-zh">设备 Ed25519 身份密钥。</span><span class="l-en">The device's Ed25519 identity key.</span></td></tr>
+        <tr><td class="mono">~/.omt/passwd</td><td><span class="l-zh">可选的连接密码派生密钥（存在即启用，0600）。</span><span class="l-en">Optional password-derived key (its existence is the switch, 0600).</span></td></tr>
+        <tr><td class="mono">~/.ssh/authorized_keys</td><td><span class="l-zh">被授权连接本设备终端的浏览器公钥（与 SSH 同机制，独立于 ~/.omt）。</span><span class="l-en">Browser public keys authorized to connect to this device's terminals (same mechanism as SSH, separate from ~/.omt).</span></td></tr>
+        <tr><td class="mono">~/.omt/takeover.lock 等</td><td><span class="l-zh">运行时文件：takeover 文件锁、pty-holder 版本戳、密码重放账本。</span><span class="l-en">Runtime files: the takeover lock, pty-holder version stamp, password replay ledger.</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <h3><span class="l-zh">自升级信任链</span><span class="l-en">The self-update trust chain</span></h3>
+    <ol>
+      <li><span class="l-zh">取 <code>{server_url_cache}/metainfo.json</code>，按平台与当前版本选出条目。</span><span class="l-en">Fetch <code>{server_url_cache}/metainfo.json</code> and select the entry for this platform and client version.</span></li>
+      <li><span class="l-zh">验内联 manifest 的 Ed25519 签名（用钉住的 <code>release_pubkey_b64</code>），才信任其中的 SHA-256。</span><span class="l-en">Verify the inline manifest's Ed25519 signature (against pinned <code>release_pubkey_b64</code>) before trusting its SHA-256.</span></li>
+      <li><span class="l-zh">下载二进制、核对哈希、原子替换运行中的自身；manifest 轮换公钥时同步更新信任锚。</span><span class="l-en">Download the binary, verify the hash, atomically replace the running binary; adopt a rotated pubkey from the manifest.</span></li>
+      <li><span class="l-zh">运行时契约有变时询问（或 <code>-y</code>）后 <code>takeover</code>，会话不中断。</span><span class="l-en">Take over (asking, or with <code>-y</code>) when the runtime contract changed — sessions survive.</span></li>
+    </ol>
+
+    <h3 id="omtc-faq"><span class="l-zh">常见问题</span><span class="l-en">FAQ</span></h3>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th><span class="l-zh">问题</span><span class="l-en">Question</span></th><th><span class="l-zh">答案</span><span class="l-en">Answer</span></th></tr></thead>
+      <tbody>
+        <tr><td><span class="l-zh">关掉客户端，会话还在吗？</span><span class="l-en">Do sessions survive a closed client?</span></td><td><span class="l-zh">在。会话由设备端 pty-holder 守护，与客户端生命周期解耦；只有 <code>omtc stop</code>/<code>omtc restart</code> 或机器关机才会终止。</span><span class="l-en">Yes. Sessions live in the device-side pty-holder, decoupled from the client; only <code>omtc stop</code>/<code>omtc restart</code> or host shutdown ends them.</span></td></tr>
+        <tr><td><span class="l-zh">忘了设备连接密码？</span><span class="l-en">Forgot the device password?</span></td><td><span class="l-zh">在设备上 <code>omtc passwd --clear</code> 清除，回到 authorized_keys 仪式；或重新设置。</span><span class="l-en">Run <code>omtc passwd --clear</code> on the device to fall back to the authorized_keys ceremony, or set a new one.</span></td></tr>
+        <tr><td><span class="l-zh">怎么彻底移除设备端？</span><span class="l-en">Remove the device agent completely?</span></td><td><span class="l-zh"><code>omtc uninstall</code>：关自启、注销、停进程、删 <code>~/.omt/</code>。</span><span class="l-en"><code>omtc uninstall</code>: disables autostart, unregisters, stops processes, deletes <code>~/.omt/</code>.</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <div class="doc-pager" id="docPager"></div>
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <img class="brand-mark" src="../logo-mark.png" alt="" aria-hidden="true">
+      <span class="foot-name">oh-my-term</span>
+      <span class="foot-tag"><span class="l-zh">为 Vibe Coding 而生的终端管理器</span><span class="l-en">The terminal built for Vibe Coding</span></span>
+    </div>
+    <div class="foot-links">
+      <a href="../index.html"><span class="l-zh">首页</span><span class="l-en">Home</span></a>
+      <a href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="../docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="https://github.com/oh-my-term" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="foot-meta">© 2026 oh-my-term · Apache-2.0</div>
+  </div>
+</footer>
+
+<script src="../app.js"></script>
+<script src="docs-nav.js"></script>
+</body>
+</html>

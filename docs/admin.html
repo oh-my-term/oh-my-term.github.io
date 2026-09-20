@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh" class="lang-zh" data-title-zh="管理员手册 — oh-my-term 文档" data-title-en="Admin Manual — oh-my-term Docs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>oh-my-term — 文档 · 管理员手册</title>
+<meta name="description" content="oh-my-term 管理员手册：管理员身份、用户管理、OAuth 登录配置、系统设置、审计日志、集群节点与诊断。">
+<link rel="canonical" href="https://ohmyterm.com/docs/admin.html">
+<meta name="theme-color" content="#08090d">
+<link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('omt-theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+  var m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', t === 'light' ? '#f6f7f5' : '#08090d');
+})();
+</script>
+<script>
+(function () {
+  var l = null;
+  try { l = localStorage.getItem('omt-lang'); } catch (e) {}
+  if (l !== 'zh' && l !== 'en') {
+    l = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+  var r = document.documentElement;
+  r.classList.remove('lang-zh', 'lang-en');
+  r.classList.add('lang-' + l);
+  r.lang = l;
+  document.title = l === 'zh'
+    ? r.getAttribute('data-title-zh') || document.title
+    : r.getAttribute('data-title-en') || document.title;
+})();
+</script>
+</head>
+<body data-doc="admin">
+
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <a class="brand" href="../index.html" aria-label="oh-my-term">
+      <img class="brand-mark" src="../logo-mark.png" alt="" aria-hidden="true">
+      <span class="brand-name">oh-my-term</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="../docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="../index.html#features"><span class="l-zh">特性</span><span class="l-en">Features</span></a>
+      <a href="../index.html#security"><span class="l-zh">安全</span><span class="l-en">Security</span></a>
+      <a href="../index.html#deploy"><span class="l-zh">部署</span><span class="l-en">Deploy</span></a>
+      <a href="../getting-started.html#download"><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+    </nav>
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light / dark theme"><span class="t-light">☀</span><span class="t-dark">☾</span></button>
+      <button id="navBurger" class="nav-burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+      <button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">
+        <span class="l-zh">EN</span><span class="l-en">中文</span>
+      </button>
+      <a class="btn btn-primary btn-sm" href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a class="btn btn-ghost btn-sm" href="https://github.com/oh-my-term" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="docs-hero">
+  <div class="wrap">
+    <p class="sec-eyebrow">// <span class="l-zh">文档 · 管理员手册</span><span class="l-en">docs · admin manual</span></p>
+    <h1 class="sec-title"><span class="l-zh">管理员手册</span><span class="l-en">Admin manual</span></h1>
+    <p class="sec-sub">
+      <span class="l-zh">面向自建 omts 的管理员：账号体系、OAuth 登录、系统设置、审计与集群。部署本身（docker compose、nginx、多节点上线）见<a href="omts.html">服务端章节</a>；普通用户的操作见<a href="omtn.html">客户端手册</a>。</span>
+      <span class="l-en">For self-hosted omts administrators: accounts, OAuth, system settings, audit, and the cluster. Deployment itself (docker compose, nginx, multi-node) is in the <a href="omts.html">server chapter</a>; end-user features live in the <a href="omtn.html">client manual</a>.</span>
+    </p>
+  </div>
+</section>
+
+<div class="wrap docs-layout">
+  <nav class="doc-side" aria-label="Documentation">
+    <div class="doc-side-title">Contents</div>
+    <div class="doc-nav" id="docNav"></div>
+  </nav>
+
+  <main>
+  <section class="doc-sec">
+
+    <h3 id="admin-entry"><span class="l-zh">管理员身份与入口</span><span class="l-en">Admin identity &amp; entry</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>首个管理员</b>：首次启动且用户表为空时自动创建。用户名取环境变量 <code>SC_ADMIN_USERNAME</code>（默认 <code>admin</code>）；密码取 <code>OMT_BOOTSTRAP_ADMIN_PASSWORD</code>，未设置则随机生成并写入数据目录旁的 <code>bootstrap-admin-password.txt</code>（0600）——登录后删除该文件。</span><span class="l-en"><b>First admin</b>: created automatically on first boot when the user table is empty. The username comes from <code>SC_ADMIN_USERNAME</code> (default <code>admin</code>); the password from <code>OMT_BOOTSTRAP_ADMIN_PASSWORD</code>, or a random one written to <code>bootstrap-admin-password.txt</code> (0600) next to the data directory — delete it after the first login.</span></li>
+      <li><span class="l-zh"><b>角色</b>：只有 <code>admin</code> / <code>user</code> 两级；管理 API 统一经 JWT + admin 守卫中间件。</span><span class="l-en"><b>Roles</b>: just <code>admin</code> / <code>user</code>; every admin API passes JWT auth plus an admin-guard middleware.</span></li>
+      <li><span class="l-zh"><b>入口</b>：admin 用户的侧栏菜单出现 Admin 项——浏览器开新标签 <code>/?page=admin</code>，omtn 桌面壳开独立管理窗口。</span><span class="l-en"><b>Entry</b>: admins see an Admin item in the sidebar menu — a browser opens <code>/?page=admin</code> in a new tab; the omtn desktop shell opens a dedicated admin window.</span></li>
+    </ul>
+
+    <h3 id="admin-users"><span class="l-zh">用户管理</span><span class="l-en">User management</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>基本操作</b>：列表、创建（用户名 3–32 字符、密码 ≥8、可选角色）、禁用 / 启用、改角色、重置密码（指定或随机 16 位临时密码）、关闭某用户的 TOTP。禁用 / 改角色 / 重置密码都会踢掉该用户的浏览器连接并作废旧 JWT。没有「删除用户」接口——用户可自助删除账号。</span><span class="l-en"><b>Basics</b>: list, create (username 3–32 chars, password ≥8, optional role), disable/enable, change role, reset password (chosen or a random 16-char temp), disable a user's TOTP. Disable / role change / password reset also kick the user's browser sockets and invalidate old JWTs. There is no admin-side user deletion — users can delete their own accounts.</span></li>
+      <li><span class="l-zh"><b>每用户配置</b>：文件传输限速（全局 / 不限 / 自定义 bps / 拒绝）、P2P 中继回退开关、不活跃清理豁免（admin 角色天然豁免）。</span><span class="l-en"><b>Per-user settings</b>: file-transfer rate limit (global / unlimited / custom bps / deny), P2P relay-fallback switch, inactivity-sweep exemption (admins are exempt by role).</span></li>
+    </ul>
+
+    <h3 id="admin-oauth"><span class="l-zh">OAuth 登录</span><span class="l-en">OAuth sign-in</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>支持</b>：飞书（feishu）、钉钉（dingtalk）、GitHub、Google。每个 provider 配置：id、显示名、app_id、app_secret（落库加密）、三组回调 URL（browser / desktop / android，必须 HTTPS；browser 最多 8 条）。</span><span class="l-en"><b>Supported</b>: Feishu, DingTalk, GitHub, Google. Per provider: id, display name, app_id, app_secret (stored encrypted), and three callback groups (browser / desktop / android, HTTPS only; up to 8 browser callbacks).</span></li>
+      <li><span class="l-zh"><b>镜像源自动派生</b>：回调可从 <code>oauth_allowed_origins</code>（见系统设置）自动派生 <code>&lt;origin&gt;/oauth-callback/&lt;id&gt;</code>；改 origins 会全量重同步各 provider 的回调。</span><span class="l-en"><b>Mirror-derived callbacks</b>: callbacks can be auto-derived from <code>oauth_allowed_origins</code> (see system settings) as <code>&lt;origin&gt;/oauth-callback/&lt;id&gt;</code>; changing the origins resyncs every provider's callbacks.</span></li>
+      <li><span class="l-zh"><b>scope 确认</b>：feishu / dingtalk / google 保存前须勾选 scope 确认（更换 app 或类型后需重新勾选）。</span><span class="l-en"><b>Scope confirmation</b>: feishu / dingtalk / google require an explicit scope checkbox before saving (re-confirm after switching apps or provider type).</span></li>
+      <li><span class="l-zh"><b>进阶选项</b>：GitHub 支持 <code>allowed_users</code> 白名单与自定义 endpoints；Google / 钉钉支持 <code>auto_create_user</code>（首次登录自动建号），Google 另有 <code>allowed_domains</code>。</span><span class="l-en"><b>Advanced</b>: GitHub supports an <code>allowed_users</code> allowlist and custom endpoints; Google / DingTalk support <code>auto_create_user</code> (first login creates the account), and Google adds <code>allowed_domains</code>.</span></li>
+      <li><span class="l-zh"><b>生效</b>：保存后登录页的 provider 列表即时更新（<code>/auth/providers</code>）。</span><span class="l-en"><b>Effect</b>: the login page's provider list updates immediately on save (<code>/auth/providers</code>).</span></li>
+    </ul>
+
+    <h3 id="admin-settings"><span class="l-zh">系统设置</span><span class="l-en">System settings</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>开放注册</b>：<code>open_registration</code> 开关——关掉后只有管理员建号或 auto-create 的用户能登录。</span><span class="l-en"><b>Open registration</b>: the <code>open_registration</code> switch — off means only admin-created or auto-created users can sign in.</span></li>
+      <li><span class="l-zh"><b>镜像源</b>：<code>oauth_allowed_origins</code>（CSV）。保存需一次性解锁仪式，服务端会逐个探测镜像的 <code>/api/v1/version</code> 存活后才接受。</span><span class="l-en"><b>Mirror origins</b>: <code>oauth_allowed_origins</code> (CSV). Saving requires a one-time unlock ceremony, and the server probes each mirror's <code>/api/v1/version</code> for liveness before accepting.</span></li>
+      <li><span class="l-zh"><b>P2P 数据面</b>：<code>p2p_relay_enabled</code> 中继回退总开关（P2P Data Plane 标签）；<code>file_transfer_relay_bps</code> 全局文件传输限速默认（0 = 不限）。</span><span class="l-en"><b>P2P data plane</b>: the <code>p2p_relay_enabled</code> master switch for relay fallback (P2P Data Plane tab); <code>file_transfer_relay_bps</code> as the global file-transfer default (0 = unlimited).</span></li>
+      <li><span class="l-zh"><b>命令行白名单</b>：<code>omts config set</code> 还可改 <code>feishu_webhook_url</code>（SSRF 校验）、<code>feishu_app_id</code>、<code>oauth_redirect_url</code>。</span><span class="l-en"><b>CLI allowlist</b>: <code>omts config set</code> additionally covers <code>feishu_webhook_url</code> (SSRF-checked), <code>feishu_app_id</code>, and <code>oauth_redirect_url</code>.</span></li>
+    </ul>
+
+    <h3 id="admin-audit"><span class="l-zh">审计日志</span><span class="l-en">Audit log</span></h3>
+    <p>
+      <span class="l-zh">管理页 Audit Log 标签返回最近 100 条。除全部 admin_* 操作外还记录：设备注册 / 吊销 / 恢复 / 删除 / 迁移、TOFU 信任事件、OAuth 自动建号、密码重授权设置、全设备登出等。</span>
+      <span class="l-en">The Audit Log tab returns the latest 100 entries. Beyond every admin_* action it also records device registered/revoked/resumed/deleted/migrated, TOFU trust events, OAuth auto-created users, password-set-via-reauth, and logout-all events.</span>
+    </p>
+
+    <h3 id="admin-nodes"><span class="l-zh">集群与节点</span><span class="l-en">Cluster &amp; nodes</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>节点列表</b>：<code>GET /api/v1/admin/nodes</code>——node_id、主机名、监听地址、状态、boot epoch、版本、心跳年龄、存活判定（TTL）。</span><span class="l-en"><b>Node list</b>: <code>GET /api/v1/admin/nodes</code> — node_id, hostname, listen addr, state, boot epoch, version, heartbeat age, TTL-based aliveness.</span></li>
+      <li><span class="l-zh"><b>排空与迁移</b>：<code>POST /admin/nodes/self/drain</code> 排空本节点（滚动升级用）；<code>POST /admin/devices/{id}/migrate</code> 两阶段把设备迁到目标节点。</span><span class="l-en"><b>Drain &amp; migrate</b>: <code>POST /admin/nodes/self/drain</code> drains this node (for rolling upgrades); <code>POST /admin/devices/{id}/migrate</code> moves a device to a target node in two phases.</span></li>
+      <li><span class="l-zh">多节点部署步骤（compose、nginx 双段、滚动升级）见<a href="omts.html#deploy-multi">服务端 · 多节点部署</a>。</span><span class="l-en">For the multi-node deployment steps (compose, the two nginx files, rolling upgrades) see <a href="omts.html#deploy-multi">Server · multi-node</a>.</span></li>
+    </ul>
+
+    <h3 id="admin-diag"><span class="l-zh">诊断</span><span class="l-en">Diagnostics</span></h3>
+    <ul>
+      <li><span class="l-zh"><code>GET /api/v1/diagnostics</code>（admin）：版本三元组、uptime、全设备 / 全会话（集群视图）、内存日志环形缓冲。</span><span class="l-en"><code>GET /api/v1/diagnostics</code> (admin): version triple, uptime, all devices / sessions (cluster view), and the in-memory log ring buffer.</span></li>
+      <li><span class="l-zh"><code>/healthz</code> 公开零依赖存活探针；<code>/metrics</code> 按 CIDR 白名单放行；<code>/api/v1/version</code> 公开。</span><span class="l-en"><code>/healthz</code> is a public dependency-free liveness probe; <code>/metrics</code> follows the CIDR allowlist; <code>/api/v1/version</code> is public.</span></li>
+      <li><span class="l-zh"><b>设备处置分工</b>：浏览器信任的 trusted devices 由用户自助管理（<code>/settings/trusted-devices</code>：列表 / 改名 / 吊销）；管理员可经 API 吊销 / 恢复 / 删除<b>任意</b>用户的 omtc 设备。</span><span class="l-en"><b>Device split</b>: trusted <em>browsers</em> are user-managed (<code>/settings/trusted-devices</code>: list / rename / revoke); administrators can revoke / resume / delete <em>any</em> user's omtc devices via API.</span></li>
+    </ul>
+  </section>
+
+  <div class="doc-pager" id="docPager"></div>
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <img class="brand-mark" src="../logo-mark.png" alt="" aria-hidden="true">
+      <span class="foot-name">oh-my-term</span>
+      <span class="foot-tag"><span class="l-zh">为 Vibe Coding 而生的终端管理器</span><span class="l-en">The terminal built for Vibe Coding</span></span>
+    </div>
+    <div class="foot-links">
+      <a href="../index.html"><span class="l-zh">首页</span><span class="l-en">Home</span></a>
+      <a href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="../docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="https://github.com/oh-my-term" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="foot-meta">© 2026 oh-my-term · Apache-2.0</div>
+  </div>
+</footer>
+
+<script src="../app.js"></script>
+<script src="docs-nav.js"></script>
+</body>
+</html>

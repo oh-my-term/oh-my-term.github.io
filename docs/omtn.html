@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh" class="lang-zh" data-title-zh="客户端手册 — oh-my-term 文档" data-title-en="Client Manual — oh-my-term Docs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>oh-my-term — 文档 · 客户端手册</title>
+<meta name="description" content="omtn 客户端用户手册：主界面与会话、终端、软键盘、文件管理、设备管理、连接与信任、登录与账号、更新与源、桌面壳与移动端特性。">
+<link rel="canonical" href="https://ohmyterm.com/docs/omtn.html">
+<meta name="theme-color" content="#08090d">
+<link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('omt-theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+  var m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute('content', t === 'light' ? '#f6f7f5' : '#08090d');
+})();
+</script>
+<script>
+(function () {
+  var l = null;
+  try { l = localStorage.getItem('omt-lang'); } catch (e) {}
+  if (l !== 'zh' && l !== 'en') {
+    l = (navigator.language || 'en').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+  var r = document.documentElement;
+  r.classList.remove('lang-zh', 'lang-en');
+  r.classList.add('lang-' + l);
+  r.lang = l;
+  document.title = l === 'zh'
+    ? r.getAttribute('data-title-zh') || document.title
+    : r.getAttribute('data-title-en') || document.title;
+})();
+</script>
+</head>
+<body data-doc="omtn">
+
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <a class="brand" href="../index.html" aria-label="oh-my-term">
+      <img class="brand-mark" src="../logo-mark.png" alt="" aria-hidden="true">
+      <span class="brand-name">oh-my-term</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="../docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="../index.html#features"><span class="l-zh">特性</span><span class="l-en">Features</span></a>
+      <a href="../index.html#security"><span class="l-zh">安全</span><span class="l-en">Security</span></a>
+      <a href="../index.html#deploy"><span class="l-zh">部署</span><span class="l-en">Deploy</span></a>
+      <a href="../getting-started.html#download"><span class="l-zh">下载</span><span class="l-en">Download</span></a>
+    </nav>
+    <div class="nav-actions">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light / dark theme"><span class="t-light">☀</span><span class="t-dark">☾</span></button>
+      <button id="navBurger" class="nav-burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+      <button id="langToggle" class="lang-toggle" type="button" aria-label="Switch language">
+        <span class="l-zh">EN</span><span class="l-en">中文</span>
+      </button>
+      <a class="btn btn-primary btn-sm" href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a class="btn btn-ghost btn-sm" href="https://github.com/oh-my-term" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="docs-hero">
+  <div class="wrap">
+    <p class="sec-eyebrow">// <span class="l-zh">文档 · 客户端手册</span><span class="l-en">docs · client manual</span></p>
+    <h1 class="sec-title"><span class="l-zh">客户端手册</span><span class="l-en">Client manual</span></h1>
+    <p class="sec-sub">
+      <span class="l-zh">omtn 原生壳（桌面 / 移动）内嵌 omta 页面应用，两者合起来就是你在用的客户端。本手册按功能域覆盖普通用户的全部日常操作；服务端管理见<a href="admin.html">管理员手册</a>。</span>
+      <span class="l-en">The omtn native shell (desktop / mobile) embeds the omta page app — together they are the client you use. This manual covers everyday user features by domain; for the server side see the <a href="admin.html">admin manual</a>.</span>
+    </p>
+  </div>
+</section>
+
+<div class="wrap docs-layout">
+  <nav class="doc-side" aria-label="Documentation">
+    <div class="doc-side-title">Contents</div>
+    <div class="doc-nav" id="docNav"></div>
+  </nav>
+
+  <main>
+  <section class="doc-sec">
+
+    <h3 id="omtn-platforms"><span class="l-zh">平台</span><span class="l-en">Platforms</span></h3>
+    <div class="doc-table-wrap"><table class="doc-table">
+      <thead><tr><th><span class="l-zh">平台</span><span class="l-en">Platform</span></th><th><span class="l-zh">状态</span><span class="l-en">Status</span></th></tr></thead>
+      <tbody>
+        <tr><td>Windows x64</td><td><span class="l-zh">可下载（zip）。</span><span class="l-en">Available (zip).</span></td></tr>
+        <tr><td>macOS Apple Silicon</td><td><span class="l-zh">可下载（签名 .app.tar.gz）。</span><span class="l-en">Available (signed .app.tar.gz).</span></td></tr>
+        <tr><td>Linux x64</td><td><span class="l-zh">可下载。</span><span class="l-en">Available.</span></td></tr>
+        <tr><td>Android / iOS</td><td><span class="l-zh">即将上架（Google Play / App Store）。</span><span class="l-en">Coming soon (Google Play / App Store).</span></td></tr>
+      </tbody>
+    </table></div>
+    <p>
+      <span class="l-zh">Intel Mac 与 ARM Windows 暂无构建；关注 <a href="../getting-started.html#download">release 页</a>后续架构。</span>
+      <span class="l-en">No Intel Mac or ARM Windows builds yet; watch the <a href="../getting-started.html#download">release pages</a> for more architectures.</span>
+    </p>
+
+    <h3 id="omtn-terms"><span class="l-zh">主界面与会话</span><span class="l-en">Main UI &amp; sessions</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>侧栏</b>：Sessions / Devices 两个页签。会话按自定义分组折叠展示，分组可重排、重命名、删除；会话支持拖拽排序与跨组拖动，排序随账号漫游。</span><span class="l-en"><b>Sidebar</b>: Sessions / Devices tabs. Sessions fold into custom groups (reorderable, renamable, deletable); sessions themselves drag-sort within and across groups, and the order roams with your account.</span></li>
+      <li><span class="l-zh"><b>过滤器</b>：三个开关——只看已连接（attached）、只看已完成待查看（Done）、只看待办（pending 旗标，右键会话切换）。</span><span class="l-en"><b>Filters</b>: three toggles — attached only, done-but-unseen only, pending-flagged only (toggle the flag from the session context menu).</span></li>
+      <li><span class="l-zh"><b>会话行</b>：状态徽章（running / starting / offline / lost / exited）+ 活动指示（「工作中」圆点 / 「完成待看」对勾，跨设备同步）；悬停出状态卡（状态、P2P 通路、可复制的完整会话 ID）。名字未通过签名校验时显示 ❔。</span><span class="l-en"><b>Session rows</b>: status badge (running / starting / offline / lost / exited) + activity indicator ("working" dot / "done" checkmark, synced across devices); hover for a status card (state, P2P path, copyable full session id). An ❔ badge appears when the name fails signature verification.</span></li>
+      <li><span class="l-zh"><b>右键 / 长按菜单</b>：重命名（防篡改签名）、在同机快速新建、新窗口打开（桌面）、移动分组、detach、会话详情、关闭（offline 会话额外确认）。</span><span class="l-en"><b>Context menu</b>: rename (tamper-proofed by signature), quick-new on the same machine, open in a new window (desktop), move group, detach, session details, close (with extra confirmation for offline sessions).</span></li>
+      <li><span class="l-zh"><b>新建会话</b>：选择设备（搜索 / 按最近或字母排序）、可选名称与高级参数（命令、参数、工作目录、分组）；默认 shell 按设备 OS 解析（zsh / bash / cmd.exe）。</span><span class="l-en"><b>New session</b>: pick a device (searchable, sortable by recency or name), optional name and advanced parameters (command, args, working directory, group); the default shell resolves by the device OS (zsh / bash / cmd.exe).</span></li>
+    </ul>
+
+    <h3 id="omtn-term"><span class="l-zh">终端</span><span class="l-en">Terminal</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>渲染</b>：全屏 TUI 原样呈现（alt-screen、256 色、滚动区域），10000 行回看缓冲；字号 10–24、等宽字体可选（预设 + 自定义）。</span><span class="l-en"><b>Rendering</b>: fullscreen TUIs render as designed (alt-screen, 256 colors, scroll regions) with a 10,000-line scrollback; font size 10–24 and selectable monospace fonts (presets + custom).</span></li>
+      <li><span class="l-zh"><b>移动端手势</b>：双指滚动回看、双指捏合调字号。</span><span class="l-en"><b>Mobile gestures</b>: two-finger scroll for scrollback, pinch to zoom the font.</span></li>
+      <li><span class="l-zh"><b>Freeze</b>：冻结输出便于回看（FROZEN 徽章），导航菜单提供顶部 / 上翻 / 下翻 / 底部、Fit 重适配、刷新快照、清屏（Ctrl+L）、Paste File。</span><span class="l-en"><b>Freeze</b>: freeze output for review (FROZEN badge); the nav menu offers top / page-up / page-down / bottom, Fit, snapshot refresh, clear (Ctrl+L), and Paste File.</span></li>
+      <li><span class="l-zh"><b>选区与链接</b>：移动端长按、桌面右键唤出菜单（预览、复制、折行复制、打开链接、View in Files）；URL 自动识别可点开。</span><span class="l-en"><b>Selection &amp; links</b>: long-press (mobile) or right-click (desktop) for the menu (preview, copy, copy-wrapped, open link, View in Files); URLs are auto-detected and clickable.</span></li>
+      <li><span class="l-zh"><b>快捷键</b>：Ctrl+Shift+C / V 复制粘贴，另有 6 项应用内快捷键可自定义；桌面壳可注册全局呼出热键。</span><span class="l-en"><b>Shortcuts</b>: Ctrl+Shift+C / V for copy/paste plus six customizable in-app shortcuts; the desktop shell can register a global summon hotkey.</span></li>
+      <li><span class="l-zh"><b>粘贴安全</b>：strict / lenient / off 三档，拦截危险的多行粘贴（防「粘贴炸弹」）。</span><span class="l-en"><b>Paste safety</b>: strict / lenient / off — intercepts dangerous multi-line pastes.</span></li>
+      <li><span class="l-zh"><b>断线与恢复</b>：断线出全屏重连面板（倒计时、手动重试、日志），可折叠成右上角 Reconnecting 胶囊，期间终端内容仍可查看复制；多会话并行 attach 保活，切换时快照回放现场。</span><span class="l-en"><b>Reconnect</b>: a full-screen panel on disconnect (countdown, manual retry, logs), collapsible into a corner capsule — the terminal stays viewable and copyable meanwhile; multiple sessions stay attached in parallel, switching replays the snapshot.</span></li>
+      <li><span class="l-zh"><b>主题</b>：System / Dark / Light 跟随或固定；设置里可自定义亮暗双色板并导出 JSON。</span><span class="l-en"><b>Themes</b>: System / Dark / Light, plus custom light/dark palettes exportable as JSON.</span></li>
+      <li><span class="l-zh"><b>Vibe 模式</b>（桌面）：底部 inputbox 整段输入直接发给 claude / codex 等 TUI，免去逐键模拟。</span><span class="l-en"><b>Vibe mode</b> (desktop): a bottom inputbox sends whole paragraphs to claude / codex TUIs instead of per-key typing.</span></li>
+    </ul>
+
+    <h3 id="omtn-kb"><span class="l-zh">软键盘</span><span class="l-en">Soft keyboard</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>布局</b>：折叠功能条（Esc / Ctrl / Tab / Alt / 方向 / PgUp / PgDn / Snip / 退格 / Enter）+ 展开 QWERTY 与符号层；键盘布局含 qwerty / azerty / 法语 / cyrillic / 假名。</span><span class="l-en"><b>Layout</b>: a collapsed utility strip (Esc / Ctrl / Tab / Alt / arrows / PgUp / PgDn / Snip / backspace / Enter) plus the expanded QWERTY and symbol layers; qwerty / azerty / French / Cyrillic / kana layouts.</span></li>
+      <li><span class="l-zh"><b>手势</b>：长按弹出候选横排（拖远取消）、上滑出备用字符、下滑大写、左右滑动移动光标。</span><span class="l-en"><b>Gestures</b>: long-press for the candidate strip (drag away to cancel), flick up for the alternate char, flick down for caps, sideways swipes move the cursor.</span></li>
+      <li><span class="l-zh"><b>可调</b>：长按时延、滑动增益与触发距离、震动反馈、字母动画。</span><span class="l-en"><b>Tunables</b>: long-press delay, swipe gain and trigger distance, haptics, key animation.</span></li>
+      <li><span class="l-zh"><b>Snippets</b>：片段库（标签 + 内容），可排序，插入时支持换行 / Tab / ESC。</span><span class="l-en"><b>Snippets</b>: a snippet library (label + body), reorderable; insertions can carry newlines / Tab / ESC.</span></li>
+    </ul>
+
+    <h3 id="omtn-files"><span class="l-zh">文件管理</span><span class="l-en">Files</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>浏览与操作</b>：Files 页面包屑导航（Windows 可切盘符）、新建文件夹 / 文件、多选上传、下载、重命名 / 删除 / 属性、隐藏点文件开关、名称过滤。</span><span class="l-en"><b>Browse &amp; operate</b>: the Files tab has breadcrumb navigation (drive switcher on Windows), new folder/file, multi-select upload, download, rename/delete/properties, dotfile toggle, name filter.</span></li>
+      <li><span class="l-zh"><b>查看 / 编辑器</b>：内置文件预览与编辑（预览↔编辑切换、自动换行、保存、编码显示）。</span><span class="l-en"><b>Viewer/editor</b>: built-in preview and editing (toggle, word wrap, save, encoding display).</span></li>
+      <li><span class="l-zh"><b>浮动面板</b>（桌面）：Files 以浮窗打开，不挤占终端空间，可最大化 / 折叠 / 缩放。</span><span class="l-en"><b>Floating panel</b> (desktop): Files opens as a floating window that never crowds the terminal — maximize, collapse, resize.</span></li>
+      <li><span class="l-zh"><b>文件粘贴</b>：Ctrl+V 粘贴带文件的剪贴板会自动上传到设备并把绝对路径注入 PTY——等效本地拖文件进终端；可在设备设置里按设备关闭。</span><span class="l-en"><b>Paste files</b>: Ctrl+V with files on the clipboard uploads them and injects the absolute path into the PTY — like dragging a file into a local terminal; can be disabled per device.</span></li>
+    </ul>
+
+    <h3 id="omtn-devices"><span class="l-zh">设备管理</span><span class="l-en">Device management</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>添加设备向导</b>：生成 Linux/macOS 与 Windows 安装命令（一次性令牌）、公钥展示、令牌状态跟踪、安装进度（issued → registered → online）。</span><span class="l-en"><b>Add-device wizard</b>: generates the Linux/macOS and Windows install commands (one-time token), shows the public key, tracks token state and install progress (issued → registered → online).</span></li>
+      <li><span class="l-zh"><b>每设备设置</b>：P2P 开关、剪贴板文件粘贴开关、该机会话的默认覆盖项。</span><span class="l-en"><b>Per-device settings</b>: P2P toggle, clipboard-file-paste toggle, default overrides for sessions on that machine.</span></li>
+      <li><span class="l-zh"><b>生命周期</b>：设备分组管理、重命名、吊销 / 恢复、删除。</span><span class="l-en"><b>Lifecycle</b>: device grouping, rename, revoke / resume, delete.</span></li>
+    </ul>
+
+    <h3 id="omtn-trust"><span class="l-zh">连接与信任</span><span class="l-en">Connection &amp; trust</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>TOFU 首连</b>：首次连接核对设备上的 16 位指纹（或 26 位身份信任码）；可选「跳过验证」（需确认风险），但密钥轮换时必须验证、不可跳过。</span><span class="l-en"><b>TOFU first connect</b>: verify the 16-hex fingerprint from the device (or the 26-char identity trust code); "skip verification" exists but demands a risk confirmation — and key rotation always requires verification.</span></li>
+      <li><span class="l-zh"><b>连接密钥</b>：设置里显示本机公钥与二维码，可复制导入；桌面壳走原生密钥库，支持自定义密钥文件与多钥匙注册表（默认钥匙、按设备绑定）。</span><span class="l-en"><b>Connection keys</b>: settings show your public key and QR code to copy/import; the desktop shell uses the native keystore with custom key files and a multi-key registry (default key, per-device binding).</span></li>
+      <li><span class="l-zh"><b>设备密码</b>：设备上 <code>omtc passwd</code> 设置后，新浏览器可用密码直连（PAKE 认证，密码不上线）。</span><span class="l-en"><b>Device password</b>: after <code>omtc passwd</code> on the device, a new browser can connect with the password (PAKE — the password never crosses the wire).</span></li>
+      <li><span class="l-zh"><b>签名确认</b>：授权公钥等敏感签名在桌面壳的原生确认小窗完成，密钥不经过页面 JS。</span><span class="l-en"><b>Signed approvals</b>: sensitive signatures (e.g. authorizing a pubkey) happen in the shell's native confirm dialog — keys never touch the page JS.</span></li>
+    </ul>
+
+    <h3 id="omtn-account"><span class="l-zh">登录与账号</span><span class="l-en">Sign-in &amp; account</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>登录方式</b>：密码 + TOTP（可记住设备 30 / 60 / 90 天）、OAuth（按服务器配置：钉钉 / 飞书 / GitHub / Google）、开放注册（服务器开启时）。</span><span class="l-en"><b>Sign-in</b>: password + TOTP (remember-device 30 / 60 / 90 days), OAuth (server-configured: DingTalk / Feishu / GitHub / Google), open registration (when enabled server-side).</span></li>
+      <li><span class="l-zh"><b>账号设置</b>：Profile（显示名 / 邮箱）、改密码、登出全部设备、TOTP 绑定 / 解绑、Linked Accounts 管理、删除账号（需密码 + TOTP 或 OAuth 再授权）。</span><span class="l-en"><b>Account settings</b>: profile (display name / email), change password, log out everywhere, TOTP bind/unbind, linked accounts, account deletion (password + TOTP or an OAuth re-auth).</span></li>
+      <li><span class="l-zh"><b>Trusted Devices</b>：查看并管理已信任的浏览器设备指纹（重命名 / 吊销）。</span><span class="l-en"><b>Trusted devices</b>: review and manage trusted browser fingerprints (rename / revoke).</span></li>
+      <li><span class="l-zh"><b>备份</b>：客户端配置导出 / 导入（不含私钥与令牌）。</span><span class="l-en"><b>Backup</b>: export/import client configuration (never keys or tokens).</span></li>
+    </ul>
+
+    <h3 id="omtn-update"><span class="l-zh">更新与源</span><span class="l-en">Updates &amp; sources</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>三级更新，互相独立验签</b>：omta 页面 OTA（Ed25519 验签 → 下载校验 → 原子激活，30 秒健康检查看门狗失败自动回滚；支持热切换）；omtn 壳自检（读签名 metainfo，仅提醒不自动安装）；omtd 产物下载器（验签 + 哈希校验后保存）。</span><span class="l-en"><b>Three independent, separately-verified update paths</b>: the omta page OTA (Ed25519-verified manifest → hash-checked download → atomic activation with a 30s watchdog rollback; hot-swap supported); the omtn shell self-check (signed metainfo, remind-only); the omtd artifact downloader (signature + hash verified before saving).</span></li>
+      <li><span class="l-zh"><b>版本弹窗</b>：一次展示 omts / omta / omtn 三个组件的版本与说明，附按平台的下载卡片。</span><span class="l-en"><b>Version dialog</b>: shows omts / omta / omtn versions and notes in one place, with per-platform download cards.</span></li>
+      <li><span class="l-zh"><b>源切换</b>：更新通道一键切换 GitHub / Gitee 国内镜像（同签名资产）；omtc 安装源自定义与存量设备迁移命令；启动自动检查可关。</span><span class="l-en"><b>Sources</b>: one-click channel switch between GitHub and the Gitee mirror (same signed artifacts); custom omtc install source with a migration command for existing devices; startup auto-check is optional.</span></li>
+    </ul>
+
+    <h3 id="omtn-shell"><span class="l-zh">桌面壳与移动端</span><span class="l-en">Desktop shell &amp; mobile</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>窗口</b>：主窗口 + 多终端窗口（可直达指定会话）+ 独立 admin 窗口；窗口标题跟随当前会话。</span><span class="l-en"><b>Windows</b>: main window plus multiple terminal windows (deep-linking a session) plus a standalone admin window; the window title follows the current session.</span></li>
+      <li><span class="l-zh"><b>托盘</b>（Windows / macOS）：托盘菜单 Show / Reload / Change omts URL / Quit；关最后一个终端窗即隐藏到托盘；macOS Dock 点击恢复。Linux 无托盘，关窗即退出。</span><span class="l-en"><b>Tray</b> (Windows / macOS): Show / Reload / Change omts URL / Quit; closing the last terminal window hides to tray; macOS restores from the Dock. Linux has no tray — closing quits.</span></li>
+      <li><span class="l-zh"><b>更新与安全</b>：壳永不加载远端页面——构建期内嵌 omta，运行期只信通过验签的 OTA 产物；服务器地址改动、更新通道变更都要原生确认。</span><span class="l-en"><b>Update &amp; safety</b>: the shell never loads remote pages — omta is embedded at build time and only signature-verified OTA output is trusted at runtime; server-URL and channel changes need native confirmation.</span></li>
+      <li><span class="l-zh"><b>移动端</b>：OAuth 走系统会话（iOS ASWebAuthenticationSession / Android 系统浏览器 + 回跳）；Android 有原生快捷键桥、APK 自更新、分享身份备份；iOS 键盘直连（inputmode=none）；Play 版含内购与并发终端配额。</span><span class="l-en"><b>Mobile</b>: OAuth rides the system session (iOS ASWebAuthenticationSession / Android browser + return hop); Android adds a native shortcut bridge, APK self-update, and share-to-backup of identity; iOS drives the keyboard directly (inputmode=none); the Play build adds billing and a concurrent-terminal quota.</span></li>
+    </ul>
+
+    <h3 id="omtn-misc"><span class="l-zh">其他</span><span class="l-en">Miscellany</span></h3>
+    <ul>
+      <li><span class="l-zh"><b>语言</b>：界面中 / 英，默认跟随浏览器。</span><span class="l-en"><b>Language</b>: Chinese / English UI, following the browser by default.</span></li>
+      <li><span class="l-zh"><b>Remote Debug</b>：生成授权码让运维（或别人）连上你已打开的页面协助排障——连上自动复制、TTL 倒计时、可续期、可勾选允许写入。</span><span class="l-en"><b>Remote Debug</b>: mint an authorization code to let an operator attach to your already-open page for troubleshooting — auto-copied, TTL countdown, extendable, write access opt-in.</span></li>
+      <li><span class="l-zh"><b>P2P 指示</b>：直连会话在徽章高亮；中继被禁用时出横幅提示。</span><span class="l-en"><b>P2P indicator</b>: direct sessions highlight the badge; a banner appears when the relay is disabled.</span></li>
+      <li><span class="l-zh"><b>Help</b>：内置入门指南、错误码、词汇表与搜索。</span><span class="l-en"><b>Help</b>: built-in getting-started guide, error codes, glossary, and search.</span></li>
+    </ul>
+  </section>
+
+  <div class="doc-pager" id="docPager"></div>
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <img class="brand-mark" src="../logo-mark.png" alt="" aria-hidden="true">
+      <span class="foot-name">oh-my-term</span>
+      <span class="foot-tag"><span class="l-zh">为 Vibe Coding 而生的终端管理器</span><span class="l-en">The terminal built for Vibe Coding</span></span>
+    </div>
+    <div class="foot-links">
+      <a href="../index.html"><span class="l-zh">首页</span><span class="l-en">Home</span></a>
+      <a href="../getting-started.html"><span class="l-zh">开始使用</span><span class="l-en">Get started</span></a>
+      <a href="../docs.html"><span class="l-zh">文档</span><span class="l-en">Docs</span></a>
+      <a href="https://github.com/oh-my-term" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="foot-meta">© 2026 oh-my-term · Apache-2.0</div>
+  </div>
+</footer>
+
+<script src="../app.js"></script>
+<script src="docs-nav.js"></script>
+</body>
+</html>
