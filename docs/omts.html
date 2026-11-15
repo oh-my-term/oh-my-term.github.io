@@ -102,6 +102,7 @@
       <a href="#cli"><span class="l-zh">启动参数</span><span class="l-en">Startup reference</span></a>
       <a href="#network"><span class="l-zh">网络与 P2P</span><span class="l-en">Network &amp; P2P</span></a>
       <a href="#ops"><span class="l-zh">日常运维</span><span class="l-en">Operations</span></a>
+      <a class="sub" href="#tuning"><span class="l-zh">按场景调整</span><span class="l-en">Tuning</span></a>
     </nav>
   </aside>
 
@@ -243,7 +244,7 @@ $ docker compose up -d</pre>
           </tbody>
         </table>
       </div>
-      <p><span class="l-zh">顺手加上：<code>client_max_body_size 10m</code>（文件上传）、HSTS。要用飞书 / Google / GitHub 登录，还需部署 <b>oauth-callback.html</b>（从源码仓 <code>web/src/oauth-callback.html</code> 的构建产物取，与服务器同版本）。它带内联脚本——若在 nginx 层下发 CSP，<code>script-src</code> 哈希要按文件<b>原始内联块字节</b>（含首尾空白）sha256-base64 计算，页面升级后必须重算，否则被 CSP 拦死。管理后台 admin.html 同样出自构建产物（如挂 <code>/admin.html</code>）——建议限制到运维网段，或配置完成后撤下。</span><span class="l-en">While you are in there: <code>client_max_body_size 10m</code> (uploads) and HSTS. feishu / Google / GitHub sign-in additionally needs <b>oauth-callback.html</b> deployed (from the source repo's <code>web/src/oauth-callback.html</code> build output, same version as the server). It carries inline scripts — if nginx serves a CSP for it, the <code>script-src</code> hashes are sha256-base64 over the file's RAW inline blocks (leading/trailing whitespace included); recompute on every page change or CSP kills it. The admin console admin.html deploys the same way (e.g. at <code>/admin.html</code>) — restrict it to your ops network, or take it down once configuration is done.</span></p>
+      <p><span class="l-zh">顺手加上：HSTS，以及显式的 <code>client_max_body_size</code>——注意它<b>不挡文件传输</b>（文件走 WebSocket 数据面、自适应 64–512 KiB 分块）；HTTP API 目前没有超过 1 MiB 的请求体，配 10m 只是把 nginx 静默的 1m 默认值显式放宽，给将来可能出现的较大 JSON 请求留余量。要用飞书 / Google / GitHub 登录，还需部署 <b>oauth-callback.html</b>（从源码仓 <code>web/src/oauth-callback.html</code> 的构建产物取，与服务器同版本）。它带内联脚本——若在 nginx 层下发 CSP，<code>script-src</code> 哈希要按文件<b>原始内联块字节</b>（含首尾空白）sha256-base64 计算，页面升级后必须重算，否则被 CSP 拦死。管理后台 admin.html 同样出自构建产物（如挂 <code>/admin.html</code>）——建议限制到运维网段，或配置完成后撤下。</span><span class="l-en">While you are in there: HSTS, plus an explicit <code>client_max_body_size</code> — note it does <b>not</b> gate file transfers (those ride the WebSocket data plane in adaptive 64–512 KiB chunks); no HTTP API currently sends a body over 1 MiB, so 10m exists purely to widen nginx's silent 1m default and leave headroom for future larger JSON requests. feishu / Google / GitHub sign-in additionally needs <b>oauth-callback.html</b> deployed (from the source repo's <code>web/src/oauth-callback.html</code> build output, same version as the server). It carries inline scripts — if nginx serves a CSP for it, the <code>script-src</code> hashes are sha256-base64 over the file's RAW inline blocks (leading/trailing whitespace included); recompute on every page change or CSP kills it. The admin console admin.html deploys the same way (e.g. at <code>/admin.html</code>) — restrict it to your ops network, or take it down once configuration is done.</span></p>
 
       <h3 id="d-boot"><span class="l-zh">2.6 首次启动与账号</span><span class="l-en">2.6 First boot and accounts</span></h3>
       <pre class="doc-pre">$ docker compose ps &amp;&amp; docker compose logs omts | tail -5
@@ -345,6 +346,29 @@ $ omtc register https://omts.example.com/&lt;reg_token&gt;</pre>
     <!-- ===================== 06 OPS ===================== -->
     <section class="doc-sec" id="ops">
       <h2 class="doc-h2"><span class="n">06</span><span class="l-zh">日常运维</span><span class="l-en">Operations</span></h2>
+
+      <h3 id="tuning"><span class="l-zh">按场景调整的参数</span><span class="l-en">Parameters you may need to tune</span></h3>
+      <p><span class="l-zh">多数默认值即正确值；这一列出的才是部署时真正要做选择的：</span><span class="l-en">Most defaults are already right; these are the ones that actually need a decision per deployment:</span></p>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead><tr>
+            <th><span class="l-zh">参数</span><span class="l-en">Parameter</span></th>
+            <th><span class="l-zh">默认</span><span class="l-en">Default</span></th>
+            <th><span class="l-zh">何时调整</span><span class="l-en">When to change</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td><code>OMT_SERVER_URL</code></td><td>—</td><td><span class="l-zh">必填。对外域名（OAuth 回调校验与绝对链接都依赖它），填错 OAuth 登录会拒绝</span><span class="l-en">required. Your public origin (OAuth redirect validation and absolute URLs); a wrong value breaks OAuth sign-in</span></td></tr>
+            <tr><td>STUN UDP <span class="l-zh">端口</span><span class="l-en">port</span></td><td>3478</td><td><span class="l-zh">不必拘泥 3478：地址随 P2P 授权下发，客户端零改动——选云安全组<b>已经放行</b>的那个 UDP 口即可；不开放也不影响可用性（回退中继）</span><span class="l-en">need not be 3478: the address travels with the P2P grant, clients need no change — pick whichever UDP port your security group already allows; leaving it closed never breaks connectivity (relay fallback)</span></td></tr>
+            <tr><td>MySQL <code>mem_limit</code></td><td>400m</td><td><span class="l-zh">1G 以下小主机调低（如 256m）；专用数据库机可去掉限制</span><span class="l-en">lower it on hosts under 1G RAM (e.g. 256m); drop the cap on a dedicated DB box</span></td></tr>
+            <tr><td><code>client_max_body_size</code></td><td>10m</td><td><span class="l-zh">一般不动：文件传输走 WebSocket（不受它限制），HTTP API 无超过 1 MiB 的请求体——10m 只是显式放宽 nginx 静默的 1m 默认</span><span class="l-en">leave it alone: file transfers ride the WebSocket (not gated by it) and no HTTP API exceeds a 1 MiB body — 10m merely widens nginx's silent 1m default</span></td></tr>
+            <tr><td><code>OMT_METRICS_ALLOW_CIDRS</code></td><td><span class="l-zh">关</span><span class="l-en">off</span></td><td><span class="l-zh">要接 Prometheus / 监控才开，且只放行内网或监控网段 CIDR</span><span class="l-en">enable only when you scrape metrics, and only for your internal / monitoring CIDRs</span></td></tr>
+            <tr><td><code>OMT_INACTIVITY_*</code></td><td><span class="l-zh">关</span><span class="l-en">off</span></td><td><span class="l-zh">只对<b>公开注册</b>的实例开启（闲置账号 disable→delete 生命周期，默认 180/90 天）；私有部署保持关闭，免得低频账号被清</span><span class="l-en">enable only on <b>public-registration</b> instances (the idle-account disable→delete lifecycle, 180/90 days by default); keep it off for private deployments so rare users are never swept</span></td></tr>
+            <tr><td><code>OMT_NODE_ID</code></td><td>1</td><td><span class="l-zh">仅双节点：两个节点必须显式设 1 / 2（书签 URL 含节点段）</span><span class="l-en">two-node only: the nodes must pin 1 / 2 explicitly (bookmarkable URLs embed the node segment)</span></td></tr>
+            <tr><td><code>proxy_read_timeout</code>（ws）</td><td>3600s</td><td><span class="l-zh">已匹配终端长连接语义；调小会在传输中途掐断空闲会话</span><span class="l-en">matches terminal long-connect semantics; lowering it cuts idle sessions mid-transfer</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <h3><span class="l-zh">升级与回滚</span><span class="l-en">Upgrades and rollback</span></h3>
       <p><span class="l-zh">下载新二进制并校验 → 旧版挪为 <code>bin/omts.v&lt;ver&gt;</code> → 新版就位 → <code>docker compose up -d</code>（重建容器）。数据库迁移在启动时自动执行。回滚 = 拷回旧文件再重启。双节点逐台滚动，确认一台健康再动下一台。</span><span class="l-en">Fetch and verify the new binary → move the old one to <code>bin/omts.v&lt;ver&gt;</code> → put the new one in place → <code>docker compose up -d</code> (recreates the container). DB migrations run on boot. Rollback is copying the old file back and restarting. For two nodes, roll one at a time and let it report healthy before touching the next.</span></p>
       <h3><span class="l-zh">密钥与备份</span><span class="l-en">Secrets and backups</span></h3>
